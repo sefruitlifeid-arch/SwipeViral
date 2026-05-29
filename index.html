@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>YukViral Brief Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0C0C0C;--surface:#141414;--surface2:#1C1C1C;
+  --border:#2A2A2A;--accent:#C8FF00;
+  --accent-dim:rgba(200,255,0,0.06);--accent-dim2:rgba(200,255,0,0.14);
+  --text:#F0F0F0;--text2:#888;--text3:#3A3A3A;--red:#FF4444;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:140px}
+header{padding:32px 20px 20px;border-bottom:1px solid var(--border)}
+.header-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:4px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;letter-spacing:.02em}
+.logo span{color:var(--accent)}
+.version{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.1em;margin-bottom:2px}
+.reset-btn{background:transparent;border:1px solid var(--border);color:var(--text2);font-family:'DM Mono',monospace;font-size:10px;padding:6px 12px;border-radius:6px;cursor:pointer;letter-spacing:.06em;transition:all .2s;margin-bottom:10px}
+.reset-btn:hover{border-color:var(--red);color:var(--red)}
+.tagline{color:var(--text2);font-size:13px;font-weight:300}
+.progress-wrap{padding:18px 20px 0}
+.progress-bar{height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;width:0%}
+.progress-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.06em}
+.section{padding:28px 20px 0}
+.section-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.section-title{font-size:17px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.section-hint{font-size:12px;color:var(--text2);margin-bottom:12px;font-style:italic;line-height:1.5}
+.input-field{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s;margin-bottom:10px}
+.input-field:focus{border-color:var(--accent)}
+.input-field::placeholder{color:var(--text3)}
+textarea.input-field{resize:none;min-height:88px;line-height:1.5}
+.field-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--text2);letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.req-dot{width:5px;height:5px;background:var(--red);border-radius:50%;display:inline-block;flex-shrink:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.chip{background:var(--surface2);border:1.5px solid var(--border);border-radius:100px;padding:9px 16px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s ease;user-select:none;white-space:nowrap}
+.chip:active{transform:scale(.96)}
+.chip.selected{background:var(--accent-dim2);border-color:var(--accent);color:var(--accent)}
+.divider{height:1px;background:var(--border);margin:28px 20px 0}
+.platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.platform-btn{background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:16px 10px;text-align:center;cursor:pointer;transition:all .15s ease;user-select:none}
+.platform-btn:active{transform:scale(.97)}
+.platform-btn.selected{border-color:var(--accent);background:var(--accent-dim2)}
+.platform-icon{font-size:24px;margin-bottom:6px}
+.platform-name{font-size:12px;font-weight:600;color:var(--text2)}
+.platform-btn.selected .platform-name{color:var(--accent)}
+.generate-wrap{position:fixed;bottom:0;left:0;right:0;padding:16px 20px 24px;background:linear-gradient(to top,#0C0C0C 60%,transparent);z-index:100}
+.generate-btn{width:100%;background:var(--accent);color:#0C0C0C;border:none;border-radius:14px;padding:18px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;cursor:pointer;transition:all .2s ease;display:flex;align-items:center;justify-content:center;gap:10px}
+.generate-btn:active{transform:scale(.98)}
+.generate-btn:disabled{opacity:.25;cursor:not-allowed;transform:none}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:none;align-items:flex-end}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 36px;width:100%;max-height:88vh;display:flex;flex-direction:column;animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-shrink:0}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.04em;color:var(--accent)}
+.modal-close{background:var(--surface2);border:none;color:var(--text2);width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.platform-tabs{display:flex;gap:8px;margin-bottom:14px;flex-shrink:0}
+.platform-tab{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:10px 6px;font-size:11px;font-weight:600;color:var(--text2);cursor:pointer;text-align:center;transition:all .15s}
+.platform-tab.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim2)}
+.prompt-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;font-family:'DM Mono',monospace;font-size:11px;line-height:1.75;color:var(--text2);overflow-y:auto;flex:1;white-space:pre-wrap;word-break:break-word}
+.copy-btn{width:100%;background:var(--accent);color:#0C0C0C;border:none;border-radius:12px;padding:16px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.06em;cursor:pointer;margin-top:14px;flex-shrink:0;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.copy-btn.copied{background:var(--surface2);color:var(--accent);border:1.5px solid var(--accent)}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--red);color:white;padding:12px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:500;transition:transform .3s ease;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.file-toggle-wrap{display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;margin-top:12px;transition:border-color .2s;user-select:none}
+.file-toggle-wrap:active{opacity:.8}
+.file-toggle-wrap.active{border-color:var(--accent)}
+.file-toggle-label{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)}
+.toggle-switch{width:36px;height:20px;background:var(--border2);border-radius:100px;position:relative;transition:background .2s;flex-shrink:0}
+.toggle-switch::after{content:'';position:absolute;width:14px;height:14px;background:white;border-radius:50%;top:3px;left:3px;transition:transform .2s}
+.file-toggle-wrap.active .toggle-switch{background:var(--accent)}
+.file-toggle-wrap.active .toggle-switch::after{transform:translateX(16px)}
+.file-note{background:rgba(200,255,0,0.06);border:1px solid rgba(200,255,0,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--accent);margin-top:8px;line-height:1.5;font-family:'DM Mono',monospace}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div class="logo">Yuk<span>Viral</span></div>
+    <button class="reset-btn" onclick="resetAll()">↺ RESET</button>
+  </div>
+  <div class="version">BRIEF BUILDER v2.0</div>
+  <div class="tagline">Tap, fill, copy. Prompt siap dalam 60 detik.</div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 of 8 required fields completed</div>
+</div>
+
+<div class="section">
+  <div class="section-label">01</div>
+  <div class="section-title">Tipe konten</div>
+  <div class="field-label"><span class="req-dot"></span> Wajib — form di bawah akan berubah sesuai pilihan</div>
+  <div class="chips">
+    <div class="chip" data-group="type" data-val="Affiliate / Product Review" onclick="selectType(this)">📦 Product Review</div>
+    <div class="chip" data-group="type" data-val="General / Entertainment" onclick="selectType(this)">🎬 General</div>
+    <div class="chip" data-group="type" data-val="Educational" onclick="selectType(this)">🎓 Educational</div>
+    <div class="chip" data-group="type" data-val="Trend Hijack" onclick="selectType(this)">🔥 Trend Hijack</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 02: DYNAMIC — changes per content type -->
+<div class="section" id="section02">
+
+  <!-- PRODUCT REVIEW form -->
+  <div id="form-product" style="display:none">
+    <div class="section-label">02</div>
+    <div class="section-title">Detail produk</div>
+    <div class="field-label"><span class="req-dot"></span> Nama produk</div>
+    <input type="text" class="input-field" id="productName" placeholder="e.g. TNW A40 AI Wireless Mic" oninput="updateProgress()">
+    <div class="field-label"><span class="req-dot"></span> Fungsi utama — satu kalimat</div>
+    <input type="text" class="input-field" id="productWhat" placeholder="e.g. Wireless lavalier mic dengan AI noise cancellation" oninput="updateProgress()">
+    <div class="field-label">Selling point utama</div>
+    <div class="section-hint">Fitur paling membedakan dari kompetitor — makin spesifik makin bagus</div>
+    <input type="text" class="input-field" id="productSelling" placeholder="e.g. Magnetic clip, plug-and-play, 100m range, AI chip" oninput="updateProgress()">
+    <div class="field-label">Produk pembanding / kompetitor</div>
+    <input type="text" class="input-field" id="productComp" placeholder="e.g. DJI Mic 2, Rode Wireless GO II" oninput="updateProgress()">
+    <div class="field-label">Pengalaman atau hasil pribadimu <span style="color:var(--text3);font-size:9px">— opsional</span></div>
+    <div class="section-hint">Spesifik: sebelum vs sesudah, ada angka atau detail nyata? Kosongkan jika belum ada pengalaman langsung.</div>
+    <textarea class="input-field" id="productExp" placeholder="e.g. Sebelumnya pakai Rode yang harganya 3x lipat. Tiga minggu pakai A40, belum ada yang komplain soal audio." oninput="updateProgress()"></textarea>
+
+    <!-- YouTube-only extra fields -->
+    <div id="ytProductFields" style="display:none">
+      <div class="field-label">Use case — siapa yang paling butuh produk ini <span style="color:var(--text3);font-size:9px">— opsional</span></div>
+      <input type="text" class="input-field" id="productUseCase" placeholder="e.g. Content creator yang sering rekam di luar ruangan atau tempat rame" oninput="updateProgress()">
+      <div class="field-label">Kekurangan / limitasi yang jujur <span style="color:var(--text3);font-size:9px">— opsional</span></div>
+      <div class="section-hint">YouTube audience lebih kritis — honesty builds trust dan watch time</div>
+      <input type="text" class="input-field" id="productCons" placeholder="e.g. Battery life cuma 5 jam, tidak waterproof" oninput="updateProgress()">
+      <div class="field-label">Sudah berapa lama dipakai / testing period <span style="color:var(--text3);font-size:9px">— opsional</span></div>
+      <input type="text" class="input-field" id="productTesting" placeholder="e.g. 3 minggu, 10+ sesi rekaman" oninput="updateProgress()">
+    </div>
+
+    <!-- File brief toggle -->
+    <div class="file-toggle-wrap" onclick="toggleFileBrief('product')">
+      <div class="file-toggle-label">
+        <span id="productFileIcon">📎</span>
+        <span id="productFileText">Ada brief dari klien? (image / PDF / doc)</span>
+      </div>
+      <div class="toggle-switch" id="productFileToggle"></div>
+    </div>
+    <div id="productFileNote" style="display:none" class="file-note">
+      ✅ Instruksi "baca file yang diattach" akan otomatis masuk ke prompt. Setelah copy prompt, attach file-nya di chat AI sebelum kirim.
+    </div>
+  </div>
+
+  <!-- GENERAL / EDUCATIONAL form -->
+  <div id="form-general" style="display:none">
+    <div class="section-label">02</div>
+    <div class="section-title">Detail konten</div>
+    <div class="field-label"><span class="req-dot"></span> Topik / Niche <span style="color:var(--text3);font-size:9px">— pilih maks 2</span></div>
+    <div class="chips" id="topicChips">
+      <div class="chip" data-group="topic" data-val="Tech & AI" onclick="selectMultiChip(this,'topic',2)">💻 Tech & AI</div>
+      <div class="chip" data-group="topic" data-val="Gadget & Gear" onclick="selectMultiChip(this,'topic',2)">📱 Gadget & Gear</div>
+      <div class="chip" data-group="topic" data-val="Beauty & Skincare" onclick="selectMultiChip(this,'topic',2)">💄 Beauty & Skincare</div>
+      <div class="chip" data-group="topic" data-val="Health & Fitness" onclick="selectMultiChip(this,'topic',2)">💪 Health & Fitness</div>
+      <div class="chip" data-group="topic" data-val="Fashion & Style" onclick="selectMultiChip(this,'topic',2)">👗 Fashion</div>
+      <div class="chip" data-group="topic" data-val="Food & Kuliner" onclick="selectMultiChip(this,'topic',2)">🍜 Food & Kuliner</div>
+      <div class="chip" data-group="topic" data-val="Finance & Bisnis" onclick="selectMultiChip(this,'topic',2)">💰 Finance & Bisnis</div>
+      <div class="chip" data-group="topic" data-val="DIY & Life Hacks" onclick="selectMultiChip(this,'topic',2)">🔧 DIY & Life Hacks</div>
+      <div class="chip" data-group="topic" data-val="Travel" onclick="selectMultiChip(this,'topic',2)">✈️ Travel</div>
+      <div class="chip" data-group="topic" data-val="Relationship & Mental Health" onclick="selectMultiChip(this,'topic',2)">❤️ Relationship</div>
+      <div class="chip" data-group="topic" data-val="Parenting" onclick="selectMultiChip(this,'topic',2)">👶 Parenting</div>
+      <div class="chip" data-group="topic" data-val="Pets & Animals" onclick="selectMultiChip(this,'topic',2)">🐾 Pets</div>
+      <div class="chip" data-group="topic" data-val="Comedy & Hiburan" onclick="selectMultiChip(this,'topic',2)">😂 Comedy</div>
+      <div class="chip" data-group="topic" data-val="Motivasi & Self-improvement" onclick="selectMultiChip(this,'topic',2)">🔥 Motivasi</div>
+      <div class="chip" data-group="topic" data-val="Gaming" onclick="selectMultiChip(this,'topic',2)">🎮 Gaming</div>
+      <div class="chip" data-group="topic" data-val="Seni & Kreatif" onclick="selectMultiChip(this,'topic',2)">🎨 Seni & Kreatif</div>
+    </div>
+    <div class="field-label" style="margin-top:16px"><span class="req-dot"></span> Angle konten</div>
+    <div class="chips" id="angleChips">
+      <div class="chip" data-group="angle" data-val="How-to / Tutorial" onclick="selectChip(this)">📖 How-to</div>
+      <div class="chip" data-group="angle" data-val="Tips & Tricks" onclick="selectChip(this)">💡 Tips & Tricks</div>
+      <div class="chip" data-group="angle" data-val="Myth Busting — yang lo kira salah" onclick="selectChip(this)">🚫 Myth Busting</div>
+      <div class="chip" data-group="angle" data-val="Opinion / Hot Take" onclick="selectChip(this)">🎤 Hot Take</div>
+      <div class="chip" data-group="angle" data-val="Behind the Scenes" onclick="selectChip(this)">🎬 BTS</div>
+      <div class="chip" data-group="angle" data-val="Day in the Life" onclick="selectChip(this)">☀️ Day in Life</div>
+      <div class="chip" data-group="angle" data-val="Comparison / Mana yang lebih baik" onclick="selectChip(this)">⚖️ Comparison</div>
+      <div class="chip" data-group="angle" data-val="Reaction / Review" onclick="selectChip(this)">😮 Reaction</div>
+      <div class="chip" data-group="angle" data-val="Storytime" onclick="selectChip(this)">📚 Storytime</div>
+      <div class="chip" data-group="angle" data-val="ASMR / Satisfying" onclick="selectChip(this)">🎧 ASMR</div>
+    </div>
+    <div class="field-label" style="margin-top:16px">Key message / insight utama</div>
+    <div class="section-hint">Satu hal terpenting yang penonton harus ingat setelah nonton video ini</div>
+    <input type="text" class="input-field" id="contentKey" placeholder="e.g. AI bisa gantiin 3 jam kerja editing jadi 10 menit" oninput="updateProgress()">
+
+    <!-- File source toggle -->
+    <div class="file-toggle-wrap" onclick="toggleFileBrief('general')">
+      <div class="file-toggle-label">
+        <span id="generalFileIcon">📎</span>
+        <span id="generalFileText">Ada file sumber? (artikel / press release / news)</span>
+      </div>
+      <div class="toggle-switch" id="generalFileToggle"></div>
+    </div>
+    <div id="generalFileNote" style="display:none" class="file-note">
+      ✅ AI akan baca file yang kamu attach sebagai sumber tambahan — bukan pengganti research phase. Attach file di chat AI setelah paste prompt.
+    </div>
+  </div>
+
+  <!-- TREND HIJACK form -->
+  <div id="form-trend" style="display:none">
+    <div class="section-label">02</div>
+    <div class="section-title">Ceritakan trend-nya</div>
+    <div class="section-hint">Karena kamu yang nemuin trend ini sendiri di social media, tulis semua info yang relevan di sini.</div>
+    <div class="field-label"><span class="req-dot"></span> Deskripsi trend</div>
+    <div class="section-hint">Nama trend, dari platform mana, kenapa lagi viral, dan angle unik yang mau kamu ambil</div>
+    <textarea class="input-field" id="trendDesc" placeholder="e.g. Trend 'demure' lagi viral di TikTok US — orang-orang describe hal-hal sehari-hari dengan kata 'very demure, very mindful'. Gue mau hijack ini untuk konten tech setup gue — 'very demure, very mindful workspace setup 2025'." style="min-height:120px" oninput="updateProgress()"></textarea>
+    <div class="field-label">Relevansi ke niche kamu</div>
+    <input type="text" class="input-field" id="trendNiche" placeholder="e.g. Relevan ke tech/creator lifestyle karena workspace aesthetic lagi naik" oninput="updateProgress()">
+  </div>
+
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">03</div>
+  <div class="section-title" id="sec03title">Tone & vibe</div>
+
+  <!-- Price point: only for Product Review -->
+  <div id="price-section" style="display:none">
+    <div class="field-label"><span class="req-dot"></span> Price point</div>
+    <div class="chips">
+      <div class="chip" data-group="price" data-val="Budget-friendly" onclick="selectChip(this)">💸 Budget</div>
+      <div class="chip" data-group="price" data-val="Mid-range" onclick="selectChip(this)">💰 Mid-range</div>
+      <div class="chip" data-group="price" data-val="Premium" onclick="selectChip(this)">💎 Premium</div>
+    </div>
+  </div>
+
+  <div class="field-label" id="vibeLabel" style="margin-top:0"><span class="req-dot"></span> Brand vibe</div>
+  <div class="chips">
+    <div class="chip" data-group="vibe" data-val="Fun & casual — jokes style, santai, relatable" onclick="selectChip(this)">😂 Fun & Casual</div>
+    <div class="chip" data-group="vibe" data-val="Honest & raw — jujur, tidak hype, apa adanya" onclick="selectChip(this)">🎯 Honest & Raw</div>
+    <div class="chip" data-group="vibe" data-val="Premium & aspirational — polished, elegan" onclick="selectChip(this)">✨ Premium</div>
+    <div class="chip" data-group="vibe" data-val="Trendy & aesthetic — visual-first, FOMO-driven" onclick="selectChip(this)">🌊 Trendy</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">04</div>
+  <div class="section-title">Audiens & promo</div>
+
+  <div class="field-label">Primary audience <span style="color:var(--text3);font-size:9px">— pilih 1</span></div>
+  <div class="section-hint">Siapa yang paling utama akan menonton konten ini?</div>
+  <div class="chips" id="audiencePrimaryChips">
+    <div class="chip audience-chip" data-group="audiencePrimary" data-val="Aspirer / Upgrader" data-desc="Mau upgrade lifestyle, skill, atau status. Responsive terhadap konten inspirational dan aspirational." onclick="selectAudience(this,'primary')">🚀 Aspirer</div>
+    <div class="chip audience-chip" data-group="audiencePrimary" data-val="Smart Buyer" data-desc="Selalu cari value terbaik. Responsive terhadap perbandingan harga, diskon, dan 'worth it or not'." onclick="selectAudience(this,'primary')">💸 Smart Buyer</div>
+    <div class="chip audience-chip" data-group="audiencePrimary" data-val="Tech Explorer" data-desc="Selalu mau coba hal baru duluan. Responsive terhadap inovasi, specs, dan first impression review." onclick="selectAudience(this,'primary')">⚡ Tech Explorer</div>
+    <div class="chip audience-chip" data-group="audiencePrimary" data-val="Entertainment Seeker" data-desc="Scroll untuk hiburan murni. Responsive terhadap humor, drama, dan konten yang bikin tertawa atau terkejut." onclick="selectAudience(this,'primary')">😂 Entertainment</div>
+    <div class="chip audience-chip" data-group="audiencePrimary" data-val="Problem Solver" data-desc="Cari solusi untuk masalah spesifik. Responsive terhadap how-to, tips praktis, dan hasil nyata." onclick="selectAudience(this,'primary')">🔍 Problem Solver</div>
+    <div class="chip audience-chip" data-group="audiencePrimary" data-val="Trend Chaser" data-desc="Ikut sesuatu karena circle-nya ikut. Responsive terhadap FOMO, social proof, dan viral content." onclick="selectAudience(this,'primary')">🔥 Trend Chaser</div>
+    <div class="chip audience-chip" data-group="audiencePrimary" data-val="Creator & Professional" data-desc="Content creator atau pekerja profesional. Responsive terhadap tools, workflow, efisiensi, dan ROI." onclick="selectAudience(this,'primary')">💼 Creator & Pro</div>
+    <div class="chip audience-chip" data-group="audiencePrimary" data-val="Home & Lifestyle" data-desc="Prioritas keluarga, rumah, dan keseharian. Responsive terhadap konten praktis, relatable, dan value for money." onclick="selectAudience(this,'primary')">🏠 Home & Lifestyle</div>
+  </div>
+
+  <!-- Audience description box -->
+  <div id="audienceDesc" style="display:none;margin-top:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text2);line-height:1.6;font-family:'DM Mono',monospace;"></div>
+
+  <div class="field-label" style="margin-top:16px">Secondary audience <span style="color:var(--text3);font-size:9px">— opsional, pilih 1</span></div>
+  <div class="section-hint">Audience kedua yang mungkin juga menonton — bisa dikombinasikan dengan primary.</div>
+  <div class="chips" id="audienceSecondaryChips">
+    <div class="chip audience-chip" data-group="audienceSecondary" data-val="Aspirer / Upgrader" data-desc="Mau upgrade lifestyle, skill, atau status." onclick="selectAudience(this,'secondary')">🚀 Aspirer</div>
+    <div class="chip audience-chip" data-group="audienceSecondary" data-val="Smart Buyer" data-desc="Selalu cari value terbaik dengan harga terbaik." onclick="selectAudience(this,'secondary')">💸 Smart Buyer</div>
+    <div class="chip audience-chip" data-group="audienceSecondary" data-val="Tech Explorer" data-desc="Early adopter yang selalu mau coba hal baru." onclick="selectAudience(this,'secondary')">⚡ Tech Explorer</div>
+    <div class="chip audience-chip" data-group="audienceSecondary" data-val="Entertainment Seeker" data-desc="Scroll untuk hiburan — humor dan drama." onclick="selectAudience(this,'secondary')">😂 Entertainment</div>
+    <div class="chip audience-chip" data-group="audienceSecondary" data-val="Problem Solver" data-desc="Cari solusi praktis untuk masalah spesifik." onclick="selectAudience(this,'secondary')">🔍 Problem Solver</div>
+    <div class="chip audience-chip" data-group="audienceSecondary" data-val="Trend Chaser" data-desc="FOMO-driven, ikut trend karena circle-nya ikut." onclick="selectAudience(this,'secondary')">🔥 Trend Chaser</div>
+    <div class="chip audience-chip" data-group="audienceSecondary" data-val="Creator & Professional" data-desc="Tools, workflow, efisiensi, dan ROI." onclick="selectAudience(this,'secondary')">💼 Creator & Pro</div>
+    <div class="chip audience-chip" data-group="audienceSecondary" data-val="Home & Lifestyle" data-desc="Keluarga, rumah, dan keseharian yang praktis." onclick="selectAudience(this,'secondary')">🏠 Home & Lifestyle</div>
+  </div>
+  <div id="audienceSecDesc" style="display:none;margin-top:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text2);line-height:1.6;font-family:'DM Mono',monospace;"></div>
+
+  <!-- Promo: only for Product Review, changes based on YouTube vs TikTok -->
+  <div id="promo-section" style="display:none">
+    <!-- TikTok promo chips -->
+    <div id="promo-tiktok">
+      <div class="field-label" style="margin-top:16px">Promo angle</div>
+      <div class="chips">
+        <div class="chip" data-group="promo" data-val="Diskon di keranjang kuning TikTok Shop" onclick="selectChip(this)">🛒 Keranjang Kuning</div>
+        <div class="chip" data-group="promo" data-val="Discount code tersedia" onclick="selectChip(this)">🏷️ Discount Code</div>
+        <div class="chip" data-group="promo" data-val="Limited time offer — stok terbatas" onclick="selectChip(this)">⏰ Limited Offer</div>
+        <div class="chip" data-group="promo" data-val="Free shipping" onclick="selectChip(this)">🚚 Free Shipping</div>
+        <div class="chip" data-group="promo" data-val="Organic review — tidak ada promo" onclick="selectChip(this)">🙅 No Promo</div>
+      </div>
+    </div>
+    <!-- YouTube promo text field -->
+    <div id="promo-youtube" style="display:none">
+      <div class="field-label" style="margin-top:16px">Promo / sponsor angle <span style="color:var(--text3);font-size:9px">— opsional</span></div>
+      <div class="section-hint">Jika ada: discount code, sponsor segment, atau link di description. Kosongkan jika tidak ada promo.</div>
+      <input type="text" class="input-field" id="promoYoutube" placeholder="e.g. Discount code YUDO20, sponsored by X, link di description" oninput="syncYoutubePromo()">
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">05</div>
+  <div class="section-title">Region & format</div>
+  <div class="field-label"><span class="req-dot"></span> Target region</div>
+  <div class="chips">
+    <div class="chip" data-group="region" data-val="Indonesia" onclick="selectChip(this)">🇮🇩 Indonesia</div>
+    <div class="chip" data-group="region" data-val="Southeast Asia (SEA)" onclick="selectChip(this)">🌏 SEA</div>
+    <div class="chip" data-group="region" data-val="United States" onclick="selectChip(this)">🇺🇸 US</div>
+    <div class="chip" data-group="region" data-val="United Kingdom" onclick="selectChip(this)">🇬🇧 UK</div>
+    <div class="chip" data-group="region" data-val="Australia" onclick="selectChip(this)">🇦🇺 AU</div>
+    <div class="chip" data-group="region" data-val="Global" onclick="selectChip(this)">🌍 Global</div>
+  </div>
+  <div class="field-label" style="margin-top:16px"><span class="req-dot"></span> Format video</div>
+  <div class="chips">
+    <div class="chip" data-group="format" data-val="Talking head" onclick="selectChip(this)">🎙️ Talking Head</div>
+    <div class="chip" data-group="format" data-val="POV" onclick="selectChip(this)">📷 POV</div>
+    <div class="chip" data-group="format" data-val="Montage / B-roll heavy" onclick="selectChip(this)">🎞️ Montage</div>
+    <div class="chip" data-group="format" data-val="Text + VO" onclick="selectChip(this)">📝 Text + VO</div>
+    <div class="chip" data-group="format" data-val="VO + product visuals" onclick="selectChip(this)">🔊 VO + Product</div>
+  </div>
+  <div class="field-label" style="margin-top:16px"><span class="req-dot"></span> Pacing</div>
+  <div class="chips">
+    <div class="chip" data-group="pacing" data-val="Fast cut — di bawah 2 detik per shot" onclick="selectChip(this)">⚡ Fast Cut</div>
+    <div class="chip" data-group="pacing" data-val="Medium — 2 sampai 4 detik per shot" onclick="selectChip(this)">🎯 Medium</div>
+    <div class="chip" data-group="pacing" data-val="Cinematic — slow, deliberate" onclick="selectChip(this)">🎬 Cinematic</div>
+  </div>
+  <div class="field-label" style="margin-top:16px">Durasi target</div>
+  <div class="chips">
+    <div class="chip" data-group="duration" data-val="15–20 detik" onclick="selectChip(this)">⚡ 15–20s</div>
+    <div class="chip" data-group="duration" data-val="30–45 detik" onclick="selectChip(this)">🎯 30–45s</div>
+    <div class="chip" data-group="duration" data-val="45–60 detik" onclick="selectChip(this)">📽️ 45–60s</div>
+    <div class="chip" data-group="duration" data-val="youtube" onclick="selectDuration(this)">▶️ YouTube</div>
+  </div>
+  <div id="youtubeNote" style="display:none;margin-top:10px;background:rgba(255,80,80,0.06);border:1px solid rgba(255,80,80,0.2);border-radius:10px;padding:12px 14px;font-size:12px;color:#FF8080;line-height:1.6;font-family:'DM Mono',monospace;">
+    ▶️ YouTube mode: Prompt akan generate long-form script dengan struktur hook, body, CTA, dan outro — dioptimasi untuk YouTube retention, bukan TikTok.
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">06</div>
+  <div class="section-title">Hook & emosi</div>
+  <div class="field-label"><span class="req-dot"></span> Hook type</div>
+  <div class="chips">
+    <div class="chip" data-group="hook" data-val="Shock / Unexpected — sesuatu yang tidak terduga di frame pertama" onclick="selectChip(this)">⚡ Shock</div>
+    <div class="chip" data-group="hook" data-val="Bold statement — klaim berani yang bikin orang berhenti" onclick="selectChip(this)">🔥 Bold Statement</div>
+    <div class="chip" data-group="hook" data-val="Curiosity gap — pertanyaan yang harus dijawab" onclick="selectChip(this)">❓ Curiosity Gap</div>
+    <div class="chip" data-group="hook" data-val="POV / Relatable — situasi yang langsung relate" onclick="selectChip(this)">🫶 POV Relatable</div>
+    <div class="chip" data-group="hook" data-val="Watch till end tease — payoff di-tease dari awal" onclick="selectChip(this)">👀 Watch Till End</div>
+    <div class="chip" data-group="hook" data-val="Challenge / Game — format tebak-tebakan atau kompetisi" onclick="selectChip(this)">🎯 Challenge</div>
+  </div>
+  <div class="field-label" style="margin-top:16px"><span class="req-dot"></span> Emosi utama yang ingin ditrigger</div>
+  <div class="chips">
+    <div class="chip" data-group="emotion" data-val="Curiosity — penonton harus tau apa yang terjadi selanjutnya" onclick="selectChip(this)">🤔 Curiosity</div>
+    <div class="chip" data-group="emotion" data-val="Humor / Entertainment — bikin ketawa atau geli" onclick="selectChip(this)">😂 Humor</div>
+    <div class="chip" data-group="emotion" data-val="Inspiration / Aspiration — bikin penonton mau lebih baik" onclick="selectChip(this)">✨ Inspirasi</div>
+    <div class="chip" data-group="emotion" data-val="Relatability — penonton merasa ini tentang mereka" onclick="selectChip(this)">🙋 Relatable</div>
+    <div class="chip" data-group="emotion" data-val="Shock / Surprise — reveal yang tidak terduga" onclick="selectChip(this)">😮 Shock</div>
+    <div class="chip" data-group="emotion" data-val="FOMO — takut ketinggalan sesuatu" onclick="selectChip(this)">🗣️ FOMO</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">07</div>
+  <div class="section-title">Paste ke AI mana?</div>
+  <div class="field-label"><span class="req-dot"></span> Wajib — prompt akan di-tune per platform</div>
+  <div class="platform-grid">
+    <div class="platform-btn" data-platform="claude" onclick="selectPlatform(this)">
+      <div class="platform-icon">🟣</div>
+      <div class="platform-name">Claude</div>
+    </div>
+    <div class="platform-btn" data-platform="chatgpt" onclick="selectPlatform(this)">
+      <div class="platform-icon">🟢</div>
+      <div class="platform-name">ChatGPT</div>
+    </div>
+    <div class="platform-btn" data-platform="gemini" onclick="selectPlatform(this)">
+      <div class="platform-icon">🔵</div>
+      <div class="platform-name">Gemini</div>
+    </div>
+  </div>
+  <div id="eduWarning" style="display:none;margin-top:14px;background:rgba(200,255,0,0.06);border:1px solid rgba(200,255,0,0.2);border-radius:10px;padding:12px 14px;font-size:12px;color:#C8FF00;line-height:1.6;font-family:'DM Mono',monospace;">
+    ⚠️ Educational + Claude: Pastikan fitur web search aktif di Claude (ikon globe di toolbar) sebelum paste prompt. Tanpa web search, Claude pakai knowledge cutoff yang mungkin outdated.
+  </div>
+  <div id="youtubeNote" style="display:none;margin-top:14px;background:rgba(255,80,80,0.06);border:1px solid rgba(255,80,80,0.2);border-radius:10px;padding:12px 14px;font-size:12px;color:#FF8080;line-height:1.6;font-family:'DM Mono',monospace;">
+    ▶️ YouTube Script: Prompt akan generate long-form script (5–15 menit) dengan struktur hook, body, dan CTA yang dioptimasi untuk retention YouTube — bukan TikTok. Paste ke AI tools mana saja.
+  </div>
+</div>
+
+<div style="height:40px"></div>
+
+<div class="generate-wrap">
+  <button class="generate-btn" id="generateBtn" onclick="generatePrompt()" disabled>
+    <span>⚡</span> BUILD MY PROMPT
+  </button>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">PROMPT SIAP ✓</div>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="platform-tabs" id="platformTabs"></div>
+    <div class="prompt-box" id="promptBox"></div>
+    <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">
+      <span>📋</span> COPY PROMPT
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const S={type:'',price:'',vibe:'',promo:'',region:'',format:'',pacing:'',duration:'',hook:'',emotion:'',audiencePrimary:'',audienceSecondary:'',platform:'',topic:[],angle:'',contentKey:'',trendDesc:'',trendNiche:'',hasProductFile:false,hasGeneralFile:false};
+const REQUIRED=['type','price','vibe','region','format','pacing','hook','emotion','platform'];
+
+// Content type switcher
+function selectType(el){
+  document.querySelectorAll('.chip[data-group="type"]').forEach(c=>c.classList.remove('selected'));
+  el.classList.toggle('selected');
+  S.type=el.classList.contains('selected')?el.dataset.val:'';
+
+  const isProduct=S.type==='Affiliate / Product Review';
+
+  // Section 02: show correct form
+  document.getElementById('form-product').style.display='none';
+  document.getElementById('form-general').style.display='none';
+  document.getElementById('form-trend').style.display='none';
+  if(isProduct) document.getElementById('form-product').style.display='block';
+  else if(S.type==='General / Entertainment'||S.type==='Educational') document.getElementById('form-general').style.display='block';
+  else if(S.type==='Trend Hijack') document.getElementById('form-trend').style.display='block';
+
+  // YouTube product extra fields — show only if product review + youtube duration
+  const ytFields=document.getElementById('ytProductFields');
+  if(ytFields) ytFields.style.display=(isProduct&&S.duration==='youtube')?'block':'none';
+  const priceEl=document.getElementById('price-section');
+  const titleEl=document.getElementById('sec03title');
+  const vibeLabel=document.getElementById('vibeLabel');
+  if(isProduct){
+    priceEl.style.display='block';
+    titleEl.textContent='Harga & vibe';
+    vibeLabel.style.marginTop='16px';
+  } else {
+    priceEl.style.display='none';
+    S.price='';
+    document.querySelectorAll('.chip[data-group="price"]').forEach(c=>c.classList.remove('selected'));
+    titleEl.textContent='Tone & vibe';
+    vibeLabel.style.marginTop='0';
+  }
+
+  // Section 04: show/hide promo
+  const promoEl=document.getElementById('promo-section');
+  if(isProduct){
+    promoEl.style.display='block';
+  } else {
+    promoEl.style.display='none';
+    S.promo='';
+    document.querySelectorAll('.chip[data-group="promo"]').forEach(c=>c.classList.remove('selected'));
+  }
+
+  checkEduWarning();
+  updateProgress();
+}
+
+function selectChip(el){
+  const g=el.dataset.group;
+  document.querySelectorAll(`.chip[data-group="${g}"]`).forEach(c=>c.classList.remove('selected'));
+  el.classList.toggle('selected');
+  S[g]=el.classList.contains('selected')?el.dataset.val:'';
+  updateProgress();
+}
+
+function selectMultiChip(el,group,max){
+  const selected=document.querySelectorAll(`.chip[data-group="${group}"].selected`);
+  if(!el.classList.contains('selected')&&selected.length>=max){
+    showToast(`Pilih maks ${max} topik`);return;
+  }
+  el.classList.toggle('selected');
+  S.topic=Array.from(document.querySelectorAll(`.chip[data-group="${group}"].selected`)).map(c=>c.dataset.val);
+  updateProgress();
+}
+
+function selectAudience(el,tier){
+  const group=tier==='primary'?'audiencePrimary':'audienceSecondary';
+  const descId=tier==='primary'?'audienceDesc':'audienceSecDesc';
+  document.querySelectorAll(`.chip[data-group="${group}"]`).forEach(c=>c.classList.remove('selected'));
+  el.classList.toggle('selected');
+  if(el.classList.contains('selected')){
+    S[group]=el.dataset.val;
+    const desc=document.getElementById(descId);
+    if(desc){desc.textContent='ℹ️ '+el.dataset.desc;desc.style.display='block';}
+  } else {
+    S[group]='';
+    const desc=document.getElementById(descId);
+    if(desc) desc.style.display='none';
+  }
+  updateProgress();
+}
+
+function toggleFileBrief(type){
+  const key=type==='product'?'hasProductFile':'hasGeneralFile';
+  S[key]=!S[key];
+  const wrapEl=document.getElementById(type+'FileToggle').closest('.file-toggle-wrap');
+  const noteEl=document.getElementById(type+'FileNote');
+  if(wrapEl) wrapEl.classList.toggle('active',S[key]);
+  if(noteEl) noteEl.style.display=S[key]?'block':'none';
+}
+
+function selectPlatform(el){
+  document.querySelectorAll('.platform-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.toggle('selected');
+  S.platform=el.classList.contains('selected')?el.dataset.platform:'';
+  checkEduWarning();
+  updateProgress();
+}
+
+function selectDuration(el){
+  document.querySelectorAll('.chip[data-group="duration"]').forEach(c=>c.classList.remove('selected'));
+  el.classList.toggle('selected');
+  S.duration=el.classList.contains('selected')?el.dataset.val:'';
+  const isYT=S.duration==='youtube';
+  const ytNote=document.getElementById('youtubeNote');
+  if(ytNote) ytNote.style.display=isYT?'block':'none';
+  // Toggle YouTube product extra fields
+  const ytFields=document.getElementById('ytProductFields');
+  if(ytFields) ytFields.style.display=isYT&&S.type==='Affiliate / Product Review'?'block':'none';
+  // Toggle promo mode
+  const promoTT=document.getElementById('promo-tiktok');
+  const promoYT=document.getElementById('promo-youtube');
+  if(promoTT&&promoYT){
+    promoTT.style.display=isYT?'none':'block';
+    promoYT.style.display=isYT?'block':'none';
+  }
+  updateProgress();
+}
+
+function syncYoutubePromo(){
+  S.promo=document.getElementById('promoYoutube')?.value.trim()||'';
+}
+
+function checkEduWarning(){
+  const warn=document.getElementById('eduWarning');
+  if(warn) warn.style.display=(S.type==='Educational'&&S.platform==='claude')?'block':'none';
+}
+
+function updateProgress(){
+  const pn=document.getElementById('productName');
+  const pw=document.getElementById('productWhat');
+  const pe=document.getElementById('productExp');
+  const td=document.getElementById('trendDesc');
+  if(pn)S.productName=pn.value.trim();
+  if(pw)S.productWhat=pw.value.trim();
+  if(pe)S.productExp=pe.value.trim();
+  if(td)S.trendDesc=td.value.trim();
+
+  // price only required for product review
+  const baseReqs=REQUIRED.filter(k=>k!=='price');
+  let filled=0,total=0;
+
+  if(S.type==='Affiliate / Product Review'){
+    total=REQUIRED.length+2; // +productName +productWhat
+    filled=REQUIRED.filter(k=>S[k]).length+(S.productName?1:0)+(S.productWhat?1:0);
+  } else if(S.type==='General / Entertainment'||S.type==='Educational'){
+    total=baseReqs.length+2; // +topic +angle
+    filled=baseReqs.filter(k=>S[k]).length+(S.topic.length>0?1:0)+(S.angle?1:0);
+  } else if(S.type==='Trend Hijack'){
+    total=baseReqs.length+1; // +trendDesc
+    filled=baseReqs.filter(k=>S[k]).length+(S.trendDesc?1:0);
+  } else {
+    total=REQUIRED.length;
+    filled=REQUIRED.filter(k=>S[k]).length;
+  }
+
+  document.getElementById('progressFill').style.width=(filled/total*100)+'%';
+  document.getElementById('progressLabel').textContent=`${filled} of ${total} required fields completed`;
+  document.getElementById('generateBtn').disabled=filled<total;
+}
+
+function resetAll(){
+  Object.keys(S).forEach(k=>Array.isArray(S[k])?S[k]=[]:typeof S[k]==='boolean'?S[k]=false:S[k]='');
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+  document.querySelectorAll('.platform-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.input-field').forEach(f=>f.value='');
+  document.querySelectorAll('.file-toggle-wrap').forEach(w=>w.classList.remove('active'));
+  document.getElementById('productFileNote').style.display='none';
+  document.getElementById('generalFileNote').style.display='none';
+  const ytFields=document.getElementById('ytProductFields');
+  if(ytFields) ytFields.style.display='none';
+  const promoTT=document.getElementById('promo-tiktok');
+  const promoYT=document.getElementById('promo-youtube');
+  if(promoTT) promoTT.style.display='block';
+  if(promoYT) promoYT.style.display='none';
+  const ytNote=document.getElementById('youtubeNote');
+  if(ytNote) ytNote.style.display='none';
+  const ad=document.getElementById('audienceDesc');
+  const asd=document.getElementById('audienceSecDesc');
+  if(ad) ad.style.display='none';
+  if(asd) asd.style.display='none';
+  document.getElementById('form-product').style.display='none';
+  document.getElementById('form-general').style.display='none';
+  document.getElementById('form-trend').style.display='none';
+  document.getElementById('price-section').style.display='none';
+  document.getElementById('promo-section').style.display='none';
+  document.getElementById('sec03title').textContent='Tone & vibe';
+  document.getElementById('vibeLabel').style.marginTop='0';
+  updateProgress();
+  showToast('Brief direset ↺',true);
+}
+
+const REGIONAL={
+  'Indonesia':`Indonesia/SEA:
+- "Murah tapi bagus" adalah flex terkuat di market ini
+- Audiens butuh bukti nyata, bukan klaim — before/after paling dipercaya
+- Narasi "ditipu harga mahal" sangat relatable dan punya shareability tinggi ke grup WhatsApp
+- Humor self-deprecating dan jokes kasual perform tinggi
+- CTA native: "cek keranjang kuning" — jangan diganti apapun
+- Penonton screenshot caption untuk cari produk manual di TikTok Shop
+- Shares terjadi ke grup WhatsApp dan komunitas sesama kreator`,
+  'Southeast Asia (SEA)':`Southeast Asia (SEA):
+- "Murah tapi bagus" adalah flex terkuat
+- Audiens butuh bukti nyata, bukan klaim — before/after paling dipercaya
+- Humor relatable dan situasi sehari-hari perform tinggi
+- CTA: "link di bio" atau "keranjang kuning" tergantung negara
+- Shares ke grup komunitas dan sesama pengguna`,
+  'United States':`United States:
+- Pattern interrupt di 1.5 detik pertama non-negotiable
+- Raw > polished — studio quality justru kurangi trust
+- Deadpan CTA convert lebih baik dari excited pitch
+- 70% nonton tanpa suara — subtitles wajib di setiap shot penting
+- "Borderline illegal" / "nobody talks about this" phrasing resonates strongly
+- Shares ke close friends dan niche communities`,
+  'United Kingdom':`United Kingdom:
+- Skeptic-to-believer arc adalah struktur paling converting
+- Dry understatement mengalahkan hype setiap saat
+- Buka dengan keraguan, tutup dengan reluctant proof
+- "Is it actually worth it?" jauh lebih kuat dari enthusiasm
+- Shares karena konten dianggap genuinely useful`,
+  'Australia':`Australia:
+- Casual mate-to-mate tone — no fluff, no polish
+- Practical proof over aesthetic
+- Free shipping ke AU adalah conversion driver utama
+- Shares karena konten dianggap jujur dan tidak hype`,
+  'Global':`Global:
+- Universal emotions: surprise, aspiration, relatability
+- Visual transformation crosses all cultural barriers
+- Bahasa simple, tanpa slang regional
+- Before/after adalah format paling universal
+- Caption dalam bahasa Inggris, tone neutral`
+};
+
+const STRUCTURES=`== STORYTELLING STRUCTURES ==
+Selalu mix 2-3, jangan hanya satu:
+- Problem → Agitate → Solution
+- Results First (lempar hasil terbaik di detik pertama)
+- Skeptic Turned Believer
+- Day in the Life (produk embedded natural)
+- Curiosity Loop (open loop, delay payoff)
+- Challenge / Game (tebak-tebakan, perbandingan)`;
+
+function gv(id){const el=document.getElementById(id);return el?el.value.trim():'';}
+
+function buildBrief(lang){
+  const isID=lang==='id';
+  const type=S.type;
+  const dur=S.duration||(isID?'30–45 detik':'30–45 seconds');
+
+  const audienceStr=S.audiencePrimary+(S.audienceSecondary?' + '+S.audienceSecondary:'');
+  const isYT=S.duration==='youtube';
+
+  if(type==='Affiliate / Product Review'){
+    const ytExtras=isYT?`
+Use case: ${gv('productUseCase')||'Tidak disebutkan'}
+Kekurangan / limitasi: ${gv('productCons')||'Tidak disebutkan'}
+Testing period: ${gv('productTesting')||'Tidak disebutkan'}
+Promo / sponsor: ${gv('promoYoutube')||'Tidak ada'}`:'';
+
+    return isID?`== BRIEF KONTEN ==
+Tipe konten: ${type}${isYT?' (YouTube Long-form)':''}
+Nama produk: ${gv('productName')||'Tidak disebutkan'}
+Fungsi utama: ${gv('productWhat')||'Tidak disebutkan'}
+Selling point utama: ${gv('productSelling')||'Tidak disebutkan'}
+Produk pembanding: ${gv('productComp')||'Tidak ada'}
+Pengalaman pribadi: ${gv('productExp')||'Tidak disebutkan'}${ytExtras}
+Price point: ${S.price}
+Brand vibe: ${S.vibe}
+${!isYT?`Promo: ${S.promo||'Tidak ada'}`:''}
+Target audiens: ${audienceStr||'Umum'}
+Target region: ${S.region}
+Format video: ${S.format}
+Pacing: ${S.pacing}
+Hook type: ${S.hook}
+Core emotion: ${S.emotion}`
+:`== CONTENT BRIEF ==
+Content type: ${type}${isYT?' (YouTube Long-form)':''}
+Product name: ${gv('productName')||'Not specified'}
+What it does: ${gv('productWhat')||'Not specified'}
+Key selling point: ${gv('productSelling')||'Not specified'}
+Competitor / comparison: ${gv('productComp')||'None'}
+Personal result/experience: ${gv('productExp')||'Not specified'}${isYT?`
+Use case: ${gv('productUseCase')||'Not specified'}
+Limitations / cons: ${gv('productCons')||'Not specified'}
+Testing period: ${gv('productTesting')||'Not specified'}
+Promo / sponsor: ${gv('promoYoutube')||'None'}`:''}
+Price point: ${S.price}
+Brand vibe: ${S.vibe}
+${!isYT?`Promo angle: ${S.promo||'No promo'}`:''}
+Target audience: ${audienceStr||'General'}
+Target region: ${S.region}
+Video format: ${S.format}
+Pacing: ${S.pacing}
+Hook type: ${S.hook}
+Core emotion: ${S.emotion}`;
+  }
+
+  if(type==='General / Entertainment'||type==='Educational'){
+    return isID?`== BRIEF KONTEN ==
+Tipe konten: ${type}
+Topik / Niche: ${S.topic.join(', ')||'Tidak disebutkan'}
+Angle konten: ${S.angle||'Tidak disebutkan'}
+Key message / insight utama: ${gv('contentKey')||'Tidak disebutkan'}
+Brand vibe: ${S.vibe}
+Target audiens: ${audienceStr||'Umum'}
+Target region: ${S.region}
+Format video: ${S.format}
+Pacing: ${S.pacing}
+Durasi target: ${dur}
+Hook type: ${S.hook}
+Core emotion: ${S.emotion}`
+:`== CONTENT BRIEF ==
+Content type: ${type}
+Topic / Niche: ${S.topic.join(', ')||'Not specified'}
+Content angle: ${S.angle||'Not specified'}
+Key message / main insight: ${gv('contentKey')||'Not specified'}
+Brand vibe: ${S.vibe}
+Target audience: ${audienceStr||'General'}
+Target region: ${S.region}
+Video format: ${S.format}
+Pacing: ${S.pacing}
+Target duration: ${dur}
+Hook type: ${S.hook}
+Core emotion: ${S.emotion}`;
+  }
+
+  if(type==='Trend Hijack'){
+    return isID?`== BRIEF KONTEN ==
+Tipe konten: ${type}
+Deskripsi trend: ${gv('trendDesc')||'Tidak disebutkan'}
+Relevansi ke niche: ${gv('trendNiche')||'Tidak disebutkan'}
+Brand vibe: ${S.vibe}
+Target audiens: ${audienceStr||'Umum'}
+Target region: ${S.region}
+Format video: ${S.format}
+Pacing: ${S.pacing}
+Durasi target: ${dur}
+Hook type: ${S.hook}
+Core emotion: ${S.emotion}`
+:`== CONTENT BRIEF ==
+Content type: ${type}
+Trend description: ${gv('trendDesc')||'Not specified'}
+Relevance to niche: ${gv('trendNiche')||'Not specified'}
+Brand vibe: ${S.vibe}
+Target audience: ${audienceStr||'General'}
+Target region: ${S.region}
+Video format: ${S.format}
+Pacing: ${S.pacing}
+Target duration: ${dur}
+Hook type: ${S.hook}
+Core emotion: ${S.emotion}`;
+  }
+  return '';
+}
+
+function p1Format(lang){
+  const id=lang==='id';
+  const r=S.region;
+  return id?`== PHASE 1: 3 CREATIVE DIRECTIONS ==
+
+Output setiap direction PERSIS format ini — jangan deviasi:
+
+════════════════════════════════════
+DIRECTION [1 / 2 / 3]
+NAME: [nama punchy, maks 5 kata]
+
+HOOK (0:00–0:03):
+▸ VISUAL: [apa yang terjadi di frame 1 — harus mid-action, tidak pernah static]
+▸ ON-SCREEN TEXT: [maks 8 kata, bikin orang berhenti scroll]
+▸ SPOKEN LINE: [maks 10 kata, buat open loop yang harus dijawab]
+
+STORYTELLING MIX:
+[2-3 struktur yang diblend + alasan spesifik kenapa kombinasi ini tepat untuk produk dan region ini]
+
+RETENTION STRATEGY:
+[Tension apa yang membuat orang stay setelah hook? Sebutkan momen spesifik yang jadi jangkar kedua]
+
+LOOP TRIGGER:
+[Bagaimana ending nyambung kembali ke opening untuk mendorong rewatch]
+
+EMOTIONAL ARC:
+Detik 0 → [emosi] | Tengah → [emosi] | Akhir → [emosi]
+
+VIRALITY ANALYSIS:
+▸ Hook Rate: [%] — [alasan satu kalimat]
+▸ Completion Rate: [%] — [alasan satu kalimat]
+▸ Rewatch Potential: [Low / Medium / High] — [alasan]
+▸ Share Trigger: [apa yang spesifik bikin orang share/forward video ini]
+▸ Weak Point: [satu kelemahan paling kritis dari direction ini]
+▸ Must Be Perfect: [satu hal yang jika salah membunuh seluruh video]
+
+COCOK UNTUK ${r.toUpperCase()} KARENA:
+[Satu kalimat tajam yang spesifik untuk behavior audiens di region ini]
+════════════════════════════════════
+
+Setelah 3 directions, tulis PERSIS ini dan berhenti total:
+
+---
+Pilih direction: ketik "1", "2", "3", atau "mix" + elemen yang ingin digabung.
+Aku generate script final setelah kamu memilih.
+---`
+:`== PHASE 1: 3 CREATIVE DIRECTIONS ==
+
+Output each direction EXACTLY in this format — no deviation:
+
+════════════════════════════════════
+DIRECTION [1 / 2 / 3]
+NAME: [punchy name, max 5 words]
+
+HOOK (0:00-0:03):
+VISUAL: [what happens in frame 1 — mid-action only, never static]
+ON-SCREEN TEXT: [max 8 words, scroll-stopper]
+SPOKEN LINE: [max 10 words, creates open loop that must be answered]
+
+STORYTELLING MIX:
+[2-3 structures blended + specific reason why this combination works for this product and region]
+
+RETENTION STRATEGY:
+[What tension keeps people watching after hook? Name the specific second anchor moment]
+
+LOOP TRIGGER:
+[How the ending connects back to the opening to drive rewatches]
+
+EMOTIONAL ARC:
+0s → [emotion] | Mid → [emotion] | End → [emotion]
+
+VIRALITY ANALYSIS:
+Hook Rate: [%] — [one sentence reason]
+Completion Rate: [%] — [one sentence reason]
+Rewatch Potential: [Low / Medium / High] — [reason]
+Share Trigger: [what specifically makes people share/forward this video]
+Weak Point: [single most critical weakness of this direction]
+Must Be Perfect: [one thing that if wrong kills the entire video]
+
+BEST FOR ${r.toUpperCase()} BECAUSE:
+[One sharp sentence specific to this region's audience behavior]
+════════════════════════════════════
+
+After all 3 directions write EXACTLY this and stop completely:
+
+---
+Reply with "1", "2", "3", or "mix" + which elements to combine.
+I will generate the full script after your reply.
+---`;
+}
+
+function p2(lang){
+  const id=lang==='id';
+  const dur=S.duration||(id?'30–45 detik':'30–45 seconds');
+  const r=S.region;
+  const captionNote=(['Indonesia','Southeast Asia (SEA)'].includes(r))
+    ?(id?'Caption Bahasa Indonesia yang natural. Sebut nama produk lengkap — banyak penonton yang screenshot untuk dicari manual di TikTok Shop. Tambahkan hashtag relevan, tidak spammy. Maks 150 karakter.'
+        :'Caption in casual Indonesian. Include full product name as viewers screenshot to search manually. Add relevant non-spammy hashtags. Max 150 chars.')
+    :(id?'Caption dalam bahasa sesuai region target. Natural, keyword-aware. Maks 150 karakter + hashtag.'
+        :'Caption in English, natural tone, keyword-aware. Max 150 chars + non-spammy hashtags.');
+
+  return id?`== PHASE 2: SCRIPT GENERATION ==
+[HANYA AKTIF SETELAH AKU REPLY DENGAN PILIHAN]
+
+Generate langsung tanpa konfirmasi tambahan.
+
+SCRIPT RULES — semua wajib:
+□ Frame 1: mid-action, tidak pernah dari posisi diam
+□ Open loop terbentuk sebelum detik ke-3
+□ Gunakan detail spesifik: angka, nama, tempat nyata
+□ Tension dijaga sepanjang bagian tengah
+□ Zero filler: tidak ada "game changer", "kamu harus punya", "life changing"
+□ CTA terasa seperti saran teman, bukan jualan
+□ Shot terakhir nyambung ke shot pertama (loop trigger)
+□ Durasi: ${dur}
+□ Bahasa Indonesia casual sesuai brand vibe di brief
+□ VO harus terdengar seperti manusia sungguhan, bukan AI
+
+Format setiap baris PERSIS seperti ini:
+[TIMESTAMP] [SHOT: deskripsi kamera]
+ON-SCREEN TEXT: "teks di layar" (jika ada)
+VO: kata-kata yang diucapkan
+NOTES: *catatan eksekusi penting jika diperlukan*
+
+Setelah script selesai, output:
+
+════════════════════════════════════
+VIRALITY SCORECARD
+════════════════════════════════════
+VIRALITY SCORE:    [0-100] | [satu kalimat tajam]
+HOOK SCORE:        [0-100] | [satu kalimat tajam]
+COMPLETION RATE:   [%] | [alasan spesifik]
+REWATCH POTENTIAL: [Low / Medium / High] | [alasan]
+SHARE TRIGGER:     [apa yang spesifik bikin orang share]
+
+════════════════════════════════════
+WEAK POINTS & FIXES
+════════════════════════════════════
+▸ [TIMESTAMP] — [masalah spesifik + kenapa attention bisa drop]
+  FIX: [solusi konkret dan actionable]
+
+▸ [TIMESTAMP] — [masalah kedua]
+  FIX: [solusi konkret]
+
+▸ [TIMESTAMP] — [masalah ketiga jika ada]
+  FIX: [solusi konkret]
+
+════════════════════════════════════
+WHAT NEEDS TO BE PERFECT
+════════════════════════════════════
+[Satu paragraf tentang elemen eksekusi paling kritis — jika ini salah, video gagal]
+
+════════════════════════════════════
+REGIONAL INSIGHT
+════════════════════════════════════
+[4-5 kalimat konkret mengaplikasikan behavior audiens ${r} ke script ini — bukan generik]
+
+════════════════════════════════════
+CAPTION SUGGESTION
+════════════════════════════════════
+${captionNote}
+
+Mulai Phase 1 sekarang.`
+:`== PHASE 2: SCRIPT GENERATION ==
+ONLY activate after I reply with my direction choice.
+Generate immediately, no confirmation needed.
+
+SCRIPT RULES — all mandatory:
+□ Frame 1: mid-action, never from a static position
+□ Open loop exists before 3 seconds
+□ Use specific real details: numbers, names, actual places
+□ Tension maintained through the middle section
+□ Zero filler: no "game changer", "you need this", "life changing"
+□ CTA must feel like friend advice, not selling
+□ Last shot connects back to first shot (loop trigger)
+□ Duration: ${dur}
+□ Language and tone must match brief exactly
+□ VO must sound like a real human, not AI
+□ Plain text only — no markdown
+
+Format every line:
+[TIMESTAMP] [SHOT: camera description]
+ON-SCREEN TEXT: "text here" (if applicable)
+VO: spoken words here
+NOTES: *critical execution note if needed*
+
+After the script output:
+
+════════════════════════════════════
+VIRALITY SCORECARD
+════════════════════════════════════
+VIRALITY SCORE:    [0-100] | [one sharp sentence]
+HOOK SCORE:        [0-100] | [one sharp sentence]
+COMPLETION RATE:   [%] | [specific reason]
+REWATCH POTENTIAL: [Low / Medium / High] | [reason]
+SHARE TRIGGER:     [what specifically makes people share]
+
+════════════════════════════════════
+WEAK POINTS & FIXES
+════════════════════════════════════
+[TIMESTAMP] — [specific problem + why attention drops here]
+FIX: [concrete actionable solution]
+
+[TIMESTAMP] — [second problem]
+FIX: [concrete solution]
+
+[TIMESTAMP] — [third problem if any]
+FIX: [concrete solution]
+
+════════════════════════════════════
+WHAT NEEDS TO BE PERFECT
+════════════════════════════════════
+[One paragraph on the single most critical execution element]
+
+════════════════════════════════════
+REGIONAL INSIGHT
+════════════════════════════════════
+[4-5 concrete sentences applying ${r} audience behavior to THIS script — not generic]
+
+════════════════════════════════════
+CAPTION SUGGESTION
+════════════════════════════════════
+${captionNote}`;
+}
+
+function educationalResearch(lang){
+  const isID=lang==='id';
+  const topic=S.topic.join(' dan ')||'topik yang ditentukan';
+  const region=S.region||'Global';
+  const angle=S.angle||'';
+
+  if(isID) return `== RESEARCH PHASE (WAJIB untuk konten Educational) ==
+
+SEBELUM melakukan apapun, kamu HARUS search dan kumpulkan informasi terkini tentang:
+- Topik: ${topic}
+- Region target: ${region}
+- Angle: ${angle}
+
+INSTRUKSI RESEARCH:
+1. Search informasi terkini dan valid tentang topik ini — prioritaskan data, studi, atau fakta yang bisa diverifikasi
+2. Identifikasi mana yang paling relevan dan menarik untuk audiens TikTok di ${region}
+3. Pilih 3–5 fakta atau insight yang paling "scroll-stopping" — yang membuat orang berhenti dan berkata "ini gue ga tau sebelumnya"
+4. Jangan gunakan fakta yang tidak bisa kamu verifikasi — lebih baik sedikit tapi akurat
+
+OUTPUT RESEARCH (sebelum directions):
+RESEARCH FINDINGS:
+• [Fakta/insight 1] — Sumber: [nama sumber jika tersedia, kosongkan jika tidak]
+• [Fakta/insight 2] — Sumber: [nama sumber jika tersedia, kosongkan jika tidak]
+• [Fakta/insight 3] — Sumber: [nama sumber jika tersedia, kosongkan jika tidak]
+
+Catatan: Sumber bersifat opsional — jika tidak ditemukan sumber spesifik, tetap tulis faktanya. Yang terpenting adalah fakta yang disampaikan akurat dan bisa dipertanggungjawabkan.
+
+Setelah research findings, lanjut ke Phase 1 directions.`;
+
+  return `== RESEARCH PHASE (MANDATORY for Educational content) ==
+
+BEFORE doing anything else, you MUST search and gather current, verified information about:
+- Topic: ${topic}
+- Target region: ${region}
+- Angle: ${angle}
+
+RESEARCH INSTRUCTIONS:
+1. Search for current, verifiable facts, data, or studies about this topic — prioritize credible sources
+2. Identify which findings are most relevant and compelling for TikTok audiences in ${region}
+3. Select 3–5 facts or insights that are most "scroll-stopping" — things that make people say "I didn't know this"
+4. Do not use facts you cannot verify — fewer accurate facts beat many unverified claims
+
+OUTPUT RESEARCH FINDINGS before directions:
+RESEARCH FINDINGS:
+• [Fact/insight 1] — Source: [source name if available, leave blank if not]
+• [Fact/insight 2] — Source: [source name if available, leave blank if not]
+• [Fact/insight 3] — Source: [source name if available, leave blank if not]
+
+Note: Sources are optional — if no specific source is found, still include the fact as long as it is accurate and verifiable. What matters is that no unverified claims are made.
+
+After outputting research findings, proceed to Phase 1 directions.`;
+}
+
+function productResearch(lang){
+  const isID=lang==='id';
+  const isYT=S.duration==='youtube';
+  const product=document.getElementById('productName')?.value.trim()||'produk ini';
+  const category=document.getElementById('productWhat')?.value.trim()||'kategori produk';
+  const comp=document.getElementById('productComp')?.value.trim()||'';
+  const region=S.region||'Global';
+
+  if(isYT){
+    return isID?`== YOUTUBE PRODUCT RESEARCH PHASE ==
+
+Sebelum membuat outline atau script, lakukan deep research tentang:
+- Produk: ${product}
+- Kategori: ${category}
+${comp?`- Kompetitor: ${comp}`:''}
+- Region: ${region}
+
+CARI DAN GABUNGKAN langsung ke outline/script (tidak perlu output terpisah):
+1. Fitur atau kelebihan mana yang paling sering dibahas di YouTube review yang perform tinggi untuk produk atau kategori ini?
+2. Pertanyaan paling sering ditanyakan penonton di kolom komentar video review serupa (pakai untuk hook dan bait engagement)
+3. Pain point utama yang bikin orang cari review produk ini — ini adalah entry point emosional terkuat
+4. Kekhawatiran atau skeptisisme yang paling umum tentang produk ini (pakai untuk bangun credibility dengan addressing langsung)
+5. Angle atau framing yang belum banyak dipakai creator lain untuk kategori ini — ini adalah differentiator
+
+Gunakan semua temuan ini untuk membuat script yang lebih informed, lebih targeted, dan punya virality angle yang lebih kuat dari rata-rata review di kategori ini.`
+
+    :`== YOUTUBE PRODUCT RESEARCH PHASE ==
+
+Before creating an outline or script, do deep research on:
+- Product: ${product}
+- Category: ${category}
+${comp?`- Competitor: ${comp}`:''}
+- Region: ${region}
+
+SEARCH AND INTEGRATE directly into the outline/script (no separate output needed):
+1. Which features or strengths are most commonly highlighted in high-performing YouTube reviews for this product or category?
+2. Most frequently asked questions in comment sections of similar review videos (use for hook and engagement bait)
+3. Main pain points that drive people to search for reviews of this product — this is the strongest emotional entry point
+4. Most common concerns or skepticism about this product (use to build credibility by addressing directly)
+5. Angles or framings not yet widely used by other creators in this category — this is the differentiator
+
+Use all findings to create a script that is more informed, more targeted, and has a stronger virality angle than the average review in this category.`;
+  }
+
+  // TikTok version (unchanged)
+  return isID?`== MARKET RESEARCH PHASE ==
+
+SEBELUM membuat directions, lakukan quick search untuk konteks pasar:
+- Produk: ${product}
+- Kategori: ${category}
+${comp?`- Kompetitor: ${comp}`:''}
+- Region: ${region}
+
+CARI:
+1. Konten produk serupa yang sedang perform di TikTok ${region} sekarang — angle apa yang paling banyak dipakai?
+2. Pain point paling umum yang dikeluhkan audiens tentang kategori produk ini
+3. Hashtag atau keyword yang sedang trending untuk kategori ini di ${region}
+
+OUTPUT (ringkas, sebelum directions):
+MARKET INSIGHTS:
+• Trending angle: [angle konten yang sedang perform untuk kategori ini]
+• Top pain point: [keluhan paling umum audiens]
+• Trending hashtags: [2-3 hashtag relevan]
+
+Setelah market insights, lanjut ke Phase 1 directions.`
+
+  :`== MARKET RESEARCH PHASE ==
+
+BEFORE creating directions, do a quick search for market context:
+- Product: ${product}
+- Category: ${category}
+${comp?`- Competitor: ${comp}`:''}
+- Region: ${region}
+
+SEARCH FOR:
+1. Similar product content currently performing on TikTok in ${region} — what angles are being used most?
+2. Most common pain points audiences complain about in this product category
+3. Trending hashtags or keywords for this category in ${region}
+
+OUTPUT (brief, before directions):
+MARKET INSIGHTS:
+• Trending angle: [content angle currently performing for this category]
+• Top pain point: [most common audience complaint]
+• Trending hashtags: [2-3 relevant hashtags]
+
+After market insights, proceed to Phase 1 directions.`;
+}
+
+function claudeEducationalWarning(){
+  return `\n⚠️ CATATAN UNTUK PENGGUNA: Kamu memilih tipe konten Educational dengan platform Claude.
+Claude di claude.ai memiliki akses web search — pastikan fitur web search aktif (ikon globe di toolbar chat) sebelum mengirim prompt ini.
+Jika web search tidak aktif, Claude akan menggunakan knowledge cutoff-nya yang mungkin tidak up-to-date untuk topik tertentu.\n`;
+}
+
+function fileBriefInstruction(lang,type){
+  const isID=lang==='id';
+  if(type==='product'){
+    return isID
+      ?`== FILE BRIEF DARI KLIEN ==
+Saya telah melampirkan file brief dari klien (bisa berupa image, PDF, atau dokumen).
+WAJIB: Baca dan extract semua informasi produk dari file tersebut sebelum melanjutkan.
+Gunakan informasi dari file sebagai data utama produk.
+Jika ada pengalaman pribadi yang sudah saya isi di brief di atas, combine keduanya — file untuk info produk, pengalaman pribadi untuk authenticity script.
+Jika ada informasi yang konflik antara file dan brief, prioritaskan file dari klien.`
+      :`== CLIENT BRIEF FILE ==
+I have attached a client brief file (image, PDF, or document).
+MANDATORY: Read and extract all product information from the attached file before proceeding.
+Use the file as the primary product data source.
+If I have filled in personal experience in the brief above, combine both — file for product info, personal experience for script authenticity.
+If any information conflicts between the file and the brief, prioritize the client file.`;
+  }
+  if(type==='general'){
+    return isID
+      ?`== FILE SUMBER TAMBAHAN ==
+Saya telah melampirkan file sumber (artikel, press release, berita, atau dokumen referensi).
+Baca file tersebut sebagai referensi tambahan untuk konten ini.
+File ini BUKAN pengganti research phase — gunakan sebagai sumber informasi tambahan di samping hasil research kamu.
+Prioritaskan fakta dan data dari file ini jika relevan dengan topik konten.`
+      :`== ADDITIONAL SOURCE FILE ==
+I have attached a source file (article, press release, news, or reference document).
+Read it as additional reference material for this content.
+This file does NOT replace the research phase — use it as supplementary information alongside your research findings.
+Prioritize facts and data from this file where relevant to the content topic.`;
+  }
+  return '';
+}
+
+function buildClaude(){
+  const r=S.region;
+  const isEdu=S.type==='Educational';
+  const isProduct=S.type==='Affiliate / Product Review';
+  const isGeneral=S.type==='General / Entertainment';
+  const researchBlock=isEdu?educationalResearch('id'):isProduct?productResearch('id'):'';
+  const fileBlock=isProduct&&S.hasProductFile?fileBriefInstruction('id','product'):(isEdu||isGeneral)&&S.hasGeneralFile?fileBriefInstruction('id','general'):'';
+  const warning=isEdu?claudeEducationalWarning():'';
+  const hasPhase0=isEdu||isProduct;
+  const phase0note=isEdu?'Phase 0: Research dulu, output findings, baru lanjut.\n':isProduct?'Phase 0: Quick market research, output insights, baru lanjut.\n':'';
+
+  return `${warning}Kamu adalah senior TikTok Viral Content Strategist dan UGC Script Engineer. Kamu menguasai algoritma TikTok, scroll psychology, retention science, dan${isEdu?' educational content strategy yang berbasis fakta akurat.':' affiliate conversion mechanics.'}
+
+FAKTA ALGORITMA TIKTOK:
+- Completion rate 60%+ = good. 80%+ = viral distribution
+- 1.5 detik pertama: visual pattern interrupt wajib terjadi
+- Sebelum detik ke-3: open loop harus ada atau penonton pergi
+- Algorithm weight: Shares > Comments > Likes
+- Loop/rewatch trigger = algorithmic multiplier
+- Spesifisitas selalu mengalahkan keumuman
+- Emosi dulu, penjelasan kemudian — selalu
+- Follower count = nol pengaruh ke distribusi FYP
+${isEdu?'\n- Untuk konten educational: fakta yang mengejutkan tapi valid = hook terkuat. Jangan pernah klaim yang tidak bisa diverifikasi.':''}
+
+PENTING: Ini ${isEdu||isProduct?'three':'two'}-phase task.
+${phase0note}Phase 1: Output 3 directions lalu BERHENTI dan tunggu.
+Phase 2: Hanya aktif setelah aku reply dengan pilihan.
+Jangan generate script di Phase 1.
+Jangan tanya pertanyaan klarifikasi.
+
+${buildBrief('id')}
+
+${fileBlock}
+
+${researchBlock}
+
+== REGIONAL AUDIENCE INTELLIGENCE ==
+${REGIONAL[r]||REGIONAL['Global']}
+
+${STRUCTURES}
+
+${p1Format('id')}
+
+${p2('id')}`;
+}
+
+function buildChatGPT(){
+  const r=S.region;
+  const isEdu=S.type==='Educational';
+  const isProduct=S.type==='Affiliate / Product Review';
+  const isGeneral=S.type==='General / Entertainment';
+  const researchBlock=isEdu?educationalResearch('en'):isProduct?productResearch('en'):'';
+  const fileBlock=isProduct&&S.hasProductFile?fileBriefInstruction('en','product'):(isEdu||isGeneral)&&S.hasGeneralFile?fileBriefInstruction('en','general'):'';
+  const hasPhase0=isEdu||isProduct;
+
+  return `You are a senior TikTok Viral Content Strategist and UGC Script Engineer. You have mastered TikTok algorithm behavior, scroll psychology, short-form retention science,${isEdu?' and educational content strategy grounded in verified facts.':' and affiliate conversion.'}
+
+TIKTOK ALGORITHM FACTS:
+- Completion rate 60%+ = good. 80%+ = viral distribution
+- First 1.5s: visual pattern interrupt required
+- By 3s: open loop must exist or viewer leaves
+- Algorithm weight: Shares > Comments > Likes
+- Loop/rewatch = algorithmic multiplier
+- Specificity beats vagueness always
+- Emotion first, explanation second — always
+- Follower count = zero FYP distribution impact
+${isEdu?'\n- For educational content: surprising but verified facts = strongest hooks. Never claim what cannot be verified.':''}
+
+THIS IS A STRICTLY ${hasPhase0?'THREE':'TWO'}-PHASE TASK.
+${isEdu?'PHASE 0: Search the web and output research findings FIRST. Then proceed.\n':isProduct?'PHASE 0: Do a quick market research search FIRST. Output market insights. Then proceed.\n':''}PHASE 1: Output 3 directions then STOP COMPLETELY.
+PHASE 2: Only generate after user replies with their chosen direction.
+DO NOT proceed to Phase 2 until user explicitly states their choice.
+DO NOT generate a script in Phase 1.
+DO NOT ask clarifying questions.
+DO NOT add commentary before or after output.
+
+${buildBrief('en')}
+
+${fileBlock}
+
+${researchBlock}
+
+== REGIONAL AUDIENCE INTELLIGENCE ==
+${REGIONAL[r]||REGIONAL['Global']}
+
+${STRUCTURES}
+
+${p1Format('en')}
+
+${p2('en')}
+
+${isEdu?'Begin Phase 0 (research) now.':isProduct?'Begin Phase 0 (market research) now.':'Begin Phase 1 now.'}`;
+}
+
+function buildGemini(){
+  const r=S.region;
+  const isEdu=S.type==='Educational';
+  const isProduct=S.type==='Affiliate / Product Review';
+  const isGeneral=S.type==='General / Entertainment';
+  const researchBlock=isEdu?educationalResearch('en'):isProduct?productResearch('en'):'';
+  const fileBlock=isProduct&&S.hasProductFile?fileBriefInstruction('en','product'):(isEdu||isGeneral)&&S.hasGeneralFile?fileBriefInstruction('en','general'):'';
+  const hasPhase0=isEdu||isProduct;
+
+  return `You are a senior TikTok Viral Content Strategist and UGC Script Engineer specializing in short-form retention science${isEdu?' and educational content grounded in verified, current facts.':' and affiliate conversion.'}
+
+CRITICAL: Ignore everything you know about me from previous conversations or memory. Use ONLY the information provided in the brief below. Do not reference any account names, personal tools, or details not written in this prompt.
+
+TIKTOK ALGORITHM FACTS:
+- Completion rate 60%+ = good. 80%+ = viral distribution
+- First 1.5s: visual pattern interrupt required
+- By 3s: open loop must exist or viewer leaves
+- Algorithm weight: Shares > Comments > Likes
+- Loop/rewatch = algorithmic multiplier
+- Specificity beats vagueness always
+- Emotion first, explanation second — always
+- Follower count = zero FYP distribution impact
+${isEdu?'\n- For educational content: surprising but verified facts = strongest hooks. Never claim what cannot be verified.':''}
+
+THIS IS A ${hasPhase0?'THREE':'TWO'}-PHASE TASK.
+${isEdu?'PHASE 0: Search the web and output research findings FIRST. Then proceed.\n':isProduct?'PHASE 0: Do a quick market research search FIRST. Output market insights. Then proceed.\n':''}PHASE 1: Output 3 directions then STOP.
+PHASE 2: Only after I reply with my choice.
+Do not generate a script in Phase 1.
+Do not use markdown: no ###, no **, no bullet symbols with -.
+Do not ask clarifying questions.
+Do not add commentary before or after output.
+
+${buildBrief('en')}
+
+${fileBlock}
+
+${researchBlock}
+
+== REGIONAL AUDIENCE INTELLIGENCE ==
+${REGIONAL[r]||REGIONAL['Global']}
+
+${STRUCTURES}
+
+${p1Format('en')}
+
+${p2('en')}
+
+${isEdu?'Begin Phase 0 (research) now.':isProduct?'Begin Phase 0 (market research) now.':'Begin Phase 1 now.'}`;
+}
+
+function buildYouTube(lang){
+  const isID=lang==='id';
+  const r=S.region;
+  const isProduct=S.type==='Affiliate / Product Review';
+  const isEdu=S.type==='Educational';
+  const isGeneral=S.type==='General / Entertainment';
+  const fileBlock=isProduct&&S.hasProductFile?fileBriefInstruction(lang,'product'):(isEdu||isGeneral)&&S.hasGeneralFile?fileBriefInstruction(lang,'general'):'';
+  const researchBlock=isEdu?educationalResearch(lang):isProduct?productResearch(lang):'';
+
+  return `Kamu adalah senior YouTube Script Writer dan Content Strategist yang spesialis dalam long-form video yang punya retention tinggi.
+
+FAKTA ALGORITMA YOUTUBE:
+- Click-through rate (CTR) thumbnail + judul menentukan distribusi awal
+- Average View Duration (AVD) dan Average Percentage Viewed adalah ranking signal utama
+- Retensi harus di atas 50% untuk video bisa direkomendasikan
+- Hook 30 detik pertama krusial — viewer yang skip di sini tidak akan balik
+- Pattern interrupt setiap 60–90 detik untuk maintain attention
+- Strong CTA di 70–80% durasi video (bukan di akhir) perform lebih baik
+- Chapter/timestamp meningkatkan click-through dari search
+
+FORMAT OUTPUT YANG DIMINTA:
+Bukan TikTok script. Ini YouTube long-form — struktur berbeda, pacing berbeda, kedalaman berbeda.
+
+${buildBrief(lang)}
+
+${fileBlock}
+
+${researchBlock}
+
+== REGIONAL AUDIENCE INTELLIGENCE ==
+${REGIONAL[r]||REGIONAL['Global']}
+
+== TUGASMU ==
+
+Generate full YouTube video script dengan struktur:
+
+1. JUDUL (3 opsi):
+   - Judul A: curiosity/clickbait style
+   - Judul B: SEO/keyword-heavy style
+   - Judul C: value proposition style
+
+2. HOOK (0:00–0:30):
+   - Pattern interrupt di detik pertama
+   - Promise video — apa yang penonton dapat di akhir
+   - Open loop yang harus dijawab
+
+3. INTRO (0:30–1:30):
+   - Siapa kamu dan kenapa kamu kredibel untuk topik ini
+   - Preview struktur video
+   - Subscribe reminder yang tidak terasa memaksa
+
+4. BODY (1:30 sampai 80% durasi):
+   - Bagi menjadi 3–5 segmen dengan header yang jelas
+   - Setiap segmen: main point → penjelasan → contoh nyata
+   - Pattern interrupt setiap segmen (B-roll suggestion, grafik, demonstrasi)
+   - Timestamps untuk setiap segmen
+
+5. CTA (di 70–80% durasi, sebelum outro):
+   - Soft CTA yang terasa natural
+   - Link/produk/promo jika ada
+
+6. OUTRO (30 detik terakhir):
+   - Summary singkat
+   - Next video suggestion
+   - Subscribe reminder
+
+Format setiap baris:
+[TIMESTAMP] [VISUAL/B-ROLL suggestion]
+VO/NARASI: teks yang diucapkan
+NOTES: catatan eksekusi
+
+Target durasi: ${S.duration==='15–20 detik'?'5–8 menit':S.duration==='30–45 detik'?'8–12 menit':'10–15 menit'}
+
+Setelah script, output:
+
+YOUTUBE SCORECARD:
+ESTIMATED CTR POTENTIAL: [Low/Medium/High] | [alasan]
+RETENTION PREDICTION: [%] | [alasan]
+SEO STRENGTH: [Low/Medium/High] | [alasan]
+MONETIZATION FRIENDLY: [Yes/No] | [alasan]
+
+WEAK POINTS:
+• [timestamp] — [masalah + fix]
+• [timestamp] — [masalah + fix]
+
+THUMBNAIL CONCEPT:
+[Deskripsi visual thumbnail yang akan perform tinggi untuk video ini]
+
+Generate sekarang.`;
+}
+
+let currentPrompts={};
+let activeTab='';
+
+function generatePrompt(){
+  const isYT=S.duration==='youtube';
+  currentPrompts={
+    claude: isYT?buildYouTube('id'):buildClaude(),
+    chatgpt: isYT?buildYouTube('en'):buildChatGPT(),
+    gemini: isYT?buildYouTube('en'):buildGemini()
+  };
+  const icons={claude:'🟣',chatgpt:'🟢',gemini:'🔵'};
+  const names={claude:'Claude',chatgpt:'ChatGPT',gemini:'Gemini'};
+  const tabs=['claude','chatgpt','gemini'];
+  const tc=document.getElementById('platformTabs');
+  tc.innerHTML='';
+  tabs.forEach(p=>{
+    const t=document.createElement('div');
+    t.className='platform-tab'+(p===S.platform?' active':'');
+    t.textContent=icons[p]+' '+names[p];
+    t.onclick=()=>switchTab(p);
+    tc.appendChild(t);
+  });
+  activeTab=S.platform;
+  document.getElementById('promptBox').textContent=currentPrompts[activeTab];
+  document.getElementById('modalOverlay').classList.add('open');
+  resetCopyBtn();
+}
+
+function switchTab(p){
+  activeTab=p;
+  document.querySelectorAll('.platform-tab').forEach((t,i)=>{
+    t.classList.toggle('active',['claude','chatgpt','gemini'][i]===p);
+  });
+  document.getElementById('promptBox').textContent=currentPrompts[p];
+  resetCopyBtn();
+}
+
+function resetCopyBtn(){
+  const b=document.getElementById('copyBtn');
+  b.classList.remove('copied');
+  b.innerHTML='<span>📋</span> COPY PROMPT';
+}
+
+function copyPrompt(){
+  navigator.clipboard.writeText(currentPrompts[activeTab]).then(()=>{
+    const b=document.getElementById('copyBtn');
+    b.classList.add('copied');
+    b.innerHTML='<span>✅</span> COPIED!';
+    setTimeout(resetCopyBtn,2500);
+  });
+}
+
+function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalDirect();}
+function closeModalDirect(){document.getElementById('modalOverlay').classList.remove('open');}
+
+function showToast(msg,success){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast'+(success?' success':'')+' show';
+  setTimeout(()=>t.className='toast'+(success?' success':''),2500);
+}
+
+updateProgress();
+</script>
+</body>
+</html>
