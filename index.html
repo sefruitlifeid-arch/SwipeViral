@@ -123,7 +123,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 </div>
 
 <!-- PHASE 1 -->
-
 <div class="sec on" id="phase1">
   <div class="shdr">
     <div class="snum">01</div>
@@ -314,7 +313,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 </div>
 
 <!-- PHASE 2 -->
-
 <div class="sec" id="phase2">
   <div class="shdr">
     <div class="snum">02</div>
@@ -359,7 +357,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 </div>
 
 <!-- PHASE 3 -->
-
 <div class="sec" id="phase3">
   <div class="shdr">
     <div class="snum">03</div>
@@ -400,564 +397,563 @@ var S = { topic:'', platform:'', region:'', goal:'', style:'', tone:'', audience
 
 // ── OPTION PICKER ──────────────────────────────────────────────
 function pick(btn) {
-var g = btn.getAttribute(‘data-g’);
-var all = document.querySelectorAll(’[data-g=”’ + g + ‘”]’);
-for (var i = 0; i < all.length; i++) { all[i].classList.remove(‘sel’); }
-btn.classList.add(‘sel’);
-S[g] = btn.getAttribute(‘data-v’);
-showDesc(g, btn.getAttribute(‘data-v’));
-calcHidden();
+  var g = btn.getAttribute('data-g');
+  var all = document.querySelectorAll('[data-g="' + g + '"]');
+  for (var i = 0; i < all.length; i++) { all[i].classList.remove('sel'); }
+  btn.classList.add('sel');
+  S[g] = btn.getAttribute('data-v');
+  showDesc(g, btn.getAttribute('data-v'));
+  calcHidden();
 }
 
 // ── SLIDERS ────────────────────────────────────────────────────
 function setIntensity(v) {
-S.intensity = parseInt(v, 10);
-var lbl = v <= 3 ? ‘LOW INTENSITY’ : v <= 7 ? ‘MEDIUM INTENSITY’ : ‘HIGH INTENSITY’;
-document.getElementById(‘iDisp’).textContent = v + ’ - ’ + lbl;
-calcHidden();
+  S.intensity = parseInt(v, 10);
+  var lbl = v <= 3 ? 'LOW INTENSITY' : v <= 7 ? 'MEDIUM INTENSITY' : 'HIGH INTENSITY';
+  document.getElementById('iDisp').textContent = v + ' - ' + lbl;
+  calcHidden();
 }
 
 function setSlides(v) {
-S.slides = parseInt(v, 10);
-document.getElementById(‘sDisp’).textContent = v + ’ SLIDES’;
+  S.slides = parseInt(v, 10);
+  document.getElementById('sDisp').textContent = v + ' SLIDES';
 }
 
 // ── HIDDEN VARS ────────────────────────────────────────────────
 var EM = {
-‘Relatable+Gen Z Internet’: ‘FOMO + Validation Seeking’,
-‘Relatable+Casual Conversational’: ‘Comfort + Social Proof’,
-‘Relatable+Bold Aggressive’: ‘Shame Avoidance + FOMO’,
-‘Relatable+Luxury Minimal’: ‘Aspiration + Status Anxiety’,
-‘Educational+Gen Z Internet’: ‘Curiosity Gap + Status Flex’,
-‘Educational+Casual Conversational’: ‘Cognitive Ease + Trust’,
-‘Educational+Bold Aggressive’: ‘Fear of Missing Out + Authority’,
-‘Educational+Luxury Minimal’: ‘Exclusivity + Intelligence Signal’,
-‘Contrarian Take+Gen Z Internet’: ‘Cognitive Dissonance + Tribal Identity’,
-‘Contrarian Take+Casual Conversational’: ‘Surprise + Reassessment’,
-‘Contrarian Take+Bold Aggressive’: ‘Rage Bait + Ego Threat’,
-‘Contrarian Take+Luxury Minimal’: ‘Intellectual Superiority + Polarization’,
-‘Storytelling+Gen Z Internet’: ‘Parasocial Bond + Curiosity Loop’,
-‘Storytelling+Casual Conversational’: ‘Empathy Activation + Relatability’,
-‘Storytelling+Bold Aggressive’: ‘Tension Arc + Catharsis’,
-‘Storytelling+Luxury Minimal’: ‘Aspirational Journey + Identity Projection’
+  'Relatable+Gen Z Internet': 'FOMO + Validation Seeking',
+  'Relatable+Casual Conversational': 'Comfort + Social Proof',
+  'Relatable+Bold Aggressive': 'Shame Avoidance + FOMO',
+  'Relatable+Luxury Minimal': 'Aspiration + Status Anxiety',
+  'Educational+Gen Z Internet': 'Curiosity Gap + Status Flex',
+  'Educational+Casual Conversational': 'Cognitive Ease + Trust',
+  'Educational+Bold Aggressive': 'Fear of Missing Out + Authority',
+  'Educational+Luxury Minimal': 'Exclusivity + Intelligence Signal',
+  'Contrarian Take+Gen Z Internet': 'Cognitive Dissonance + Tribal Identity',
+  'Contrarian Take+Casual Conversational': 'Surprise + Reassessment',
+  'Contrarian Take+Bold Aggressive': 'Rage Bait + Ego Threat',
+  'Contrarian Take+Luxury Minimal': 'Intellectual Superiority + Polarization',
+  'Storytelling+Gen Z Internet': 'Parasocial Bond + Curiosity Loop',
+  'Storytelling+Casual Conversational': 'Empathy Activation + Relatability',
+  'Storytelling+Bold Aggressive': 'Tension Arc + Catharsis',
+  'Storytelling+Luxury Minimal': 'Aspirational Journey + Identity Projection'
 };
-var SPM = { ‘Shares’: ‘Tag-a-Friend Bait + Identity Broadcasting’, ‘Saves’: ‘Utility Hoarding + Reference Value’, ‘Comments’: ‘Opinion Polarization + Hot Take Magnet’, ‘Pure Virality’: ‘Multi-trigger Cascade + Cross-Platform Spread’ };
-var RCM = { ‘TikTok Photo Mode’: ‘Velocity Swipe > Micro-reward Loop > Dopamine Cliff > Re-loop’, ‘Instagram Carousel’: ‘Pattern Interrupt > Validation Hook > Open Loop > Insight Payoff > Save Trigger’ };
-var CLM = { 1:‘Minimal - Safe’, 2:‘Minimal - Safe’, 3:‘Low - Mild Provocation’, 4:‘Low - Mild Provocation’, 5:‘Moderate - Opinion Territory’, 6:‘Moderate - Opinion Territory’, 7:‘High - Polarizing’, 8:‘High - Polarizing’, 9:‘Extreme - Rage Bait Adjacent’, 10:‘Extreme - Maximum Controversy’ };
+var SPM = { 'Shares': 'Tag-a-Friend Bait + Identity Broadcasting', 'Saves': 'Utility Hoarding + Reference Value', 'Comments': 'Opinion Polarization + Hot Take Magnet', 'Pure Virality': 'Multi-trigger Cascade + Cross-Platform Spread' };
+var RCM = { 'TikTok Photo Mode': 'Velocity Swipe > Micro-reward Loop > Dopamine Cliff > Re-loop', 'Instagram Carousel': 'Pattern Interrupt > Validation Hook > Open Loop > Insight Payoff > Save Trigger' };
+var CLM = { 1:'Minimal - Safe', 2:'Minimal - Safe', 3:'Low - Mild Provocation', 4:'Low - Mild Provocation', 5:'Moderate - Opinion Territory', 6:'Moderate - Opinion Territory', 7:'High - Polarizing', 8:'High - Polarizing', 9:'Extreme - Rage Bait Adjacent', 10:'Extreme - Maximum Controversy' };
 
 function updateListCounter() {
-var val = document.getElementById(‘inp-content-list’).value.trim();
-var counter = document.getElementById(‘list-counter’);
-if (!val) { counter.textContent = ‘’; return; }
-var items = val.split(’,’).filter(function(i){ return i.trim().length > 0; });
-counter.textContent = items.length + ’ ITEMS DETECTED’;
-counter.style.color = ‘var(–a2)’;
-// Also update series preview if series mode is on
-if (S.seriesMode) updateSeriesPreview(S.seriesParts, S.slides);
+  var val = document.getElementById('inp-content-list').value.trim();
+  var counter = document.getElementById('list-counter');
+  if (!val) { counter.textContent = ''; return; }
+  var items = val.split(',').filter(function(i){ return i.trim().length > 0; });
+  counter.textContent = items.length + ' ITEMS DETECTED';
+  counter.style.color = 'var(--a2)';
+  // Also update series preview if series mode is on
+  if (S.seriesMode) updateSeriesPreview(S.seriesParts, S.slides);
 }
 
 function toggleSeries(on) {
-S.seriesMode = on;
-document.getElementById(‘series-on’).classList.toggle(‘sel’, on);
-document.getElementById(‘series-off’).classList.toggle(‘sel’, !on);
-document.getElementById(‘series-options’).style.display = on ? ‘block’ : ‘none’;
-if (on) {
-// default to 2 parts, set slide count to 17
-if (!document.querySelector(’[data-g=“seriesParts”].sel’)) {
-var def = document.querySelector(’[data-g=“seriesParts”][data-v=“2”]’);
-if (def) setParts(def, 2);
-}
-}
+  S.seriesMode = on;
+  document.getElementById('series-on').classList.toggle('sel', on);
+  document.getElementById('series-off').classList.toggle('sel', !on);
+  document.getElementById('series-options').style.display = on ? 'block' : 'none';
+  if (on) {
+    // default to 2 parts, set slide count to 17
+    if (!document.querySelector('[data-g="seriesParts"].sel')) {
+      var def = document.querySelector('[data-g="seriesParts"][data-v="2"]');
+      if (def) setParts(def, 2);
+    }
+  }
 }
 
 function setParts(btn, n) {
-S.seriesParts = n;
-var all = document.querySelectorAll(’[data-g=“seriesParts”]’);
-for (var i = 0; i < all.length; i++) all[i].classList.remove(‘sel’);
-btn.classList.add(‘sel’);
-// Auto-set recommended slide count
-var recommended = n === 2 ? 17 : n === 3 ? 25 : 33;
-S.slides = recommended;
-document.getElementById(‘sSlider’).value = Math.min(recommended, 12);
-document.getElementById(‘sDisp’).textContent = recommended + ’ SLIDES’;
-updateSeriesPreview(n, recommended);
+  S.seriesParts = n;
+  var all = document.querySelectorAll('[data-g="seriesParts"]');
+  for (var i = 0; i < all.length; i++) all[i].classList.remove('sel');
+  btn.classList.add('sel');
+  // Auto-set recommended slide count
+  var recommended = n === 2 ? 17 : n === 3 ? 25 : 33;
+  S.slides = recommended;
+  document.getElementById('sSlider').value = Math.min(recommended, 12);
+  document.getElementById('sDisp').textContent = recommended + ' SLIDES';
+  updateSeriesPreview(n, recommended);
 }
 
 function updateSeriesPreview(parts, total) {
-var preview = ‘’;
-var listEl = document.getElementById(‘inp-content-list’);
-var listVal = listEl ? listEl.value.trim() : ‘’;
-var items = listVal ? listVal.split(’,’).filter(function(i){ return i.trim().length > 0; }) : [];
-var itemCount = items.length;
-var contentPerPart = itemCount > 0 ? Math.floor(itemCount / parts) : Math.floor((total - (parts * 3)) / parts);
-var remainder = itemCount > 0 ? itemCount % parts : 0;
+  var preview = '';
+  var listEl = document.getElementById('inp-content-list');
+  var listVal = listEl ? listEl.value.trim() : '';
+  var items = listVal ? listVal.split(',').filter(function(i){ return i.trim().length > 0; }) : [];
+  var itemCount = items.length;
+  var contentPerPart = itemCount > 0 ? Math.floor(itemCount / parts) : Math.floor((total - (parts * 3)) / parts);
+  var remainder = itemCount > 0 ? itemCount % parts : 0;
 
-if (itemCount > 0) {
-preview += ‘Content List: ’ + itemCount + ’ items detected\n’;
-preview += ‘Per part: ’ + contentPerPart + (remainder > 0 ? ‘-’ + (contentPerPart+1) : ‘’) + ’ items\n\n’;
-}
+  if (itemCount > 0) {
+    preview += 'Content List: ' + itemCount + ' items detected\n';
+    preview += 'Per part: ' + contentPerPart + (remainder > 0 ? '-' + (contentPerPart+1) : '') + ' items\n\n';
+  }
 
-for (var p = 1; p <= parts; p++) {
-var extra = (remainder > 0 && p <= remainder) ? 1 : 0;
-var cnt = contentPerPart + extra;
-if (p === 1) {
-preview += ’PART ’ + p + ‘: Hook + Open Loop + ’ + cnt + ’ content slides + CTA\n’;
-} else if (p === parts) {
-preview += ’PART ’ + p + ‘: Re-hook + ’ + cnt + ’ content slides + Final CTA\n’;
-} else {
-preview += ’PART ’ + p + ‘: Re-hook + ’ + cnt + ’ content slides + CTA\n’;
-}
-}
+  for (var p = 1; p <= parts; p++) {
+    var extra = (remainder > 0 && p <= remainder) ? 1 : 0;
+    var cnt = contentPerPart + extra;
+    if (p === 1) {
+      preview += 'PART ' + p + ': Hook + Open Loop + ' + cnt + ' content slides + CTA\n';
+    } else if (p === parts) {
+      preview += 'PART ' + p + ': Re-hook + ' + cnt + ' content slides + Final CTA\n';
+    } else {
+      preview += 'PART ' + p + ': Re-hook + ' + cnt + ' content slides + CTA\n';
+    }
+  }
 
-var suggestedTotal = itemCount > 0
-? itemCount + (parts * 3)
-: total;
+  var suggestedTotal = itemCount > 0
+    ? itemCount + (parts * 3)
+    : total;
 
-preview += ‘\nSuggested total: ’ + suggestedTotal + ’ slides’;
-if (itemCount > 0) {
-// Auto-update slide slider
-S.slides = suggestedTotal;
-var sliderEl = document.getElementById(‘sSlider’);
-var dispEl = document.getElementById(‘sDisp’);
-if (sliderEl) sliderEl.value = Math.min(suggestedTotal, parseInt(sliderEl.max));
-if (dispEl) dispEl.textContent = suggestedTotal + ’ SLIDES’;
-}
-document.getElementById(‘series-preview’).textContent = preview;
+  preview += '\nSuggested total: ' + suggestedTotal + ' slides';
+  if (itemCount > 0) {
+    // Auto-update slide slider
+    S.slides = suggestedTotal;
+    var sliderEl = document.getElementById('sSlider');
+    var dispEl = document.getElementById('sDisp');
+    if (sliderEl) sliderEl.value = Math.min(suggestedTotal, parseInt(sliderEl.max));
+    if (dispEl) dispEl.textContent = suggestedTotal + ' SLIDES';
+  }
+  document.getElementById('series-preview').textContent = preview;
 }
 
 var DESCS = {
-hook: {
-‘POV Hook’: ‘Langsung drop reader ke dalam situasi spesifik. “POV: lo baru sadar semua teman lo nikah duluan.” Tidak ada intro — langsung di dalam momen.’,
-‘Confession Hook’: ‘Pengakuan yang sedikit uncomfortable tapi relatable. Bikin orang nod dan terusin baca karena pernah ngerasain hal yang sama.’,
-‘Number Hook’: ‘Angka spesifik di depan = otak langsung tertarik. “7 hal yang…” selalu perform karena otak suka struktur yang jelas.’,
-‘Vs Hook’: ‘Dua kubu yang berlawanan. Langsung bikin orang pilih pihak dan penasaran siapa yang “menang”.’,
-‘Unpopular Opinion Hook’: ‘Statement yang mayoritas orang bakal nolak — tapi dalam hati setuju. Pure scroll-stopper karena memicu disonansi.’,
-‘Question Hook’: ‘Pertanyaan yang sudah ada di kepala audience tapi belum pernah dijawab langsung. Bikin mereka harus terusin baca.’
-},
-cta: {
-‘Save for Reference’: ‘Konten ini adalah sesuatu yang orang mau simpan dan balik lagi nanti. Slide terakhir fokus dorong untuk save.’,
-‘Drive to DM’: ‘Slide terakhir ciptakan curiosity yang hanya bisa resolve lewat DM. “DM gue keyword ini untuk full list.”’,
-‘Drive to Link Bio’: ‘Tease sesuatu yang lebih lengkap ada di luar. Bikin mereka rela klik away dari konten.’,
-‘Comment Bait’: ‘Tutup dengan statement atau pertanyaan yang impossible untuk tidak punya pendapat. Harus reply.’
-},
-tone: {
-‘Gen Z Internet’: ‘Slang, singkat, no filter. Kayak nulis caption sambil rebahan. Natural, bukan dipaksain.’,
-‘Casual Conversational’: ‘Ngobrol santai seperti teman. Hangat, tidak menggurui, mudah dicerna siapa saja.’,
-‘Bold Aggressive’: ‘Straight to the point, tidak minta maaf. Setiap kalimat punya weight dan tidak ada filler.’,
-‘Luxury Minimal’: ‘Sedikit kata, banyak makna. Elegan dan confident — tidak perlu teriak untuk diperhatikan.’
-},
-style: {
-‘Relatable’: ‘Bikin orang merasa “ini gue banget.” Fokus pada pengalaman yang universal tapi terasa sangat personal.’,
-‘Educational’: ‘Kasih value yang actionable. Orang save karena merasa lebih pinter dan lebih siap setelah baca.’,
-‘Contrarian Take’: ‘Lawan narrative yang umum. Bikin orang berhenti scroll dan mikir ulang apa yang mereka percaya.’,
-‘Storytelling’: ‘Bangun narasi yang ada arc-nya. Orang swipe karena penasaran gimana kelanjutan dan endingnya.’
-},
-goal: {
-‘Shares’: ‘Konten yang orang tag temannya atau forward ke grup. “Ini lo banget” atau “eh liat ini deh.”’,
-‘Saves’: ‘Konten yang terlalu sayang untuk di-scroll begitu saja. Reference material yang akan dibuka lagi.’,
-‘Comments’: ‘Konten yang impossible untuk tidak punya pendapat. Memancing orang untuk harus reply.’,
-‘Pure Virality’: ‘All-out — hook terkuat, angle terpolarizing, spread seluas mungkin lintas platform.’
-}
+  hook: {
+    'POV Hook': 'Langsung drop reader ke dalam situasi spesifik. "POV: lo baru sadar semua teman lo nikah duluan." Tidak ada intro — langsung di dalam momen.',
+    'Confession Hook': 'Pengakuan yang sedikit uncomfortable tapi relatable. Bikin orang nod dan terusin baca karena pernah ngerasain hal yang sama.',
+    'Number Hook': 'Angka spesifik di depan = otak langsung tertarik. "7 hal yang..." selalu perform karena otak suka struktur yang jelas.',
+    'Vs Hook': 'Dua kubu yang berlawanan. Langsung bikin orang pilih pihak dan penasaran siapa yang "menang".',
+    'Unpopular Opinion Hook': 'Statement yang mayoritas orang bakal nolak — tapi dalam hati setuju. Pure scroll-stopper karena memicu disonansi.',
+    'Question Hook': 'Pertanyaan yang sudah ada di kepala audience tapi belum pernah dijawab langsung. Bikin mereka harus terusin baca.'
+  },
+  cta: {
+    'Save for Reference': 'Konten ini adalah sesuatu yang orang mau simpan dan balik lagi nanti. Slide terakhir fokus dorong untuk save.',
+    'Drive to DM': 'Slide terakhir ciptakan curiosity yang hanya bisa resolve lewat DM. "DM gue keyword ini untuk full list."',
+    'Drive to Link Bio': 'Tease sesuatu yang lebih lengkap ada di luar. Bikin mereka rela klik away dari konten.',
+    'Comment Bait': 'Tutup dengan statement atau pertanyaan yang impossible untuk tidak punya pendapat. Harus reply.'
+  },
+  tone: {
+    'Gen Z Internet': 'Slang, singkat, no filter. Kayak nulis caption sambil rebahan. Natural, bukan dipaksain.',
+    'Casual Conversational': 'Ngobrol santai seperti teman. Hangat, tidak menggurui, mudah dicerna siapa saja.',
+    'Bold Aggressive': 'Straight to the point, tidak minta maaf. Setiap kalimat punya weight dan tidak ada filler.',
+    'Luxury Minimal': 'Sedikit kata, banyak makna. Elegan dan confident — tidak perlu teriak untuk diperhatikan.'
+  },
+  style: {
+    'Relatable': 'Bikin orang merasa "ini gue banget." Fokus pada pengalaman yang universal tapi terasa sangat personal.',
+    'Educational': 'Kasih value yang actionable. Orang save karena merasa lebih pinter dan lebih siap setelah baca.',
+    'Contrarian Take': 'Lawan narrative yang umum. Bikin orang berhenti scroll dan mikir ulang apa yang mereka percaya.',
+    'Storytelling': 'Bangun narasi yang ada arc-nya. Orang swipe karena penasaran gimana kelanjutan dan endingnya.'
+  },
+  goal: {
+    'Shares': 'Konten yang orang tag temannya atau forward ke grup. "Ini lo banget" atau "eh liat ini deh."',
+    'Saves': 'Konten yang terlalu sayang untuk di-scroll begitu saja. Reference material yang akan dibuka lagi.',
+    'Comments': 'Konten yang impossible untuk tidak punya pendapat. Memancing orang untuk harus reply.',
+    'Pure Virality': 'All-out — hook terkuat, angle terpolarizing, spread seluas mungkin lintas platform.'
+  }
 };
 
 function showDesc(group, val) {
-var boxId = ‘desc-’ + group;
-var box = document.getElementById(boxId);
-if (!box) return;
-var desc = DESCS[group] && DESCS[group][val];
-if (desc) {
-box.textContent = desc;
-box.style.display = ‘block’;
-} else {
-box.style.display = ‘none’;
-}
+  var boxId = 'desc-' + group;
+  var box = document.getElementById(boxId);
+  if (!box) return;
+  var desc = DESCS[group] && DESCS[group][val];
+  if (desc) {
+    box.textContent = desc;
+    box.style.display = 'block';
+  } else {
+    box.style.display = 'none';
+  }
 }
 
 function calcHidden() {
-var k = S.style + ‘+’ + S.tone;
-S.et = EM[k] || ‘Curiosity + Resonance’;
-S.sp = SPM[S.goal] || ‘Organic Spread’;
-S.rc = RCM[S.platform] || ‘Standard Linear’;
-S.cl = CLM[S.intensity] || ‘Moderate’;
-if (S.style || S.tone || S.goal || S.platform) {
-document.getElementById(‘hvbox’).style.display = ‘block’;
-document.getElementById(‘hv1’).textContent = S.et;
-document.getElementById(‘hv2’).textContent = S.sp;
-document.getElementById(‘hv3’).textContent = S.rc;
-document.getElementById(‘hv4’).textContent = S.cl;
-}
+  var k = S.style + '+' + S.tone;
+  S.et = EM[k] || 'Curiosity + Resonance';
+  S.sp = SPM[S.goal] || 'Organic Spread';
+  S.rc = RCM[S.platform] || 'Standard Linear';
+  S.cl = CLM[S.intensity] || 'Moderate';
+  if (S.style || S.tone || S.goal || S.platform) {
+    document.getElementById('hvbox').style.display = 'block';
+    document.getElementById('hv1').textContent = S.et;
+    document.getElementById('hv2').textContent = S.sp;
+    document.getElementById('hv3').textContent = S.rc;
+    document.getElementById('hv4').textContent = S.cl;
+  }
 }
 
 // ── NAVIGATION ─────────────────────────────────────────────────
 function goPhase(n) {
-var secs = document.querySelectorAll(’.sec’);
-for (var i = 0; i < secs.length; i++) { secs[i].classList.remove(‘on’); }
-document.getElementById(‘phase’ + n).classList.add(‘on’);
-var navs = document.querySelectorAll(’.pbtn’);
-for (var i = 0; i < navs.length; i++) {
-navs[i].classList.remove(‘on’, ‘done’);
-if (i + 1 < n) { navs[i].classList.add(‘done’); }
-}
-document.getElementById(‘nav’ + n).classList.add(‘on’);
-window.scrollTo({ top: 0, behavior: ‘smooth’ });
+  var secs = document.querySelectorAll('.sec');
+  for (var i = 0; i < secs.length; i++) { secs[i].classList.remove('on'); }
+  document.getElementById('phase' + n).classList.add('on');
+  var navs = document.querySelectorAll('.pbtn');
+  for (var i = 0; i < navs.length; i++) {
+    navs[i].classList.remove('on', 'done');
+    if (i + 1 < n) { navs[i].classList.add('done'); }
+  }
+  document.getElementById('nav' + n).classList.add('on');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ── PROCEED TO PHASE 2 ─────────────────────────────────────────
 function toPhase2() {
-S.topic = document.getElementById(‘inp-topic’).value.trim();
-S.painpoint = document.getElementById(‘inp-pain’).value.trim();
-S.contentList = document.getElementById(‘inp-content-list’).value.trim();
-var req = [‘topic’, ‘platform’, ‘region’, ‘goal’, ‘style’, ‘tone’, ‘audience’, ‘hook’, ‘cta’];
-var miss = false;
-for (var i = 0; i < req.length; i++) { if (!S[req[i]]) { miss = true; break; } }
-var al = document.getElementById(‘alertbox’);
-if (miss) { al.classList.add(‘on’); setTimeout(function () { al.classList.remove(‘on’); }, 3000); return; }
-al.classList.remove(‘on’);
-var t = S.topic.length > 40 ? S.topic.slice(0, 40) + ‘…’ : S.topic;
-document.getElementById(‘briefchips’).innerHTML =
-‘<div class="chip cp">’ + t + ‘</div>’ +
-’<div class="chip cc">Platform: ’ + S.platform + ‘</div>’ +
-’<div class="chip cc">Region: ’ + S.region + ‘</div>’ +
-’<div class="chip cp">Audience: ’ + S.audience + ‘</div>’ +
-’<div class="chip ca">Goal: ’ + S.goal + ‘</div>’ +
-’<div class="chip ca">Style: ’ + S.style + ‘</div>’ +
-’<div class="chip cg">Tone: ’ + S.tone + ‘</div>’ +
-’<div class="chip cg">Intensity: ’ + S.intensity + ‘/10</div>’ +
-‘<div class="chip ca">Slides: ’ + S.slides + ‘</div>’ +
-‘<div class="chip cp">Hook: ’ + S.hook + ‘</div>’ +
-‘<div class="chip cc">CTA: ’ + S.cta + ‘</div>’ +
-(S.painpoint ? ‘<div class="chip cg">Pain Point: ’ + (S.painpoint.length > 35 ? S.painpoint.slice(0,35)+’…’ : S.painpoint) + ‘</div>’ : ‘’) +
-(S.seriesMode ? ‘<div class="chip cp">Series: ’ + S.seriesParts + ’ Parts</div>’ : ‘’) +
-(S.contentList ? ‘<div class="chip cc">List: ’ + S.contentList.split(’,’).length + ’ items</div>’ : ‘’);
-goPhase(2);
+  S.topic = document.getElementById('inp-topic').value.trim();
+  S.painpoint = document.getElementById('inp-pain').value.trim();
+  S.contentList = document.getElementById('inp-content-list').value.trim();
+  var req = ['topic', 'platform', 'region', 'goal', 'style', 'tone', 'audience', 'hook', 'cta'];
+  var miss = false;
+  for (var i = 0; i < req.length; i++) { if (!S[req[i]]) { miss = true; break; } }
+  var al = document.getElementById('alertbox');
+  if (miss) { al.classList.add('on'); setTimeout(function () { al.classList.remove('on'); }, 3000); return; }
+  al.classList.remove('on');
+  var t = S.topic.length > 40 ? S.topic.slice(0, 40) + '...' : S.topic;
+  document.getElementById('briefchips').innerHTML =
+    '<div class="chip cp">' + t + '</div>' +
+    '<div class="chip cc">Platform: ' + S.platform + '</div>' +
+    '<div class="chip cc">Region: ' + S.region + '</div>' +
+    '<div class="chip cp">Audience: ' + S.audience + '</div>' +
+    '<div class="chip ca">Goal: ' + S.goal + '</div>' +
+    '<div class="chip ca">Style: ' + S.style + '</div>' +
+    '<div class="chip cg">Tone: ' + S.tone + '</div>' +
+    '<div class="chip cg">Intensity: ' + S.intensity + '/10</div>' +
+    '<div class="chip ca">Slides: ' + S.slides + '</div>' +
+    '<div class="chip cp">Hook: ' + S.hook + '</div>' +
+    '<div class="chip cc">CTA: ' + S.cta + '</div>' +
+    (S.painpoint ? '<div class="chip cg">Pain Point: ' + (S.painpoint.length > 35 ? S.painpoint.slice(0,35)+'...' : S.painpoint) + '</div>' : '') +
+    (S.seriesMode ? '<div class="chip cp">Series: ' + S.seriesParts + ' Parts</div>' : '') +
+    (S.contentList ? '<div class="chip cc">List: ' + S.contentList.split(',').length + ' items</div>' : '');
+  goPhase(2);
 }
 
 // ── LLM CONFIGS ────────────────────────────────────────────────
 var LC = {
-claude: {
-lbl: ‘Master Content Prompt - Claude Architecture’,
-intro: “You are operating under Claude’s structural discipline protocol. Execute with deep linguistic nuance, non-robotic transitions, and precise cognitive architecture. Avoid formulaic AI phrasing. Every sentence must earn its place.”,
-note: ‘Write with structural elegance. Use nested logic. No transition words like “furthermore” or “in conclusion”. Let ideas flow through syntax variation.’
-},
-chatgpt: {
-lbl: ‘Master Content Prompt - ChatGPT Architecture’,
-intro: ‘You are in fast-execution internet-native mode. Prioritize aggressive hooks, modern slang authenticity, and punchline-dense slide copy. Think: viral tweet energy but structured.’,
-note: ‘Write fast. Write punchy. Short sentences. Mid-sentence line breaks for rhythm. Internet phrasing mandatory. TikTok comment section energy in slide format.’
-},
-gemini: {
-lbl: ‘Master Content Prompt - Gemini Architecture’,
-intro: ‘You are leveraging broad context synthesis mode. Tap into social data mapping and cross-platform cultural intelligence. Output should feel culturally informed and trend-aware.’,
-note: ‘Synthesize across cultural signals. Pull from current online discourse. Ground every slide in observable social behavior, not abstract theory.’
-}
+  claude: {
+    lbl: 'Master Content Prompt - Claude Architecture',
+    intro: "You are operating under Claude's structural discipline protocol. Execute with deep linguistic nuance, non-robotic transitions, and precise cognitive architecture. Avoid formulaic AI phrasing. Every sentence must earn its place.",
+    note: 'Write with structural elegance. Use nested logic. No transition words like "furthermore" or "in conclusion". Let ideas flow through syntax variation.'
+  },
+  chatgpt: {
+    lbl: 'Master Content Prompt - ChatGPT Architecture',
+    intro: 'You are in fast-execution internet-native mode. Prioritize aggressive hooks, modern slang authenticity, and punchline-dense slide copy. Think: viral tweet energy but structured.',
+    note: 'Write fast. Write punchy. Short sentences. Mid-sentence line breaks for rhythm. Internet phrasing mandatory. TikTok comment section energy in slide format.'
+  },
+  gemini: {
+    lbl: 'Master Content Prompt - Gemini Architecture',
+    intro: 'You are leveraging broad context synthesis mode. Tap into social data mapping and cross-platform cultural intelligence. Output should feel culturally informed and trend-aware.',
+    note: 'Synthesize across cultural signals. Pull from current online discourse. Ground every slide in observable social behavior, not abstract theory.'
+  }
 };
 
 // ── REGION DNA ─────────────────────────────────────────────────
 var RD = {
-‘Indonesia’: ‘REGIONAL DNA - INDONESIA:\n- Language: Bahasa Indonesia + Jaksel slang: “literally”, “valid”, “fix sih”, “lowkey”, “ngl”, “bestie”, “gak sih”, “parah banget”, “mager”, “vibes”, “no cap”\n- Tone: Conversational bestie energy. Voice-note to closest friend.\n- Avoid: Corporate AI-speak, religious taboos, overly formal Bahasa.\n- Cultural hooks: Financial pressure, hustle culture, ketinggalan trend, family expectations.’,
-‘Australia’: ‘REGIONAL DNA - AUSTRALIA:\n- Tone: Dry wit, anti-pretentious, self-deprecating humor.\n- Hooks: No BS directness. Contrarian angles, brutal honesty.\n- Cultural hooks: Cost of living, housing anxiety, work-life balance.’,
-‘United States’: ‘REGIONAL DNA - UNITED STATES:\n- Tone: Confident, direct. Skeptical of hustle culture.\n- Hooks: Self-improvement + money + status. Anti-establishment angles.\n- Slang: “Lowkey”, “fr fr”, “no cap”, “based”.’,
-‘Southeast Asia’: ‘REGIONAL DNA - SOUTHEAST ASIA:\n- Tone: Aspirational but grounded. English with regional warmth.\n- Hooks: Family values, economic aspiration, social comparison anxiety.’,
-‘European Union’: ‘REGIONAL DNA - EUROPEAN UNION:\n- Tone: Sophisticated, slightly ironic, quality-conscious.\n- Hooks: Work-life balance, sustainability, quality of life.’
+  'Indonesia': 'REGIONAL DNA - INDONESIA:\n- Language: Bahasa Indonesia + Jaksel slang: "literally", "valid", "fix sih", "lowkey", "ngl", "bestie", "gak sih", "parah banget", "mager", "vibes", "no cap"\n- Tone: Conversational bestie energy. Voice-note to closest friend.\n- Avoid: Corporate AI-speak, religious taboos, overly formal Bahasa.\n- Cultural hooks: Financial pressure, hustle culture, ketinggalan trend, family expectations.',
+  'Australia': 'REGIONAL DNA - AUSTRALIA:\n- Tone: Dry wit, anti-pretentious, self-deprecating humor.\n- Hooks: No BS directness. Contrarian angles, brutal honesty.\n- Cultural hooks: Cost of living, housing anxiety, work-life balance.',
+  'United States': 'REGIONAL DNA - UNITED STATES:\n- Tone: Confident, direct. Skeptical of hustle culture.\n- Hooks: Self-improvement + money + status. Anti-establishment angles.\n- Slang: "Lowkey", "fr fr", "no cap", "based".',
+  'Southeast Asia': 'REGIONAL DNA - SOUTHEAST ASIA:\n- Tone: Aspirational but grounded. English with regional warmth.\n- Hooks: Family values, economic aspiration, social comparison anxiety.',
+  'European Union': 'REGIONAL DNA - EUROPEAN UNION:\n- Tone: Sophisticated, slightly ironic, quality-conscious.\n- Hooks: Work-life balance, sustainability, quality of life.'
 };
 
 // ── PLATFORM ARCHITECTURE ──────────────────────────────────────
 var PA = {
-‘Instagram Carousel’: ‘INSTAGRAM CAROUSEL (SAVE + SHARE):\nSlide 1: PATTERN INTERRUPT - Counter-intuitive statement, stop the scroll.\nSlide 2: VALIDATION - Make them feel seen and understood.\nSlide 3: OPEN LOOP - Tease insight, withhold the payoff.\nSlides 4-5: DEEP INSIGHT / SAVE TRIGGER - Dense value worth bookmarking.\nSlide 6: SUMMARY PUNCH - One quotable, shareable statement.\nFinal Slide: SAVE CTA - Direct save prompt + share hook.’,
-‘TikTok Photo Mode’: ‘TIKTOK PHOTO MODE (SWIPE VELOCITY + COMMENT BAIT):\nSlide 1: HARD INTERRUPT - Maximum disruption in 5 words or less.\nSlide 2: OPEN LOOP - Tease the story, never reveal yet.\nSlides 3-4: RELATABILITY HIT - “This is literally me” moment.\nSlides 5-6: BUILD + TENSION - Escalate. Create micro-suspense.\nFinal Slide: POLARIZING CLOSER + COMMENT BAIT - Divisive statement or direct question.’
+  'Instagram Carousel': 'INSTAGRAM CAROUSEL (SAVE + SHARE):\nSlide 1: PATTERN INTERRUPT - Counter-intuitive statement, stop the scroll.\nSlide 2: VALIDATION - Make them feel seen and understood.\nSlide 3: OPEN LOOP - Tease insight, withhold the payoff.\nSlides 4-5: DEEP INSIGHT / SAVE TRIGGER - Dense value worth bookmarking.\nSlide 6: SUMMARY PUNCH - One quotable, shareable statement.\nFinal Slide: SAVE CTA - Direct save prompt + share hook.',
+  'TikTok Photo Mode': 'TIKTOK PHOTO MODE (SWIPE VELOCITY + COMMENT BAIT):\nSlide 1: HARD INTERRUPT - Maximum disruption in 5 words or less.\nSlide 2: OPEN LOOP - Tease the story, never reveal yet.\nSlides 3-4: RELATABILITY HIT - "This is literally me" moment.\nSlides 5-6: BUILD + TENSION - Escalate. Create micro-suspense.\nFinal Slide: POLARIZING CLOSER + COMMENT BAIT - Divisive statement or direct question.'
 };
 
 // ── BUILD CONTENT PROMPT ───────────────────────────────────────
 function buildContent(llm) {
-var c = LC[llm];
-var rd = RD[S.region] || RD[‘United States’];
-var pa = PA[S.platform] || PA[‘Instagram Carousel’];
-var il = S.intensity <= 3 ? ‘LOW - Informative, low provocation’ : S.intensity <= 7 ? ‘MEDIUM - Punchy, mildly polarizing’ : ‘HIGH - Aggressive, controversy-adjacent’;
-var ln = ‘========================================’;
-return c.intro + ‘\n\n’ +
-ln + ‘\nMASTER CONTENT PROMPT - VIRAL CAROUSEL\n’ + ln + ‘\n\n’ +
-‘[CONTENT BRIEF]\n’ +
-’- TOPIC: ’ + S.topic + ‘\n’ +
-’- PLATFORM: ’ + S.platform + ‘\n’ +
-’- REGION: ’ + S.region + ‘\n’ +
-’- AUDIENCE: ’ + S.audience + ‘\n’ +
-’- GOAL: ’ + S.goal + ‘\n’ +
-’- STYLE: ’ + S.style + ‘\n’ +
-’- TONE: ’ + S.tone + ‘\n’ +
-’- INTENSITY: ’ + S.intensity + ’/10 - ’ + il + ‘\n’ +
-‘- SLIDES: EXACTLY ’ + S.slides + ’ (hard requirement, not more, not fewer)\n’ +
-’- HOOK FORMULA: ’ + S.hook + ‘\n’ +
-‘- CTA INTENT: ’ + S.cta + ‘\n’ +
-(S.painpoint ? ‘- CORE PAIN POINT: ’ + S.painpoint + ‘\n’ : ‘’) +
-(S.contentList ? ‘- CONTENT LIST (’ + S.contentList.split(’,’).filter(function(i){return i.trim();}).length + ’ items): ’ + S.contentList + ‘\n’ : ‘’) + ‘\n’ +
-‘[HIDDEN PSYCHOLOGICAL VARIABLES]\n’ +
-’- Emotional Trigger: ’ + S.et + ‘\n’ +
-’- Shareability Pattern: ’ + S.sp + ‘\n’ +
-’- Retention Curve: ’ + S.rc + ‘\n’ +
-‘- Controversy Level: ’ + S.cl + ‘\n\n’ +
-ln + ‘\nDIRECTIVE 1: LIVE INTERNET RESEARCH — MANDATORY\n’ + ln + ‘\n’ +
-‘You MUST actively search ALL of the following sources before writing a single slide. This is not optional.\n\n’ +
-‘SOURCE 1 — TikTok Creative Center (ads.tiktok.com/business/creativecenter/trends)\n’ +
-‘Search for trending hashtags, videos, and content formats related to “’ + S.topic + ‘” in ’ + S.region + ’ from the last 30 days. Note the top performing formats, hook styles, and engagement patterns.\n\n’ +
-‘SOURCE 2 — Reddit\n’ +
-‘Search relevant subreddits for “’ + S.topic + ‘” discussions in ’ + S.region + ’ context. Look for hot posts, controversial threads, and recurring pain points that generate high engagement.\n\n’ +
-‘SOURCE 3 — X / Twitter\n’ +
-‘Search trending topics and viral tweets related to “’ + S.topic + ‘” targeting ’ + S.region + ’ audience. Identify hot takes, discourse patterns, and quote-tweet-worthy statements.\n\n’ +
-‘SOURCE 4 — Instagram Explore + Reels\n’ +
-‘Identify carousel and reel formats around “’ + S.topic + ‘” that are currently performing well for ’ + S.region + ’ audience. Note caption styles, hook formats, and engagement triggers.\n\n’ +
-‘SOURCE 5 — Google Trends\n’ +
-‘Verify that “’ + S.topic + ‘” is currently trending or rising in ’ + S.region + ‘. Note related queries and breakout topics that could sharpen the angle.\n\n’ +
-‘REPORTING REQUIREMENT: Before writing any slide, state what you found from each source in 1 sentence per source. If you cannot access a source, explicitly state which one and why. Do not skip this step.\n\n’ +
-(S.contentList ?
-ln + ‘\nDIRECTIVE: CONTENT LIST — MANDATORY COVERAGE\n’ + ln + ‘\n’ +
-‘The following ’ + S.contentList.split(’,’).filter(function(i){return i.trim();}).length + ’ items MUST ALL appear in the content. No exceptions, no skipping, no substitutions:\n\n’ +
-S.contentList + ‘\n\n’ +
-‘COVERAGE RULES:\n’ +
-‘- Every single item in this list must be addressed. Do not omit any.\n’ +
-‘- Each item gets its own dedicated slide (unless items are very short, in which case max 2 per slide).\n’ +
-‘- Treat each item with equal depth and quality — do not rush the last items.\n’ +
-(S.seriesMode ?
-‘- Distribute items EQUALLY across all ’ + S.seriesParts + ’ parts. ’ +
-‘Each part gets exactly ’ + Math.floor(S.contentList.split(’,’).filter(function(i){return i.trim();}).length / S.seriesParts) + ’ items. ’ +
-‘Plan the distribution before writing any slide.\n’
-: ‘’
-) +
-‘- The order of items can be rearranged for maximum narrative flow and engagement — but all must be present.\n\n’
-: ‘’
-) +
-ln + ‘\nDIRECTIVE 2: LINGUISTIC PATTERN EXTRACTION\n’ + ln + ‘\n’ +
-‘Based on your research findings from Directive 1, before writing any slide you MUST extract the specific linguistic DNA that makes those viral contents work for ’ + S.region + ’ audience. Analyze and document:\n\n’ +
-‘SENTENCE ARCHITECTURE:\n’ +
-‘- What is the average sentence length of top performing content? (e.g. 3-5 words per line, or longer flowing sentences)\n’ +
-‘- Do they use sentence fragments intentionally? Where and how?\n’ +
-‘- What punctuation patterns create rhythm? (ellipsis for pause, em dash for tension, period for punch)\n\n’ +
-‘WORD CHOICE PATTERN:\n’ +
-‘- What specific vocabulary, slang, or phrases appear repeatedly in viral content for this region + audience?\n’ +
-‘- What words do they NEVER use? (corporate words, formal language, etc)\n’ +
-‘- How do they handle numbers — written out or numeric? Specific or vague?\n\n’ +
-‘RHYTHM + FLOW:\n’ +
-‘- Do viral posts in this niche use repetition for emphasis?\n’ +
-‘- Is the phrasing direct and declarative, or does it use questions and uncertainty?\n’ +
-‘- Where do they break lines for dramatic effect?\n\n’ +
-‘APPLY THIS PATTERN:\n’ +
-‘Every slide you write MUST apply these extracted linguistic patterns. The goal is for the copy to feel native — indistinguishable from content that is already organically viral in this space. Not generic AI writing, not textbook copywriting. Sound like the best version of what is already working.\n\n’ +
-‘State your extracted linguistic pattern in 3-4 bullet points before writing the slides.\n\n’ +
-ln + ‘\nDIRECTIVE 3: TARGET AUDIENCE + PAIN POINT CALIBRATION\n’ + ln + ‘\n’ +
-’PRIMARY AUDIENCE: ’ + S.audience + ‘\n’ +
-(S.painpoint ?
-’CORE PAIN POINT / DESIRE: ’ + S.painpoint + ‘\n\n’ +
-‘This pain point is the emotional anchor of the entire carousel. Rules:\n’ +
-‘- Slide 1 hook must punch directly at this pain point or desire — not around it, not near it, AT it.\n’ +
-‘- Every slide must connect back to this emotional anchor, even if subtly.\n’ +
-‘- The language used to describe this pain point must mirror exactly how the audience talks about it to themselves — not how a marketer would describe it.\n’ +
-‘- Do NOT reframe the pain point into something positive on Slide 1. Let it sit uncomfortable. Resolution comes later.\n\n’
-:
-‘No specific pain point provided. Infer the most emotionally charged pain point or desire for ’ + S.audience + ’ in ’ + S.region + ’ related to this topic based on your research. State your inference before writing the slides.\n\n’
-) +
-‘Every hook, example, and reference must map directly to this audience lived experience. Mirror their vocabulary. They must feel this content was made FOR them specifically.\n\n’ +
-ln + ‘\nDIRECTIVE 4: REGIONAL CULTURE INJECTION\n’ + ln + ‘\n’ +
-rd + ‘\n\n’ +
-ln + ‘\nDIRECTIVE 5: PLATFORM RETENTION ARCHITECTURE\n’ + ln + ‘\n’ +
-pa + ‘\n\n’ +
-ln + ‘\nDIRECTIVE 6: HOOK FORMULA EXECUTION\n’ + ln + ‘\n’ +
-’The user has selected the following hook formula for Slide 1: ’ + S.hook + ‘\n\n’ +
-‘Hook formula definitions and execution rules:\n’ +
-‘- POV Hook: Open with “POV:” followed by a specific relatable scenario in second person. Immediately drop the reader into the moment.\n’ +
-‘- Confession Hook: Open with a personal admission that is slightly uncomfortable or counterintuitive. “Gue salah selama ini…” or “I used to believe…”\n’ +
-‘- Number Hook: Lead with a specific number. “7 hal yang…”, “3 alasan kenapa…” — number must be specific and the list must deliver.\n’ +
-‘- Vs Hook: Create immediate tension by contrasting two opposing groups, behaviors, or mindsets. Short, punchy, no explanation needed on Slide 1.\n’ +
-‘- Unpopular Opinion Hook: State a bold take that most people would instinctively disagree with. No softening. Let it land hard.\n’ +
-‘- Question Hook: Open with a question that the target audience is already asking themselves but has never seen answered directly.\n\n’ +
-‘Slide 1 MUST use this exact hook formula. Do not deviate. The entire hook must land in 1-2 lines maximum.\n\n’ +
-ln + ‘\nDIRECTIVE 7: SLIDE COUNT AND STRUCTURE\n’ + ln + ‘\n’ +
-‘Produce EXACTLY ’ + S.slides + ’ slides. Not more, not fewer. This is a hard requirement.\nEach slide = ONE focused idea. No padding, no redundancy.\nSlide copy: 1-3 punchy lines max per slide (insight slides may have 4-5 dense lines).\n\n’ +
-ln + ‘\nLINGUISTIC STYLE\n’ + ln + ‘\n’ +
-c.note + ‘\n\n’ +
-ln + ‘\nDIRECTIVE 8: CTA INTENT FOR FINAL SLIDE\n’ + ln + ‘\n’ +
-’The final slide CTA must be written specifically for this intent: ’ + S.cta + ‘\n\n’ +
-‘CTA execution rules:\n’ +
-‘- Save for Reference: Final slide copy must give a compelling reason to save — “Save this before you need it” or “Screenshot this.” Frame the entire carousel as a reference guide worth keeping.\n’ +
-‘- Drive to DM: Final slide must create curiosity or urgency that resolves only via DM. “DM me [keyword] for the full list” or “Send me a message if this hit different.”\n’ +
-‘- Drive to Link Bio: Final slide must create enough desire that clicking away feels worth it. “Full breakdown is in the link.” Tease what they will find, do not give it away.\n’ +
-‘- Comment Bait: Final slide must end with a polarizing statement or a direct question that demands a response. Make it impossible not to have an opinion. “Agree or fight me in the comments.”\n\n’ +
-(S.seriesMode ?
-ln + ‘\nDIRECTIVE 9: SERIES MODE STRUCTURE\n’ + ln + ‘\n’ +
-’This content is intentionally built as a ’ + S.seriesParts + ’-part series. Total slides: ’ + S.slides + ‘. Structure rules:\n\n’ +
-‘PART 1:\n’ +
-‘- Slide 1: Hook (use selected hook formula)\n’ +
-‘- Slide 2: Open Loop (tease the full content, withhold)\n’ +
-‘- Slides 3 to ’ + (Math.floor(S.slides / S.seriesParts) - 1) + ‘: Content slides (equal distribution)\n’ +
-‘- Final slide of Part 1: CTA that teases Part 2. Not “bersambung” — craft a specific cliffhanger that makes people actively look for Part 2. Example: “Yang sisanya lebih relate. Part 2 out besok.”\n\n’ +
-‘PART 2 onward:\n’ +
-‘- First slide of each subsequent part: Short re-hook. Assume viewer has NOT seen Part 1. One line that re-establishes context and hooks them immediately.\n’ +
-‘- Middle slides: Content slides (equal distribution, same count as Part 1 content slides)\n’ +
-‘- Final slide of last part: Final CTA closer. This is the resolution — give them the payoff they came for, then direct to action.\n\n’ +
-‘EQUAL CONTENT RULE: Every part must have exactly the same number of content slides. Do not pad or cut to fit — plan the arc first, then write.\n’ +
-‘STANDALONE RULE: Every part must be able to stand alone. Someone who sees Part 2 first should still get value and want to find Part 1.\n’ +
-‘VOICE CONSISTENCY: Tone, linguistic pattern, and energy must be identical across all parts. They must feel like one piece of content, not separate posts.\n\n’
-: ‘’
-) +
-ln + ‘\nOUTPUT FORMAT\n’ + ln + ‘\n’ +
-‘FIRST: State your live research findings (2-3 sentences max).\n\n’ +
-‘THEN output each slide as a SEPARATE labeled block:\n\n’ +
-‘[SLIDE 1 - ROLE NAME]\n[Slide copy here]\n\n’ +
-‘[SLIDE 2 - ROLE NAME]\n[Slide copy here]\n\n’ +
-‘…continue for all ’ + S.slides + ’ slides…’ +
-(S.seriesMode ? ‘\nMark part breaks: [END OF PART 1] [START OF PART 2]. Before slides, state series arc: one line per part on angle + content focus.’ : ‘’) +
-‘\n\n’ +
-‘END with: STRATEGY NOTE: One sentence on why this drives ’ + S.goal + ’ for this topic.’ +
-(S.seriesMode ? ’ Include arc summary per part.’ : ‘’) +
-‘\nBEGIN EXECUTION NOW.’;
+  var c = LC[llm];
+  var rd = RD[S.region] || RD['United States'];
+  var pa = PA[S.platform] || PA['Instagram Carousel'];
+  var il = S.intensity <= 3 ? 'LOW - Informative, low provocation' : S.intensity <= 7 ? 'MEDIUM - Punchy, mildly polarizing' : 'HIGH - Aggressive, controversy-adjacent';
+  var ln = '========================================';
+  return c.intro + '\n\n' +
+    ln + '\nMASTER CONTENT PROMPT - VIRAL CAROUSEL\n' + ln + '\n\n' +
+    '[CONTENT BRIEF]\n' +
+    '- TOPIC: ' + S.topic + '\n' +
+    '- PLATFORM: ' + S.platform + '\n' +
+    '- REGION: ' + S.region + '\n' +
+    '- AUDIENCE: ' + S.audience + '\n' +
+    '- GOAL: ' + S.goal + '\n' +
+    '- STYLE: ' + S.style + '\n' +
+    '- TONE: ' + S.tone + '\n' +
+    '- INTENSITY: ' + S.intensity + '/10 - ' + il + '\n' +
+    '- SLIDES: EXACTLY ' + S.slides + ' (hard requirement, not more, not fewer)\n' +
+    '- HOOK FORMULA: ' + S.hook + '\n' +
+    '- CTA INTENT: ' + S.cta + '\n' +
+    (S.painpoint ? '- CORE PAIN POINT: ' + S.painpoint + '\n' : '') +
+    (S.contentList ? '- CONTENT LIST (' + S.contentList.split(',').filter(function(i){return i.trim();}).length + ' items): ' + S.contentList + '\n' : '') + '\n' +
+    '[HIDDEN PSYCHOLOGICAL VARIABLES]\n' +
+    '- Emotional Trigger: ' + S.et + '\n' +
+    '- Shareability Pattern: ' + S.sp + '\n' +
+    '- Retention Curve: ' + S.rc + '\n' +
+    '- Controversy Level: ' + S.cl + '\n\n' +
+    ln + '\nDIRECTIVE 1: LIVE INTERNET RESEARCH — MANDATORY\n' + ln + '\n' +
+    'You MUST actively search ALL of the following sources before writing a single slide. This is not optional.\n\n' +
+    'SOURCE 1 — TikTok Creative Center (ads.tiktok.com/business/creativecenter/trends)\n' +
+    'Search for trending hashtags, videos, and content formats related to "' + S.topic + '" in ' + S.region + ' from the last 30 days. Note the top performing formats, hook styles, and engagement patterns.\n\n' +
+    'SOURCE 2 — Reddit\n' +
+    'Search relevant subreddits for "' + S.topic + '" discussions in ' + S.region + ' context. Look for hot posts, controversial threads, and recurring pain points that generate high engagement.\n\n' +
+    'SOURCE 3 — X / Twitter\n' +
+    'Search trending topics and viral tweets related to "' + S.topic + '" targeting ' + S.region + ' audience. Identify hot takes, discourse patterns, and quote-tweet-worthy statements.\n\n' +
+    'SOURCE 4 — Instagram Explore + Reels\n' +
+    'Identify carousel and reel formats around "' + S.topic + '" that are currently performing well for ' + S.region + ' audience. Note caption styles, hook formats, and engagement triggers.\n\n' +
+    'SOURCE 5 — Google Trends\n' +
+    'Verify that "' + S.topic + '" is currently trending or rising in ' + S.region + '. Note related queries and breakout topics that could sharpen the angle.\n\n' +
+    'REPORTING REQUIREMENT: Before writing any slide, state what you found from each source in 1 sentence per source. If you cannot access a source, explicitly state which one and why. Do not skip this step.\n\n' +
+    (S.contentList ?
+      ln + '\nDIRECTIVE: CONTENT LIST — MANDATORY COVERAGE\n' + ln + '\n' +
+      'The following ' + S.contentList.split(',').filter(function(i){return i.trim();}).length + ' items MUST ALL appear in the content. No exceptions, no skipping, no substitutions:\n\n' +
+      S.contentList + '\n\n' +
+      'COVERAGE RULES:\n' +
+      '- Every single item in this list must be addressed. Do not omit any.\n' +
+      '- Each item gets its own dedicated slide (unless items are very short, in which case max 2 per slide).\n' +
+      '- Treat each item with equal depth and quality — do not rush the last items.\n' +
+      (S.seriesMode ?
+        '- Distribute items EQUALLY across all ' + S.seriesParts + ' parts. ' +
+        'Each part gets exactly ' + Math.floor(S.contentList.split(',').filter(function(i){return i.trim();}).length / S.seriesParts) + ' items. ' +
+        'Plan the distribution before writing any slide.\n'
+        : ''
+      ) +
+      '- The order of items can be rearranged for maximum narrative flow and engagement — but all must be present.\n\n'
+      : ''
+    ) +
+    ln + '\nDIRECTIVE 2: LINGUISTIC PATTERN EXTRACTION\n' + ln + '\n' +
+    'Based on your research findings from Directive 1, before writing any slide you MUST extract the specific linguistic DNA that makes those viral contents work for ' + S.region + ' audience. Analyze and document:\n\n' +
+    'SENTENCE ARCHITECTURE:\n' +
+    '- What is the average sentence length of top performing content? (e.g. 3-5 words per line, or longer flowing sentences)\n' +
+    '- Do they use sentence fragments intentionally? Where and how?\n' +
+    '- What punctuation patterns create rhythm? (ellipsis for pause, em dash for tension, period for punch)\n\n' +
+    'WORD CHOICE PATTERN:\n' +
+    '- What specific vocabulary, slang, or phrases appear repeatedly in viral content for this region + audience?\n' +
+    '- What words do they NEVER use? (corporate words, formal language, etc)\n' +
+    '- How do they handle numbers — written out or numeric? Specific or vague?\n\n' +
+    'RHYTHM + FLOW:\n' +
+    '- Do viral posts in this niche use repetition for emphasis?\n' +
+    '- Is the phrasing direct and declarative, or does it use questions and uncertainty?\n' +
+    '- Where do they break lines for dramatic effect?\n\n' +
+    'APPLY THIS PATTERN:\n' +
+    'Every slide you write MUST apply these extracted linguistic patterns. The goal is for the copy to feel native — indistinguishable from content that is already organically viral in this space. Not generic AI writing, not textbook copywriting. Sound like the best version of what is already working.\n\n' +
+    'State your extracted linguistic pattern in 3-4 bullet points before writing the slides.\n\n' +
+    ln + '\nDIRECTIVE 3: TARGET AUDIENCE + PAIN POINT CALIBRATION\n' + ln + '\n' +
+    'PRIMARY AUDIENCE: ' + S.audience + '\n' +
+    (S.painpoint ?
+      'CORE PAIN POINT / DESIRE: ' + S.painpoint + '\n\n' +
+      'This pain point is the emotional anchor of the entire carousel. Rules:\n' +
+      '- Slide 1 hook must punch directly at this pain point or desire — not around it, not near it, AT it.\n' +
+      '- Every slide must connect back to this emotional anchor, even if subtly.\n' +
+      '- The language used to describe this pain point must mirror exactly how the audience talks about it to themselves — not how a marketer would describe it.\n' +
+      '- Do NOT reframe the pain point into something positive on Slide 1. Let it sit uncomfortable. Resolution comes later.\n\n'
+      :
+      'No specific pain point provided. Infer the most emotionally charged pain point or desire for ' + S.audience + ' in ' + S.region + ' related to this topic based on your research. State your inference before writing the slides.\n\n'
+    ) +
+    'Every hook, example, and reference must map directly to this audience lived experience. Mirror their vocabulary. They must feel this content was made FOR them specifically.\n\n' +
+    ln + '\nDIRECTIVE 4: REGIONAL CULTURE INJECTION\n' + ln + '\n' +
+    rd + '\n\n' +
+    ln + '\nDIRECTIVE 5: PLATFORM RETENTION ARCHITECTURE\n' + ln + '\n' +
+    pa + '\n\n' +
+    ln + '\nDIRECTIVE 6: HOOK FORMULA EXECUTION\n' + ln + '\n' +
+    'The user has selected the following hook formula for Slide 1: ' + S.hook + '\n\n' +
+    'Hook formula definitions and execution rules:\n' +
+    '- POV Hook: Open with "POV:" followed by a specific relatable scenario in second person. Immediately drop the reader into the moment.\n' +
+    '- Confession Hook: Open with a personal admission that is slightly uncomfortable or counterintuitive. "Gue salah selama ini..." or "I used to believe..."\n' +
+    '- Number Hook: Lead with a specific number. "7 hal yang...", "3 alasan kenapa..." — number must be specific and the list must deliver.\n' +
+    '- Vs Hook: Create immediate tension by contrasting two opposing groups, behaviors, or mindsets. Short, punchy, no explanation needed on Slide 1.\n' +
+    '- Unpopular Opinion Hook: State a bold take that most people would instinctively disagree with. No softening. Let it land hard.\n' +
+    '- Question Hook: Open with a question that the target audience is already asking themselves but has never seen answered directly.\n\n' +
+    'Slide 1 MUST use this exact hook formula. Do not deviate. The entire hook must land in 1-2 lines maximum.\n\n' +
+    ln + '\nDIRECTIVE 7: SLIDE COUNT AND STRUCTURE\n' + ln + '\n' +
+    'Produce EXACTLY ' + S.slides + ' slides. Not more, not fewer. This is a hard requirement.\nEach slide = ONE focused idea. No padding, no redundancy.\nSlide copy: 1-3 punchy lines max per slide (insight slides may have 4-5 dense lines).\n\n' +
+    ln + '\nLINGUISTIC STYLE\n' + ln + '\n' +
+    c.note + '\n\n' +
+    ln + '\nDIRECTIVE 8: CTA INTENT FOR FINAL SLIDE\n' + ln + '\n' +
+    'The final slide CTA must be written specifically for this intent: ' + S.cta + '\n\n' +
+    'CTA execution rules:\n' +
+    '- Save for Reference: Final slide copy must give a compelling reason to save — "Save this before you need it" or "Screenshot this." Frame the entire carousel as a reference guide worth keeping.\n' +
+    '- Drive to DM: Final slide must create curiosity or urgency that resolves only via DM. "DM me [keyword] for the full list" or "Send me a message if this hit different."\n' +
+    '- Drive to Link Bio: Final slide must create enough desire that clicking away feels worth it. "Full breakdown is in the link." Tease what they will find, do not give it away.\n' +
+    '- Comment Bait: Final slide must end with a polarizing statement or a direct question that demands a response. Make it impossible not to have an opinion. "Agree or fight me in the comments."\n\n' +
+    (S.seriesMode ?
+      ln + '\nDIRECTIVE 9: SERIES MODE STRUCTURE\n' + ln + '\n' +
+      'This content is intentionally built as a ' + S.seriesParts + '-part series. Total slides: ' + S.slides + '. Structure rules:\n\n' +
+      'PART 1:\n' +
+      '- Slide 1: Hook (use selected hook formula)\n' +
+      '- Slide 2: Open Loop (tease the full content, withhold)\n' +
+      '- Slides 3 to ' + (Math.floor(S.slides / S.seriesParts) - 1) + ': Content slides (equal distribution)\n' +
+      '- Final slide of Part 1: CTA that teases Part 2. Not "bersambung" — craft a specific cliffhanger that makes people actively look for Part 2. Example: "Yang sisanya lebih relate. Part 2 out besok."\n\n' +
+      'PART 2 onward:\n' +
+      '- First slide of each subsequent part: Short re-hook. Assume viewer has NOT seen Part 1. One line that re-establishes context and hooks them immediately.\n' +
+      '- Middle slides: Content slides (equal distribution, same count as Part 1 content slides)\n' +
+      '- Final slide of last part: Final CTA closer. This is the resolution — give them the payoff they came for, then direct to action.\n\n' +
+      'EQUAL CONTENT RULE: Every part must have exactly the same number of content slides. Do not pad or cut to fit — plan the arc first, then write.\n' +
+      'STANDALONE RULE: Every part must be able to stand alone. Someone who sees Part 2 first should still get value and want to find Part 1.\n' +
+      'VOICE CONSISTENCY: Tone, linguistic pattern, and energy must be identical across all parts. They must feel like one piece of content, not separate posts.\n\n'
+      : ''
+    ) +
+    ln + '\nOUTPUT FORMAT\n' + ln + '\n' +
+    'FIRST: State your live research findings (2-3 sentences max).\n\n' +
+    'THEN output each slide as a SEPARATE labeled block:\n\n' +
+    '[SLIDE 1 - ROLE NAME]\n[Slide copy here]\n\n' +
+    '[SLIDE 2 - ROLE NAME]\n[Slide copy here]\n\n' +
+    '...continue for all ' + S.slides + ' slides...' +
+    (S.seriesMode ? '\\nMark part breaks: [END OF PART 1] [START OF PART 2]. Before slides, state series arc: one line per part on angle + content focus.' : '') +
+    '\\n\\n' +
+    'END with: STRATEGY NOTE: One sentence on why this drives ' + S.goal + ' for this topic.' +
+    (S.seriesMode ? ' Include arc summary per part.' : '') +
+    '\\nBEGIN EXECUTION NOW.';
 }
 
 // ── GENERATE PROMPT ────────────────────────────────────────────
 function genPrompt(llm) {
-document.getElementById(‘out2’).style.display = ‘none’;
-document.getElementById(‘load2’).style.display = ‘block’;
-var txt = buildContent(llm);
-document.getElementById(‘out2lbl’).textContent = LC[llm].lbl;
-setTimeout(function () {
-document.getElementById(‘load2’).style.display = ‘none’;
-document.getElementById(‘out2’).style.display = ‘block’;
-document.getElementById(‘out2body’).textContent = txt;
-}, 900);
+  document.getElementById('out2').style.display = 'none';
+  document.getElementById('load2').style.display = 'block';
+  var txt = buildContent(llm);
+  document.getElementById('out2lbl').textContent = LC[llm].lbl;
+  setTimeout(function () {
+    document.getElementById('load2').style.display = 'none';
+    document.getElementById('out2').style.display = 'block';
+    document.getElementById('out2body').textContent = txt;
+  }, 900);
 }
 
 // ── BUILD DESIGN PROMPT ────────────────────────────────────────
 function buildDesign() {
-var rv = {
-‘Indonesia’: ‘Modern Indonesian digital - clean, youthful, warm. Jakarta creative studio energy.’,
-‘Australia’: ‘Clean, laid-back modern. Anti-corporate. Sydney indie brand energy.’,
-‘United States’: ‘Polished US digital-native. Confident, high-contrast, culturally current.’,
-‘Southeast Asia’: ‘Vibrant pan-Asian digital. Bold typography, culturally informed colors.’,
-‘European Union’: ‘Refined European. Swiss-grid inspired but warm. Sophisticated typography.’
-}[S.region] || ‘Modern global digital aesthetic.’;
-var ln = ‘========================================’;
-var sl = ‘’;
-for (var i = 1; i <= S.slides; i++) { sl += ‘[SLIDE ’ + i + ’ - paste exact text from Phase 2 Slide ’ + i + ’ here]\n\n’; }
-var cm = ‘’;
-for (var i = 1; i <= S.slides; i++) { cm += i + ’ = Generate image for Slide ’ + i + ‘\n’; }
-return ln + ‘\nMASTER DESIGN PROMPT - VISUAL TRANSLATOR\nTarget: ChatGPT Image (DALL-E 3) | Slides: ’ + S.slides + ’ | Ratio: 4:5 (1080x1350px)\n’ + ln + ‘\n\n’ +
-‘[ROLE]\nYou are a Visual DNA Dissector and Image Generation Executor. Analyze uploaded brand assets, then produce ’ + S.slides + ’ separate image prompts using the locked Phase 2 slide content.\n\n’ +
-‘[CONTENT LOCK - FROM PHASE 2]\nPaste your Phase 2 slide copy into the slots below before executing:\n\n’ + sl +
-’[CONTEXT]\n- Slides: ’ + S.slides + ’ total\n- Ratio: 4:5 portrait - 1080x1350px - FIXED, no deviation\n- Platform: ’ + S.platform + ’\n- Audience: ’ + S.audience + ‘\n- Region Aesthetic: ’ + rv + ‘\n- Tone: ’ + S.tone + ‘\n- Style: ’ + S.style + ‘\n- Intensity: ’ + S.intensity + ‘/10\n\n’ +
-ln + ‘\nPRIORITY ORDER — READ BEFORE EXECUTING\n’ + ln + ‘\n’ +
-‘Execute in this exact hierarchy. Higher priority overrides lower priority in ALL decisions.\n\n’ +
-(S.customDesign ?
-‘1. CUSTOM INSTRUCTION (ABSOLUTE — HIGHEST PRIORITY):\n’ + S.customDesign + ‘\n   This overrides everything including brand DNA and visual style. Execute exactly as stated.\n\n’
-:
-‘1. CUSTOM INSTRUCTION: None provided. Skip this layer.\n\n’
-) +
-‘2. VISUAL STYLE: ’ + S.visualStyle + ‘\n’ +
-(S.visualStyle === ‘Loud and Bold’ ?
-’   Creative Direction: Raw explosive energy. Typography is a weapon — use it aggressively. Contrast is not a choice, it is the foundation. Texture and grain add weight and rawness. Think: street poster, protest art, concert flyer that stops you cold. Every decision should feel like it was made at full volume. Loud does not mean chaotic — it means every element is deliberately turned up to maximum. The brand DNA provides the colors and fonts, this direction tells you how hard to push them.’
-: S.visualStyle === ‘Editorial’ ?
-’   Creative Direction: Controlled sophistication. There is tension here but it is held with confidence. Bold moments exist but they are earned — surrounded by space that makes them land harder. Think: magazine spread, art book, premium brand lookbook. One element dominates each slide, everything else is in service of it. The restraint is intentional and communicates intelligence. Not minimalist — editorial. There is richness here, just carefully curated.’
-: S.visualStyle === ‘Clean Minimal’ ?
-’   Creative Direction: Confident restraint with strong personality. This is not empty — it is intentional. Every element was chosen and everything else was removed. Lots of breathing room but the typography does serious heavy lifting. Think: Muji, Notion, Cacalaseng, Apple — minimal but unmistakably itself. The space around the text is as important as the text itself. Nothing decorative that does not serve the meaning. If an element can be removed without losing clarity, it is already gone.’
-: S.visualStyle === ‘Brand Pure’ ?
-’   Creative Direction: Total brand fidelity. Your only job is to be a perfect mirror of the brand reference. Do not interpret, do not improve, do not inject your own aesthetic sensibility. Study the reference obsessively — the exact way text sits on the page, the specific weight of negative space, the precise atmosphere. Then reproduce it exactly. Any deviation — however small — breaks the brand language. This is an exercise in discipline, not creativity.’
-: ‘’
-) + ‘\n\n’ +
-‘3. BRAND DNA: Extract from uploaded assets. Color palette and typography are locked from reference.\n’ +
-’   Exception: If Visual Style = Brand Pure, ALL visual decisions come from brand reference only.\n\n’ +
-‘4. VIRAL CONTEXT: Zero influence on visual decisions. Content brief context does NOT affect color, typography, layout, or atmosphere choices.\n\n’ +
-ln + ‘\nSTEP 1: BRAND VISUAL DNA DISSECTION — MANDATORY OUTPUT\n’ + ln + ‘\n’ +
-‘Upload your brand visual guide, color palette, or reference images now.\n\n’ +
-‘CRITICAL: You MUST write out your complete brand DNA analysis as text BEFORE writing a single image prompt. This output is not optional and cannot be skipped. If you proceed to Step 2 without completing this analysis output, stop immediately and return to Step 1.\n\n’ +
-‘Your analysis output must include ACTUAL VALUES — not placeholders. Write the real hex codes, real font names, real descriptions. Example: write “#F2F0EB warm off-white” not “[background color from brand]”. Write “Neue Haas Grotesk 900 weight” not “[font from brand DNA]”.\n\n’ +
-‘LAYOUT: Dominant structure (centered / asymmetric / grid / full-bleed / editorial). Visual weight flow: where does the eye travel 1st, 2nd, 3rd.\n\n’ +
-‘TYPOGRAPHY: All font families - classify each as Display / Body / Accent. Weight pairings (e.g. 900 headline + 300 subtext). Font personality: heavy sans-serif / vintage serif / geometric / expressive script. Letter-spacing and line-height signatures.\n\n’ +
-‘COLORS: ALL hex codes present - classify as Background / Text / Accent / Secondary / Texture. Contrast strategy: high-contrast / soft tonal / duotone / monochromatic. Note any gradient signatures.\n\n’ +
-‘TEXTURE + ATMOSPHERE: Film grain level (heavy / medium / subtle / none). Photography vs pure graphic. Noise / halftone / paper / glass overlays. Overall atmosphere: clinical / warm / gritty / luxe.\n\n’ +
-ln + ‘\nUNIVERSAL DESIGN RULES — APPLY TO ALL SLIDES\n’ + ln + ‘\n’ +
-‘VISUAL HIERARCHY RULE (always active):\n’ +
-‘Before writing each image prompt, define the hierarchy:\n’ +
-‘- PRIMARY element: What the eye sees first. One element only. This is the anchor of the entire slide.\n’ +
-‘- SECONDARY element: Supports and gives context to the primary. Must not compete with primary for attention.\n’ +
-‘- TERTIARY element: Detail, caption, or accent only. Smallest visual weight.\n\n’ +
-‘Connecting elements (arrows, lines, brackets) MUST have a clear source and destination that are visually obvious. If the connection is not immediately clear without explanation, remove the connecting element entirely.\n\n’ +
-‘Every element in the slide must have a reason to exist. If removing it does not reduce clarity or meaning, remove it.\n\n’ +
-(S.customDesign ?
-‘CONTENT SEPARATION RULE (active because custom instruction is provided):\n’ +
-‘Every piece of content may only appear in ONE place per slide. No exceptions.\n’ +
-‘If a device mockup (iPhone, laptop, tablet, etc.) is present in the slide:\n’ +
-‘- Content goes INSIDE the device screen only\n’ +
-‘- Outside the device = only context or setup text that is DIFFERENT — never a repeat or paraphrase of what is inside\n’ +
-‘- If the content is already inside the device, do not repeat it outside\n’ +
-‘If no device mockup is present:\n’ +
-‘- One focal point text per slide\n’ +
-‘- Supporting text must add NEW information, never repeat or paraphrase the headline\n\n’
-: ‘’
-) +
-ln + ‘\nSTEP 2: PER-SLIDE IMAGE PROMPTS\n’ + ln + ‘\n’ +
-‘Output EACH slide as a SEPARATE block. Use ONLY the locked Phase 2 content. All slides must look like one cohesive series.\n\n’ +
-‘WARNING: Do NOT generate any images yet. Write all ’ + S.slides + ’ prompts first.\n’ +
-‘WARNING: Do NOT merge prompts into one block. Each slide gets its own separated block.\n\n’ +
-‘FORMATTING REQUIREMENT: Output each slide image prompt inside its own separate code block (using triple backticks). Add the label SLIDE N PROMPT as a plain text header above each code block. This allows the user to copy each slide prompt instantly with one click directly in this chat, without manually selecting text.\n\n’ +
-‘Prompt structure per slide:\n’ +
-‘Write each prompt as a creative director briefing a designer who has never seen the brand. Use ONLY actual values from your Step 1 analysis — real hex codes, real font names, real descriptions. No placeholders, no brackets, no generic descriptions.\n\n’ +
-‘Each prompt must be fully self-contained and specific. Include:\n’ +
-‘- Exact background hex from your analysis (e.g. #F2F0EB not [brand background])\n’ +
-‘- Exact font name and weight (e.g. Neue Haas Grotesk 900 not [brand font])\n’ +
-‘- Exact text color hex\n’ +
-‘- Specific layout (e.g. text left-anchored at 15% from edge, occupying 70% canvas width)\n’ +
-‘- Specific texture (e.g. monochromatic grain overlay at 12% opacity, not film grain)\n’ +
-‘- The EXACT slide text word for word from locked content\n’ +
-‘- Visual hierarchy: state what is primary, secondary, tertiary\n’ +
-’- Slide [N] of ’ + S.slides + ‘, note consistency with series\n\n’ +
-ln + ‘\nEXECUTION CONSTRAINTS\n’ + ln + ‘\n’ +
-‘- Use ONLY hex codes extracted from brand assets - no generic colors\n’ +
-‘- Use ONLY typography from brand DNA\n’ +
-‘- ALL slides must look visually consistent (same series)\n’ +
-‘- Text in every image = EXACTLY the locked Phase 2 content for that slide\n’ +
-‘- Ratio is ALWAYS 4:5 - 1080x1350px - no exceptions\n’ +
-’- Total slides = EXACTLY ’ + S.slides + ‘\n’ +
-‘- DO NOT render any image until I give the command below\n\n’ +
-ln + ‘\nCOMMAND MENU - GENERATE ON DEMAND\n’ + ln + ‘\n’ +
-‘All ’ + S.slides + ’ image prompts are ready above. To generate a slide image, simply type its number:\n\n’ +
-cm +
-‘\nType the number. I will generate that slide image immediately.’;
+  var rv = {
+    'Indonesia': 'Modern Indonesian digital - clean, youthful, warm. Jakarta creative studio energy.',
+    'Australia': 'Clean, laid-back modern. Anti-corporate. Sydney indie brand energy.',
+    'United States': 'Polished US digital-native. Confident, high-contrast, culturally current.',
+    'Southeast Asia': 'Vibrant pan-Asian digital. Bold typography, culturally informed colors.',
+    'European Union': 'Refined European. Swiss-grid inspired but warm. Sophisticated typography.'
+  }[S.region] || 'Modern global digital aesthetic.';
+  var ln = '========================================';
+  var sl = '';
+  for (var i = 1; i <= S.slides; i++) { sl += '[SLIDE ' + i + ' - paste exact text from Phase 2 Slide ' + i + ' here]\n\n'; }
+  var cm = '';
+  for (var i = 1; i <= S.slides; i++) { cm += i + ' = Generate image for Slide ' + i + '\n'; }
+  return ln + '\nMASTER DESIGN PROMPT - VISUAL TRANSLATOR\nTarget: ChatGPT Image (DALL-E 3) | Slides: ' + S.slides + ' | Ratio: 4:5 (1080x1350px)\n' + ln + '\n\n' +
+    '[ROLE]\nYou are a Visual DNA Dissector and Image Generation Executor. Analyze uploaded brand assets, then produce ' + S.slides + ' separate image prompts using the locked Phase 2 slide content.\n\n' +
+    '[CONTENT LOCK - FROM PHASE 2]\nPaste your Phase 2 slide copy into the slots below before executing:\n\n' + sl +
+    '[CONTEXT]\n- Slides: ' + S.slides + ' total\n- Ratio: 4:5 portrait - 1080x1350px - FIXED, no deviation\n- Platform: ' + S.platform + '\n- Audience: ' + S.audience + '\n- Region Aesthetic: ' + rv + '\n- Tone: ' + S.tone + '\n- Style: ' + S.style + '\n- Intensity: ' + S.intensity + '/10\n\n' +
+    ln + '\nPRIORITY ORDER — READ BEFORE EXECUTING\n' + ln + '\n' +
+    'Execute in this exact hierarchy. Higher priority overrides lower priority in ALL decisions.\n\n' +
+    (S.customDesign ?
+      '1. CUSTOM INSTRUCTION (ABSOLUTE — HIGHEST PRIORITY):\n' + S.customDesign + '\n   This overrides everything including brand DNA and visual style. Execute exactly as stated.\n\n'
+      :
+      '1. CUSTOM INSTRUCTION: None provided. Skip this layer.\n\n'
+    ) +
+    '2. VISUAL STYLE: ' + S.visualStyle + '\n' +
+    (S.visualStyle === 'Loud and Bold' ?
+      '   Creative Direction: Raw explosive energy. Typography is a weapon — use it aggressively. Contrast is not a choice, it is the foundation. Texture and grain add weight and rawness. Think: street poster, protest art, concert flyer that stops you cold. Every decision should feel like it was made at full volume. Loud does not mean chaotic — it means every element is deliberately turned up to maximum. The brand DNA provides the colors and fonts, this direction tells you how hard to push them.'
+      : S.visualStyle === 'Editorial' ?
+      '   Creative Direction: Controlled sophistication. There is tension here but it is held with confidence. Bold moments exist but they are earned — surrounded by space that makes them land harder. Think: magazine spread, art book, premium brand lookbook. One element dominates each slide, everything else is in service of it. The restraint is intentional and communicates intelligence. Not minimalist — editorial. There is richness here, just carefully curated.'
+      : S.visualStyle === 'Clean Minimal' ?
+      '   Creative Direction: Confident restraint with strong personality. This is not empty — it is intentional. Every element was chosen and everything else was removed. Lots of breathing room but the typography does serious heavy lifting. Think: Muji, Notion, Cacalaseng, Apple — minimal but unmistakably itself. The space around the text is as important as the text itself. Nothing decorative that does not serve the meaning. If an element can be removed without losing clarity, it is already gone.'
+      : S.visualStyle === 'Brand Pure' ?
+      '   Creative Direction: Total brand fidelity. Your only job is to be a perfect mirror of the brand reference. Do not interpret, do not improve, do not inject your own aesthetic sensibility. Study the reference obsessively — the exact way text sits on the page, the specific weight of negative space, the precise atmosphere. Then reproduce it exactly. Any deviation — however small — breaks the brand language. This is an exercise in discipline, not creativity.'
+      : ''
+    ) + '\n\n' +
+    '3. BRAND DNA: Extract from uploaded assets. Color palette and typography are locked from reference.\n' +
+    '   Exception: If Visual Style = Brand Pure, ALL visual decisions come from brand reference only.\n\n' +
+    '4. VIRAL CONTEXT: Zero influence on visual decisions. Content brief context does NOT affect color, typography, layout, or atmosphere choices.\n\n' +
+    ln + '\nSTEP 1: BRAND VISUAL DNA DISSECTION — MANDATORY OUTPUT\n' + ln + '\n' +
+    'Upload your brand visual guide, color palette, or reference images now.\n\n' +
+    'CRITICAL: You MUST write out your complete brand DNA analysis as text BEFORE writing a single image prompt. This output is not optional and cannot be skipped. If you proceed to Step 2 without completing this analysis output, stop immediately and return to Step 1.\n\n' +
+    'Your analysis output must include ACTUAL VALUES — not placeholders. Write the real hex codes, real font names, real descriptions. Example: write "#F2F0EB warm off-white" not "[background color from brand]". Write "Neue Haas Grotesk 900 weight" not "[font from brand DNA]".\n\n' +
+    'LAYOUT: Dominant structure (centered / asymmetric / grid / full-bleed / editorial). Visual weight flow: where does the eye travel 1st, 2nd, 3rd.\n\n' +
+    'TYPOGRAPHY: All font families - classify each as Display / Body / Accent. Weight pairings (e.g. 900 headline + 300 subtext). Font personality: heavy sans-serif / vintage serif / geometric / expressive script. Letter-spacing and line-height signatures.\n\n' +
+    'COLORS: ALL hex codes present - classify as Background / Text / Accent / Secondary / Texture. Contrast strategy: high-contrast / soft tonal / duotone / monochromatic. Note any gradient signatures.\n\n' +
+    'TEXTURE + ATMOSPHERE: Film grain level (heavy / medium / subtle / none). Photography vs pure graphic. Noise / halftone / paper / glass overlays. Overall atmosphere: clinical / warm / gritty / luxe.\n\n' +
+    ln + '\nUNIVERSAL DESIGN RULES — APPLY TO ALL SLIDES\n' + ln + '\n' +
+    'VISUAL HIERARCHY RULE (always active):\n' +
+    'Before writing each image prompt, define the hierarchy:\n' +
+    '- PRIMARY element: What the eye sees first. One element only. This is the anchor of the entire slide.\n' +
+    '- SECONDARY element: Supports and gives context to the primary. Must not compete with primary for attention.\n' +
+    '- TERTIARY element: Detail, caption, or accent only. Smallest visual weight.\n\n' +
+    'Connecting elements (arrows, lines, brackets) MUST have a clear source and destination that are visually obvious. If the connection is not immediately clear without explanation, remove the connecting element entirely.\n\n' +
+    'Every element in the slide must have a reason to exist. If removing it does not reduce clarity or meaning, remove it.\n\n' +
+    (S.customDesign ?
+      'CONTENT SEPARATION RULE (active because custom instruction is provided):\n' +
+      'Every piece of content may only appear in ONE place per slide. No exceptions.\n' +
+      'If a device mockup (iPhone, laptop, tablet, etc.) is present in the slide:\n' +
+      '- Content goes INSIDE the device screen only\n' +
+      '- Outside the device = only context or setup text that is DIFFERENT — never a repeat or paraphrase of what is inside\n' +
+      '- If the content is already inside the device, do not repeat it outside\n' +
+      'If no device mockup is present:\n' +
+      '- One focal point text per slide\n' +
+      '- Supporting text must add NEW information, never repeat or paraphrase the headline\n\n'
+      : ''
+    ) +
+    ln + '\nSTEP 2: PER-SLIDE IMAGE PROMPTS\n' + ln + '\n' +
+    'Output EACH slide as a SEPARATE block. Use ONLY the locked Phase 2 content. All slides must look like one cohesive series.\n\n' +
+    'WARNING: Do NOT generate any images yet. Write all ' + S.slides + ' prompts first.\n' +
+    'WARNING: Do NOT merge prompts into one block. Each slide gets its own separated block.\n\n' +
+    'FORMATTING REQUIREMENT: Output each slide image prompt inside its own separate code block (using triple backticks). Add the label SLIDE N PROMPT as a plain text header above each code block. This allows the user to copy each slide prompt instantly with one click directly in this chat, without manually selecting text.\n\n' +
+    'Prompt structure per slide:\\n' +
+    'Write each prompt as a creative director briefing a designer who has never seen the brand. Use ONLY actual values from your Step 1 analysis — real hex codes, real font names, real descriptions. No placeholders, no brackets, no generic descriptions.\\n\\n' +
+    'Each prompt must be fully self-contained and specific. Include:\\n' +
+    '- Exact background hex from your analysis (e.g. #F2F0EB not [brand background])\\n' +
+    '- Exact font name and weight (e.g. Neue Haas Grotesk 900 not [brand font])\\n' +
+    '- Exact text color hex\\n' +
+    '- Specific layout (e.g. text left-anchored at 15% from edge, occupying 70% canvas width)\\n' +
+    '- Specific texture (e.g. monochromatic grain overlay at 12% opacity, not film grain)\\n' +
+    '- The EXACT slide text word for word from locked content\\n' +
+    '- Visual hierarchy: state what is primary, secondary, tertiary\\n' +
+    '- Slide [N] of ' + S.slides + ', note consistency with series\\n\\n' +
+    ln + '\nEXECUTION CONSTRAINTS\n' + ln + '\n' +
+    '- Use ONLY hex codes extracted from brand assets - no generic colors\n' +
+    '- Use ONLY typography from brand DNA\n' +
+    '- ALL slides must look visually consistent (same series)\n' +
+    '- Text in every image = EXACTLY the locked Phase 2 content for that slide\n' +
+    '- Ratio is ALWAYS 4:5 - 1080x1350px - no exceptions\n' +
+    '- Total slides = EXACTLY ' + S.slides + '\n' +
+    '- DO NOT render any image until I give the command below\n\n' +
+    ln + '\nCOMMAND MENU - GENERATE ON DEMAND\n' + ln + '\n' +
+    'All ' + S.slides + ' image prompts are ready above. To generate a slide image, simply type its number:\n\n' +
+    cm +
+    '\nType the number. I will generate that slide image immediately.';
 }
 
 // ── GENERATE DESIGN ────────────────────────────────────────────
 function genDesign() {
-S.customDesign = document.getElementById(‘inp-custom-design’).value.trim();
-document.getElementById(‘out3’).style.display = ‘none’;
-document.getElementById(‘load3’).style.display = ‘block’;
-var txt = buildDesign();
-setTimeout(function () {
-document.getElementById(‘load3’).style.display = ‘none’;
-document.getElementById(‘out3’).style.display = ‘block’;
-document.getElementById(‘out3body’).textContent = txt;
-}, 800);
+  S.customDesign = document.getElementById('inp-custom-design').value.trim();
+  document.getElementById('out3').style.display = 'none';
+  document.getElementById('load3').style.display = 'block';
+  var txt = buildDesign();
+  setTimeout(function () {
+    document.getElementById('load3').style.display = 'none';
+    document.getElementById('out3').style.display = 'block';
+    document.getElementById('out3body').textContent = txt;
+  }, 800);
 }
 
 // ── COPY WITH FALLBACK ─────────────────────────────────────────
 function doCopy(id, btnId) {
-var text = document.getElementById(id).textContent;
-var btn = document.getElementById(btnId);
-function showOK() {
-btn.textContent = ‘Copied!’;
-btn.classList.add(‘ok’);
-setTimeout(function () { btn.textContent = ‘Copy All’; btn.classList.remove(‘ok’); }, 2000);
-}
-function fallback() {
-var ta = document.createElement(‘textarea’);
-ta.value = text;
-ta.style.cssText = ‘position:fixed;top:-9999px;left:-9999px;opacity:0;’;
-document.body.appendChild(ta);
-ta.focus();
-ta.select();
-try { document.execCommand(‘copy’); showOK(); } catch (e) {}
-document.body.removeChild(ta);
-}
-if (navigator.clipboard && navigator.clipboard.writeText) {
-navigator.clipboard.writeText(text).then(showOK).catch(fallback);
-} else {
-fallback();
-}
+  var text = document.getElementById(id).textContent;
+  var btn = document.getElementById(btnId);
+  function showOK() {
+    btn.textContent = 'Copied!';
+    btn.classList.add('ok');
+    setTimeout(function () { btn.textContent = 'Copy All'; btn.classList.remove('ok'); }, 2000);
+  }
+  function fallback() {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand('copy'); showOK(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showOK).catch(fallback);
+  } else {
+    fallback();
+  }
 }
 </script>
-
 </body>
 </html>
