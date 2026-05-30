@@ -149,6 +149,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
   <div class="card">
     <div class="fld">
+      <div class="flbl">
+        <span class="flbl-txt">Content List</span>
+        <span class="tag tag-m">Optional &middot; Forces All Items In</span>
+      </div>
+      <textarea id="inp-content-list" rows="3" oninput="updateListCounter()" placeholder="List semua item yang WAJIB masuk ke dalam konten, pisahkan dengan koma.&#10;e.g. Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces&#10;e.g. Micromanagement, Unpaid overtime, No psychological safety, Favoritism, Credit stealing"></textarea>
+      <div style="margin-top:8px;font-family:Space Mono,monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;" id="list-counter"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="fld">
       <div class="flbl"><span class="flbl-txt">Platform</span></div>
       <div class="ogrid">
         <button class="opt" data-g="platform" data-v="TikTok Photo Mode" onclick="pick(this)">TikTok Photo Mode</button>
@@ -177,6 +188,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
         <button class="opt" data-g="goal" data-v="Comments" onclick="pick(this)">&#128172; Comments</button>
         <button class="opt" data-g="goal" data-v="Pure Virality" onclick="pick(this)">&#128293; Pure Virality</button>
       </div>
+      <div id="desc-goal" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:8px;font-size:12px;color:var(--mid);line-height:1.6;"></div>
     </div>
     <div class="div"></div>
     <div class="fld">
@@ -187,6 +199,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
         <button class="opt" data-g="style" data-v="Contrarian Take" onclick="pick(this)">Contrarian Take</button>
         <button class="opt" data-g="style" data-v="Storytelling" onclick="pick(this)">Storytelling</button>
       </div>
+      <div id="desc-style" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:8px;font-size:12px;color:var(--mid);line-height:1.6;"></div>
     </div>
     <div class="div"></div>
     <div class="fld">
@@ -197,6 +210,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
         <button class="opt" data-g="tone" data-v="Bold Aggressive" onclick="pick(this)">Bold &amp; Aggressive</button>
         <button class="opt" data-g="tone" data-v="Luxury Minimal" onclick="pick(this)">Luxury Minimal</button>
       </div>
+      <div id="desc-tone" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:8px;font-size:12px;color:var(--mid);line-height:1.6;"></div>
     </div>
     <div class="div"></div>
     <div class="fld">
@@ -227,6 +241,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
         <button class="opt" data-g="hook" data-v="Unpopular Opinion Hook" onclick="pick(this)">Unpopular Opinion</button>
         <button class="opt" data-g="hook" data-v="Question Hook" onclick="pick(this)">Question Hook</button>
       </div>
+      <div id="desc-hook" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:8px;font-size:12px;color:var(--mid);line-height:1.6;"></div>
     </div>
     <div class="div"></div>
     <div class="fld">
@@ -237,6 +252,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
         <button class="opt" data-g="cta" data-v="Drive to Link Bio" onclick="pick(this)">Drive to Link Bio</button>
         <button class="opt" data-g="cta" data-v="Comment Bait" onclick="pick(this)">Comment Bait</button>
       </div>
+      <div id="desc-cta" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:8px;font-size:12px;color:var(--mid);line-height:1.6;"></div>
     </div>
   </div>
 
@@ -250,9 +266,34 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     <div class="div"></div>
     <div class="fld">
       <div class="flbl"><span class="flbl-txt">Slide Count</span><span class="tag tag-m">Manual Control</span></div>
-      <div class="slbl"><span class="sl">MIN (4)</span><span class="sl">DEFAULT (7)</span><span class="sl">MAX (10)</span></div>
-      <input type="range" id="sSlider" min="4" max="10" value="7" oninput="setSlides(this.value)">
+      <div class="slbl"><span class="sl">MIN (4)</span><span class="sl">DEFAULT (7)</span><span class="sl">MAX (12)</span></div>
+      <input type="range" id="sSlider" min="4" max="12" value="7" oninput="setSlides(this.value)">
       <div class="sv" id="sDisp">7 SLIDES</div>
+    </div>
+  </div>
+
+  <div class="card" id="series-card">
+    <div class="fld">
+      <div class="flbl">
+        <span class="flbl-txt">Series Mode</span>
+        <span class="tag tag-m">For Multi-Part Content</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+        <button class="opt" id="series-off" onclick="toggleSeries(false)" style="flex:1;text-align:center;">Single Content</button>
+        <button class="opt" id="series-on" onclick="toggleSeries(true)" style="flex:1;text-align:center;">Series Mode ON</button>
+      </div>
+      <div id="series-options" style="display:none;">
+        <div class="flbl" style="margin-bottom:8px;"><span class="flbl-txt">Total Parts</span></div>
+        <div class="ogrid" style="margin-bottom:16px;">
+          <button class="opt" data-g="seriesParts" data-v="2" onclick="setParts(this,2)">2 Parts</button>
+          <button class="opt" data-g="seriesParts" data-v="3" onclick="setParts(this,3)">3 Parts</button>
+          <button class="opt" data-g="seriesParts" data-v="4" onclick="setParts(this,4)">4 Parts</button>
+        </div>
+        <div style="background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:8px;padding:12px;">
+          <div style="font-family:Space Mono,monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#a78bfa;margin-bottom:8px;">Auto Structure</div>
+          <div class="sv" id="series-preview" style="text-align:left;font-size:11px;color:var(--mid);line-height:1.8;"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -345,7 +386,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 </div>
 <script>
 // ── STATE ──────────────────────────────────────────────────────
-var S = { topic:'', platform:'', region:'', goal:'', style:'', tone:'', audience:'', hook:'', cta:'', painpoint:'', intensity:5, slides:7, et:'', sp:'', rc:'', cl:'' };
+var S = { topic:'', platform:'', region:'', goal:'', style:'', tone:'', audience:'', hook:'', cta:'', painpoint:'', contentList:'', intensity:5, slides:7, seriesMode:false, seriesParts:2, et:'', sp:'', rc:'', cl:'' };
 
 // ── OPTION PICKER ──────────────────────────────────────────────
 function pick(btn) {
@@ -354,6 +395,7 @@ function pick(btn) {
   for (var i = 0; i < all.length; i++) { all[i].classList.remove('sel'); }
   btn.classList.add('sel');
   S[g] = btn.getAttribute('data-v');
+  showDesc(g, btn.getAttribute('data-v'));
   calcHidden();
 }
 
@@ -393,6 +435,134 @@ var SPM = { 'Shares': 'Tag-a-Friend Bait + Identity Broadcasting', 'Saves': 'Uti
 var RCM = { 'TikTok Photo Mode': 'Velocity Swipe > Micro-reward Loop > Dopamine Cliff > Re-loop', 'Instagram Carousel': 'Pattern Interrupt > Validation Hook > Open Loop > Insight Payoff > Save Trigger' };
 var CLM = { 1:'Minimal - Safe', 2:'Minimal - Safe', 3:'Low - Mild Provocation', 4:'Low - Mild Provocation', 5:'Moderate - Opinion Territory', 6:'Moderate - Opinion Territory', 7:'High - Polarizing', 8:'High - Polarizing', 9:'Extreme - Rage Bait Adjacent', 10:'Extreme - Maximum Controversy' };
 
+function updateListCounter() {
+  var val = document.getElementById('inp-content-list').value.trim();
+  var counter = document.getElementById('list-counter');
+  if (!val) { counter.textContent = ''; return; }
+  var items = val.split(',').filter(function(i){ return i.trim().length > 0; });
+  counter.textContent = items.length + ' ITEMS DETECTED';
+  counter.style.color = 'var(--a2)';
+  // Also update series preview if series mode is on
+  if (S.seriesMode) updateSeriesPreview(S.seriesParts, S.slides);
+}
+
+function toggleSeries(on) {
+  S.seriesMode = on;
+  document.getElementById('series-on').classList.toggle('sel', on);
+  document.getElementById('series-off').classList.toggle('sel', !on);
+  document.getElementById('series-options').style.display = on ? 'block' : 'none';
+  if (on) {
+    // default to 2 parts, set slide count to 17
+    if (!document.querySelector('[data-g="seriesParts"].sel')) {
+      var def = document.querySelector('[data-g="seriesParts"][data-v="2"]');
+      if (def) setParts(def, 2);
+    }
+  }
+}
+
+function setParts(btn, n) {
+  S.seriesParts = n;
+  var all = document.querySelectorAll('[data-g="seriesParts"]');
+  for (var i = 0; i < all.length; i++) all[i].classList.remove('sel');
+  btn.classList.add('sel');
+  // Auto-set recommended slide count
+  var recommended = n === 2 ? 17 : n === 3 ? 25 : 33;
+  S.slides = recommended;
+  document.getElementById('sSlider').value = Math.min(recommended, 12);
+  document.getElementById('sDisp').textContent = recommended + ' SLIDES';
+  updateSeriesPreview(n, recommended);
+}
+
+function updateSeriesPreview(parts, total) {
+  var preview = '';
+  var listEl = document.getElementById('inp-content-list');
+  var listVal = listEl ? listEl.value.trim() : '';
+  var items = listVal ? listVal.split(',').filter(function(i){ return i.trim().length > 0; }) : [];
+  var itemCount = items.length;
+  var contentPerPart = itemCount > 0 ? Math.floor(itemCount / parts) : Math.floor((total - (parts * 3)) / parts);
+  var remainder = itemCount > 0 ? itemCount % parts : 0;
+
+  if (itemCount > 0) {
+    preview += 'Content List: ' + itemCount + ' items detected\n';
+    preview += 'Per part: ' + contentPerPart + (remainder > 0 ? '-' + (contentPerPart+1) : '') + ' items\n\n';
+  }
+
+  for (var p = 1; p <= parts; p++) {
+    var extra = (remainder > 0 && p <= remainder) ? 1 : 0;
+    var cnt = contentPerPart + extra;
+    if (p === 1) {
+      preview += 'PART ' + p + ': Hook + Open Loop + ' + cnt + ' content slides + CTA\n';
+    } else if (p === parts) {
+      preview += 'PART ' + p + ': Re-hook + ' + cnt + ' content slides + Final CTA\n';
+    } else {
+      preview += 'PART ' + p + ': Re-hook + ' + cnt + ' content slides + CTA\n';
+    }
+  }
+
+  var suggestedTotal = itemCount > 0
+    ? itemCount + (parts * 3)
+    : total;
+
+  preview += '\nSuggested total: ' + suggestedTotal + ' slides';
+  if (itemCount > 0) {
+    // Auto-update slide slider
+    S.slides = suggestedTotal;
+    var sliderEl = document.getElementById('sSlider');
+    var dispEl = document.getElementById('sDisp');
+    if (sliderEl) sliderEl.value = Math.min(suggestedTotal, parseInt(sliderEl.max));
+    if (dispEl) dispEl.textContent = suggestedTotal + ' SLIDES';
+  }
+  document.getElementById('series-preview').textContent = preview;
+}
+
+var DESCS = {
+  hook: {
+    'POV Hook': 'Langsung drop reader ke dalam situasi spesifik. "POV: lo baru sadar semua teman lo nikah duluan." Tidak ada intro — langsung di dalam momen.',
+    'Confession Hook': 'Pengakuan yang sedikit uncomfortable tapi relatable. Bikin orang nod dan terusin baca karena pernah ngerasain hal yang sama.',
+    'Number Hook': 'Angka spesifik di depan = otak langsung tertarik. "7 hal yang..." selalu perform karena otak suka struktur yang jelas.',
+    'Vs Hook': 'Dua kubu yang berlawanan. Langsung bikin orang pilih pihak dan penasaran siapa yang "menang".',
+    'Unpopular Opinion Hook': 'Statement yang mayoritas orang bakal nolak — tapi dalam hati setuju. Pure scroll-stopper karena memicu disonansi.',
+    'Question Hook': 'Pertanyaan yang sudah ada di kepala audience tapi belum pernah dijawab langsung. Bikin mereka harus terusin baca.'
+  },
+  cta: {
+    'Save for Reference': 'Konten ini adalah sesuatu yang orang mau simpan dan balik lagi nanti. Slide terakhir fokus dorong untuk save.',
+    'Drive to DM': 'Slide terakhir ciptakan curiosity yang hanya bisa resolve lewat DM. "DM gue keyword ini untuk full list."',
+    'Drive to Link Bio': 'Tease sesuatu yang lebih lengkap ada di luar. Bikin mereka rela klik away dari konten.',
+    'Comment Bait': 'Tutup dengan statement atau pertanyaan yang impossible untuk tidak punya pendapat. Harus reply.'
+  },
+  tone: {
+    'Gen Z Internet': 'Slang, singkat, no filter. Kayak nulis caption sambil rebahan. Natural, bukan dipaksain.',
+    'Casual Conversational': 'Ngobrol santai seperti teman. Hangat, tidak menggurui, mudah dicerna siapa saja.',
+    'Bold Aggressive': 'Straight to the point, tidak minta maaf. Setiap kalimat punya weight dan tidak ada filler.',
+    'Luxury Minimal': 'Sedikit kata, banyak makna. Elegan dan confident — tidak perlu teriak untuk diperhatikan.'
+  },
+  style: {
+    'Relatable': 'Bikin orang merasa "ini gue banget." Fokus pada pengalaman yang universal tapi terasa sangat personal.',
+    'Educational': 'Kasih value yang actionable. Orang save karena merasa lebih pinter dan lebih siap setelah baca.',
+    'Contrarian Take': 'Lawan narrative yang umum. Bikin orang berhenti scroll dan mikir ulang apa yang mereka percaya.',
+    'Storytelling': 'Bangun narasi yang ada arc-nya. Orang swipe karena penasaran gimana kelanjutan dan endingnya.'
+  },
+  goal: {
+    'Shares': 'Konten yang orang tag temannya atau forward ke grup. "Ini lo banget" atau "eh liat ini deh."',
+    'Saves': 'Konten yang terlalu sayang untuk di-scroll begitu saja. Reference material yang akan dibuka lagi.',
+    'Comments': 'Konten yang impossible untuk tidak punya pendapat. Memancing orang untuk harus reply.',
+    'Pure Virality': 'All-out — hook terkuat, angle terpolarizing, spread seluas mungkin lintas platform.'
+  }
+};
+
+function showDesc(group, val) {
+  var boxId = 'desc-' + group;
+  var box = document.getElementById(boxId);
+  if (!box) return;
+  var desc = DESCS[group] && DESCS[group][val];
+  if (desc) {
+    box.textContent = desc;
+    box.style.display = 'block';
+  } else {
+    box.style.display = 'none';
+  }
+}
+
 function calcHidden() {
   var k = S.style + '+' + S.tone;
   S.et = EM[k] || 'Curiosity + Resonance';
@@ -426,6 +596,7 @@ function goPhase(n) {
 function toPhase2() {
   S.topic = document.getElementById('inp-topic').value.trim();
   S.painpoint = document.getElementById('inp-pain').value.trim();
+  S.contentList = document.getElementById('inp-content-list').value.trim();
   var req = ['topic', 'platform', 'region', 'goal', 'style', 'tone', 'audience', 'hook', 'cta'];
   var miss = false;
   for (var i = 0; i < req.length; i++) { if (!S[req[i]]) { miss = true; break; } }
@@ -445,7 +616,9 @@ function toPhase2() {
     '<div class="chip ca">Slides: ' + S.slides + '</div>' +
     '<div class="chip cp">Hook: ' + S.hook + '</div>' +
     '<div class="chip cc">CTA: ' + S.cta + '</div>' +
-    (S.painpoint ? '<div class="chip cg">Pain Point: ' + (S.painpoint.length > 35 ? S.painpoint.slice(0,35)+'...' : S.painpoint) + '</div>' : '');
+    (S.painpoint ? '<div class="chip cg">Pain Point: ' + (S.painpoint.length > 35 ? S.painpoint.slice(0,35)+'...' : S.painpoint) + '</div>' : '') +
+    (S.seriesMode ? '<div class="chip cp">Series: ' + S.seriesParts + ' Parts</div>' : '') +
+    (S.contentList ? '<div class="chip cc">List: ' + S.contentList.split(',').length + ' items</div>' : '');
   goPhase(2);
 }
 
@@ -504,7 +677,8 @@ function buildContent(llm) {
     '- SLIDES: EXACTLY ' + S.slides + ' (hard requirement, not more, not fewer)\n' +
     '- HOOK FORMULA: ' + S.hook + '\n' +
     '- CTA INTENT: ' + S.cta + '\n' +
-    (S.painpoint ? '- CORE PAIN POINT: ' + S.painpoint + '\n' : '') + '\n' +
+    (S.painpoint ? '- CORE PAIN POINT: ' + S.painpoint + '\n' : '') +
+    (S.contentList ? '- CONTENT LIST (' + S.contentList.split(',').filter(function(i){return i.trim();}).length + ' items): ' + S.contentList + '\n' : '') + '\n' +
     '[HIDDEN PSYCHOLOGICAL VARIABLES]\n' +
     '- Emotional Trigger: ' + S.et + '\n' +
     '- Shareability Pattern: ' + S.sp + '\n' +
@@ -523,6 +697,23 @@ function buildContent(llm) {
     'SOURCE 5 — Google Trends\n' +
     'Verify that "' + S.topic + '" is currently trending or rising in ' + S.region + '. Note related queries and breakout topics that could sharpen the angle.\n\n' +
     'REPORTING REQUIREMENT: Before writing any slide, state what you found from each source in 1 sentence per source. If you cannot access a source, explicitly state which one and why. Do not skip this step.\n\n' +
+    (S.contentList ?
+      ln + '\nDIRECTIVE: CONTENT LIST — MANDATORY COVERAGE\n' + ln + '\n' +
+      'The following ' + S.contentList.split(',').filter(function(i){return i.trim();}).length + ' items MUST ALL appear in the content. No exceptions, no skipping, no substitutions:\n\n' +
+      S.contentList + '\n\n' +
+      'COVERAGE RULES:\n' +
+      '- Every single item in this list must be addressed. Do not omit any.\n' +
+      '- Each item gets its own dedicated slide (unless items are very short, in which case max 2 per slide).\n' +
+      '- Treat each item with equal depth and quality — do not rush the last items.\n' +
+      (S.seriesMode ?
+        '- Distribute items EQUALLY across all ' + S.seriesParts + ' parts. ' +
+        'Each part gets exactly ' + Math.floor(S.contentList.split(',').filter(function(i){return i.trim();}).length / S.seriesParts) + ' items. ' +
+        'Plan the distribution before writing any slide.\n'
+        : ''
+      ) +
+      '- The order of items can be rearranged for maximum narrative flow and engagement — but all must be present.\n\n'
+      : ''
+    ) +
     ln + '\nDIRECTIVE 2: LINGUISTIC PATTERN EXTRACTION\n' + ln + '\n' +
     'Based on your research findings from Directive 1, before writing any slide you MUST extract the specific linguistic DNA that makes those viral contents work for ' + S.region + ' audience. Analyze and document:\n\n' +
     'SENTENCE ARCHITECTURE:\n' +
@@ -578,14 +769,34 @@ function buildContent(llm) {
     '- Drive to DM: Final slide must create curiosity or urgency that resolves only via DM. "DM me [keyword] for the full list" or "Send me a message if this hit different."\n' +
     '- Drive to Link Bio: Final slide must create enough desire that clicking away feels worth it. "Full breakdown is in the link." Tease what they will find, do not give it away.\n' +
     '- Comment Bait: Final slide must end with a polarizing statement or a direct question that demands a response. Make it impossible not to have an opinion. "Agree or fight me in the comments."\n\n' +
+    (S.seriesMode ?
+      ln + '\nDIRECTIVE 9: SERIES MODE STRUCTURE\n' + ln + '\n' +
+      'This content is intentionally built as a ' + S.seriesParts + '-part series. Total slides: ' + S.slides + '. Structure rules:\n\n' +
+      'PART 1:\n' +
+      '- Slide 1: Hook (use selected hook formula)\n' +
+      '- Slide 2: Open Loop (tease the full content, withhold)\n' +
+      '- Slides 3 to ' + (Math.floor(S.slides / S.seriesParts) - 1) + ': Content slides (equal distribution)\n' +
+      '- Final slide of Part 1: CTA that teases Part 2. Not "bersambung" — craft a specific cliffhanger that makes people actively look for Part 2. Example: "Yang sisanya lebih relate. Part 2 out besok."\n\n' +
+      'PART 2 onward:\n' +
+      '- First slide of each subsequent part: Short re-hook. Assume viewer has NOT seen Part 1. One line that re-establishes context and hooks them immediately.\n' +
+      '- Middle slides: Content slides (equal distribution, same count as Part 1 content slides)\n' +
+      '- Final slide of last part: Final CTA closer. This is the resolution — give them the payoff they came for, then direct to action.\n\n' +
+      'EQUAL CONTENT RULE: Every part must have exactly the same number of content slides. Do not pad or cut to fit — plan the arc first, then write.\n' +
+      'STANDALONE RULE: Every part must be able to stand alone. Someone who sees Part 2 first should still get value and want to find Part 1.\n' +
+      'VOICE CONSISTENCY: Tone, linguistic pattern, and energy must be identical across all parts. They must feel like one piece of content, not separate posts.\n\n'
+      : ''
+    ) +
     ln + '\nOUTPUT FORMAT\n' + ln + '\n' +
     'FIRST: State your live research findings (2-3 sentences max).\n\n' +
     'THEN output each slide as a SEPARATE labeled block:\n\n' +
     '[SLIDE 1 - ROLE NAME]\n[Slide copy here]\n\n' +
     '[SLIDE 2 - ROLE NAME]\n[Slide copy here]\n\n' +
-    '...continue for all ' + S.slides + ' slides...\n\n' +
-    'END with: STRATEGY NOTE: One sentence on why this structure drives ' + S.goal + ' for this topic and region.\n\n' +
-    'BEGIN EXECUTION NOW.';
+    '...continue for all ' + S.slides + ' slides...' +
+    (S.seriesMode ? '\\nMark part breaks: [END OF PART 1] [START OF PART 2]. Before slides, state series arc: one line per part on angle + content focus.' : '') +
+    '\\n\\n' +
+    'END with: STRATEGY NOTE: One sentence on why this drives ' + S.goal + ' for this topic.' +
+    (S.seriesMode ? ' Include arc summary per part.' : '') +
+    '\\nBEGIN EXECUTION NOW.';
 }
 
 // ── GENERATE PROMPT ────────────────────────────────────────────
