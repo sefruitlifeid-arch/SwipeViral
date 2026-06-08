@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -461,36 +462,36 @@ var CLM = {1:'Minimal',2:'Minimal',3:'Low Provocation',4:'Low Provocation',5:'Mo
 
 var DESCS = {
   hook: {
-    'POV Hook':'Drop reader langsung ke dalam situasi. Tidak ada intro.',
-    'Confession Hook':'Pengakuan uncomfortable tapi relatable.',
-    'Number Hook':'Angka spesifik = otak langsung tertarik.',
-    'Vs Hook':'Dua kubu berlawanan. Langsung bikin orang pilih pihak.',
-    'Unpopular Opinion Hook':'Statement mayoritas tolak tapi dalam hati setuju.',
-    'Question Hook':'Pertanyaan yang sudah ada di kepala audience.'
+    'POV Hook': 'Langsung drop reader ke dalam situasi spesifik. "POV: lo baru sadar semua teman lo nikah duluan." Tidak ada intro — langsung di dalam momen.',
+    'Confession Hook': 'Pengakuan yang sedikit uncomfortable tapi relatable. Bikin orang nod dan terusin baca karena pernah ngerasain hal yang sama.',
+    'Number Hook': 'Angka spesifik di depan = otak langsung tertarik. "7 hal yang..." selalu perform karena otak suka struktur yang jelas.',
+    'Vs Hook': 'Dua kubu yang berlawanan. Langsung bikin orang pilih pihak dan penasaran siapa yang "menang".',
+    'Unpopular Opinion Hook': 'Statement yang mayoritas orang bakal nolak — tapi dalam hati setuju. Pure scroll-stopper karena memicu disonansi.',
+    'Question Hook': 'Pertanyaan yang sudah ada di kepala audience tapi belum pernah dijawab langsung. Bikin mereka harus terusin baca.'
   },
   cta: {
-    'Save for Reference':'Frame konten sebagai reference material.',
-    'Drive to DM':'Curiosity yang resolve hanya lewat DM.',
-    'Drive to Link Bio':'Tease sesuatu lebih lengkap di luar.',
-    'Comment Bait':'Impossible untuk tidak berpendapat.'
+    'Save for Reference': 'Konten ini adalah sesuatu yang orang mau simpan dan balik lagi nanti. Slide terakhir fokus dorong untuk save.',
+    'Drive to DM': 'Slide terakhir ciptakan curiosity yang hanya bisa resolve lewat DM. "DM gue keyword ini untuk full list."',
+    'Drive to Link Bio': 'Tease sesuatu yang lebih lengkap ada di luar. Bikin mereka rela klik away dari konten.',
+    'Comment Bait': 'Tutup dengan statement atau pertanyaan yang impossible untuk tidak punya pendapat. Harus reply.'
   },
   tone: {
-    'Gen Z Internet':'Slang, singkat, no filter.',
-    'Casual Conversational':'Ngobrol santai seperti teman.',
-    'Bold Aggressive':'Straight to the point. No filler.',
-    'Luxury Minimal':'Sedikit kata, banyak makna.'
+    'Gen Z Internet': 'Slang, singkat, no filter. Kayak nulis caption sambil rebahan. Natural, bukan dipaksain.',
+    'Casual Conversational': 'Ngobrol santai seperti teman. Hangat, tidak menggurui, mudah dicerna siapa saja.',
+    'Bold Aggressive': 'Straight to the point, tidak minta maaf. Setiap kalimat punya weight dan tidak ada filler.',
+    'Luxury Minimal': 'Sedikit kata, banyak makna. Elegan dan confident — tidak perlu teriak untuk diperhatikan.'
   },
   style: {
-    'Relatable':'"Ini gue banget."',
-    'Educational':'Value actionable. Orang save karena lebih siap.',
-    'Contrarian Take':'Lawan narrative umum. Bikin orang mikir ulang.',
-    'Storytelling':'Narasi dengan arc. Orang swipe karena penasaran.'
+    'Relatable': 'Bikin orang merasa "ini gue banget." Fokus pada pengalaman yang universal tapi terasa sangat personal.',
+    'Educational': 'Kasih value yang actionable. Orang save karena merasa lebih pinter dan lebih siap setelah baca.',
+    'Contrarian Take': 'Lawan narrative yang umum. Bikin orang berhenti scroll dan mikir ulang apa yang mereka percaya.',
+    'Storytelling': 'Bangun narasi yang ada arc-nya. Orang swipe karena penasaran gimana kelanjutan dan endingnya.'
   },
   goal: {
-    'Shares':'Orang tag temannya atau forward ke grup.',
-    'Saves':'Terlalu sayang untuk di-scroll. Reference.',
-    'Comments':'Impossible tidak berpendapat.',
-    'Pure Virality':'All-out. Spread seluas mungkin.'
+    'Shares': 'Konten yang orang tag temannya atau forward ke grup. "Ini lo banget" atau "eh liat ini deh."',
+    'Saves': 'Konten yang terlalu sayang untuk di-scroll begitu saja. Reference material yang akan dibuka lagi.',
+    'Comments': 'Konten yang impossible untuk tidak punya pendapat. Memancing orang untuk harus reply.',
+    'Pure Virality': 'All-out — hook terkuat, angle terpolarizing, spread seluas mungkin lintas platform.'
   }
 };
 
@@ -619,58 +620,169 @@ function toPhase2() {
 }
 
 var LC = {
-  claude: { lbl:'Master Content Prompt - Claude', intro:"Operate under Claude's structural discipline. Deep linguistic nuance, non-robotic transitions. Every sentence must earn its place.", note:'Structural elegance. No "furthermore". Syntax variation.' },
-  chatgpt: { lbl:'Master Content Prompt - ChatGPT', intro:'Fast-execution internet-native mode. Aggressive hooks, modern slang, punchline-dense slides.', note:'Punchy. Short sentences. Line breaks for rhythm. TikTok energy.' },
-  gemini: { lbl:'Master Content Prompt - Gemini', intro:'Broad context synthesis. Social data mapping, cross-platform cultural intelligence.', note:'Synthesize cultural signals. Ground in observable social behavior.' }
+  claude: {
+    lbl: 'Master Content Prompt - Claude Architecture',
+    intro: "You are operating under Claude's structural discipline protocol. Execute with deep linguistic nuance, non-robotic transitions, and precise cognitive architecture. Avoid formulaic AI phrasing. Every sentence must earn its place.",
+    note: 'Write with structural elegance. Use nested logic. No transition words like "furthermore" or "in conclusion". Let ideas flow through syntax variation.'
+  },
+  chatgpt: {
+    lbl: 'Master Content Prompt - ChatGPT Architecture',
+    intro: 'You are in fast-execution internet-native mode. Prioritize aggressive hooks, modern slang authenticity, and punchline-dense slide copy. Think: viral tweet energy but structured.',
+    note: 'Write fast. Write punchy. Short sentences. Mid-sentence line breaks for rhythm. Internet phrasing mandatory. TikTok comment section energy in slide format.'
+  },
+  gemini: {
+    lbl: 'Master Content Prompt - Gemini Architecture',
+    intro: 'You are leveraging broad context synthesis mode. Tap into social data mapping and cross-platform cultural intelligence. Output should feel culturally informed and trend-aware.',
+    note: 'Synthesize across cultural signals. Pull from current online discourse. Ground every slide in observable social behavior, not abstract theory.'
+  }
 };
 
 var RD = {
-  'Indonesia': 'REGIONAL DNA - INDONESIA:\n- Bahasa + Jaksel slang: "literally","valid","fix sih","lowkey","bestie","parah banget","mager"\n- Tone: bestie energy.\n- Avoid: corporate speak, formal Bahasa.\n- Hooks: financial pressure, hustle culture, family expectations.',
-  'Australia': 'REGIONAL DNA - AUSTRALIA:\n- Dry wit, anti-pretentious, brutal honesty.\n- Hooks: cost of living, housing anxiety.',
-  'United States': 'REGIONAL DNA - US:\n- Confident, direct.\n- Slang: "lowkey","fr fr","no cap","based".\n- Hooks: self-improvement, money, status.',
-  'Southeast Asia': 'REGIONAL DNA - SEA:\n- Aspirational but grounded.\n- Hooks: family values, economic aspiration.',
-  'European Union': 'REGIONAL DNA - EU:\n- Sophisticated, slightly ironic.\n- Hooks: work-life balance, sustainability.'
+  'Indonesia': 'REGIONAL DNA - INDONESIA:\n- Language: Bahasa Indonesia + Jaksel slang: "literally", "valid", "fix sih", "lowkey", "ngl", "bestie", "gak sih", "parah banget", "mager", "vibes", "no cap"\n- Tone: Conversational bestie energy. Voice-note to closest friend.\n- Avoid: Corporate AI-speak, religious taboos, overly formal Bahasa.\n- Cultural hooks: Financial pressure, hustle culture, ketinggalan trend, family expectations.',
+  'Australia': 'REGIONAL DNA - AUSTRALIA:\n- Tone: Dry wit, anti-pretentious, self-deprecating humor.\n- Hooks: No BS directness. Contrarian angles, brutal honesty.\n- Cultural hooks: Cost of living, housing anxiety, work-life balance.',
+  'United States': 'REGIONAL DNA - UNITED STATES:\n- Tone: Confident, direct. Skeptical of hustle culture.\n- Hooks: Self-improvement + money + status. Anti-establishment angles.\n- Slang: "Lowkey", "fr fr", "no cap", "based".',
+  'Southeast Asia': 'REGIONAL DNA - SOUTHEAST ASIA:\n- Tone: Aspirational but grounded. English with regional warmth.\n- Hooks: Family values, economic aspiration, social comparison anxiety.',
+  'European Union': 'REGIONAL DNA - EUROPEAN UNION:\n- Tone: Sophisticated, slightly ironic, quality-conscious.\n- Hooks: Work-life balance, sustainability, quality of life.'
 };
 
 var PA = {
-  'Instagram Carousel': 'INSTAGRAM: Slide 1: PATTERN INTERRUPT. Slide 2: VALIDATION. Slide 3: OPEN LOOP. Slides 4-5: DEEP INSIGHT. Slide 6: SUMMARY PUNCH. Final: SAVE CTA.',
-  'TikTok Photo Mode': 'TIKTOK: Slide 1: HARD INTERRUPT (5 words max). Slide 2: OPEN LOOP. Slides 3-4: RELATABILITY HIT. Slides 5-6: BUILD+TENSION. Final: POLARIZING CLOSER+COMMENT BAIT.'
+  'Instagram Carousel': 'INSTAGRAM CAROUSEL (SAVE + SHARE):\nSlide 1: PATTERN INTERRUPT - Counter-intuitive statement, stop the scroll.\nSlide 2: VALIDATION - Make them feel seen and understood.\nSlide 3: OPEN LOOP - Tease insight, withhold the payoff.\nSlides 4-5: DEEP INSIGHT / SAVE TRIGGER - Dense value worth bookmarking.\nSlide 6: SUMMARY PUNCH - One quotable, shareable statement.\nFinal Slide: SAVE CTA - Direct save prompt + share hook.',
+  'TikTok Photo Mode': 'TIKTOK PHOTO MODE (SWIPE VELOCITY + COMMENT BAIT):\nSlide 1: HARD INTERRUPT - Maximum disruption in 5 words or less.\nSlide 2: OPEN LOOP - Tease the story, never reveal yet.\nSlides 3-4: RELATABILITY HIT - "This is literally me" moment.\nSlides 5-6: BUILD + TENSION - Escalate. Create micro-suspense.\nFinal Slide: POLARIZING CLOSER + COMMENT BAIT - Divisive statement or direct question.'
 };
 
 function buildContent(llm) {
   var c = LC[llm];
   var rd = RD[S.region] || RD['United States'];
   var pa = PA[S.platform] || PA['Instagram Carousel'];
-  var il = S.intensity <= 3 ? 'LOW' : S.intensity <= 7 ? 'MEDIUM' : 'HIGH';
+  var il = S.intensity <= 3 ? 'LOW - Informative, low provocation' : S.intensity <= 7 ? 'MEDIUM - Punchy, mildly polarizing' : 'HIGH - Aggressive, controversy-adjacent';
   var ln = '========================================';
-  var listCount = S.contentList ? S.contentList.split(',').filter(function(i){return i.trim();}).length : 0;
-  return c.intro + '\n\n' + ln + '\nMASTER CONTENT PROMPT - VIRAL CAROUSEL\n' + ln + '\n\n' +
-    'TOPIC: ' + S.topic + '\nPLATFORM: ' + S.platform + '\nREGION: ' + S.region + '\nAUDIENCE: ' + S.audience +
-    '\nGOAL: ' + S.goal + '\nSTYLE: ' + S.style + '\nTONE: ' + S.tone + '\nINTENSITY: ' + S.intensity + '/10 (' + il + ')' +
-    '\nSLIDES: EXACTLY ' + S.slides + '\nHOOK: ' + S.hook + '\nCTA: ' + S.cta +
-    (S.painpoint ? '\nPAIN POINT: ' + S.painpoint : '') +
-    (S.contentList ? '\nCONTENT LIST (' + listCount + ' items): ' + S.contentList : '') +
-    '\n\nPSYCHOLOGICAL VARIABLES:\nEmotional Trigger: ' + S.et + '\nShareability: ' + S.sp + '\nRetention: ' + S.rc + '\nControversy: ' + S.cl +
-    '\n\n' + ln + '\nDIRECTIVE 1: LIVE INTERNET RESEARCH — MANDATORY\n' + ln +
-    '\nSearch TikTok Creative Center, Reddit, X/Twitter, Instagram Explore, Google Trends for "' + S.topic + '" in ' + S.region + ' (last 30 days). Report 1 sentence per source before writing any slide.\n\n' +
-    (S.contentList ? ln + '\nCONTENT LIST — ALL ITEMS MANDATORY\n' + ln + '\nAll ' + listCount + ' items MUST appear. Each gets its own slide. Equal depth on all items.' + (S.seriesMode ? '\nDistribute equally across ' + S.seriesParts + ' parts.' : '') + '\n\n' : '') +
-    ln + '\nDIRECTIVE 2: LINGUISTIC PATTERN EXTRACTION\n' + ln +
-    '\nExtract linguistic DNA from research. Before writing slides, state 3-4 bullets covering: sentence length pattern, specific slang/vocabulary for this region+audience, words they never use, rhythm and line break patterns.\n\n' +
-    ln + '\nDIRECTIVE 3: AUDIENCE + PAIN POINT\n' + ln +
-    '\nAUDIENCE: ' + S.audience + '\n' +
-    (S.painpoint ? 'PAIN POINT: ' + S.painpoint + '\nSlide 1 hook must punch directly at this. Every slide connects back to this emotional anchor.\n\n' : 'No pain point provided. Infer the most emotionally charged pain point for ' + S.audience + ' in ' + S.region + ' for this topic. State your inference before writing.\n\n') +
-    ln + '\nDIRECTIVE 4: REGIONAL CULTURE INJECTION\n' + ln + '\n' + rd + '\n\n' +
-    ln + '\nDIRECTIVE 5: PLATFORM RETENTION ARCHITECTURE\n' + ln + '\n' + pa + '\n\n' +
-    ln + '\nDIRECTIVE 6: HOOK FORMULA — ' + S.hook.toUpperCase() + '\n' + ln +
-    '\nSlide 1 MUST use this exact hook formula. Land in 1-2 lines maximum. No deviation.\n\n' +
-    ln + '\nDIRECTIVE 7: SLIDE COUNT & STRUCTURE\n' + ln +
-    '\nProduce EXACTLY ' + S.slides + ' slides. Not more, not fewer.\nEach slide = ONE focused idea. 1-3 punchy lines max.\n\nSTYLE: ' + c.note + '\n\n' +
-    ln + '\nDIRECTIVE 8: CTA INTENT — ' + S.cta.toUpperCase() + '\n' + ln +
-    '\nFinal slide CTA must be written specifically for: ' + S.cta + '\n\n' +
-    (S.seriesMode ? ln + '\nDIRECTIVE 9: SERIES MODE — ' + S.seriesParts + ' PARTS\n' + ln +
-    '\nPart 1: Hook + Open Loop + content slides + cliffhanger CTA teasing Part 2.\nParts 2+: Re-hook + content. Last part: full resolution + final CTA.\nEvery part must stand alone. Voice consistent across all parts.\n\n' : '') +
-    ln + '\nOUTPUT FORMAT\n' + ln +
-    '\nFIRST: Research findings (1 sentence per source).\nTHEN:\n[SLIDE 1 - ROLE NAME]\n[copy]\n\n[SLIDE 2 - ROLE NAME]\n[copy]\n\n...continue for all ' + S.slides + ' slides...\n\nSTRATEGY NOTE: One sentence on why this drives ' + S.goal + ' for this topic.\n\nBEGIN EXECUTION NOW.';
+  return c.intro + '\n\n' +
+    ln + '\nMASTER CONTENT PROMPT - VIRAL CAROUSEL\n' + ln + '\n\n' +
+    '[CONTENT BRIEF]\n' +
+    '- TOPIC: ' + S.topic + '\n' +
+    '- PLATFORM: ' + S.platform + '\n' +
+    '- REGION: ' + S.region + '\n' +
+    '- AUDIENCE: ' + S.audience + '\n' +
+    '- GOAL: ' + S.goal + '\n' +
+    '- STYLE: ' + S.style + '\n' +
+    '- TONE: ' + S.tone + '\n' +
+    '- INTENSITY: ' + S.intensity + '/10 - ' + il + '\n' +
+    '- SLIDES: EXACTLY ' + S.slides + ' (hard requirement, not more, not fewer)\n' +
+    '- HOOK FORMULA: ' + S.hook + '\n' +
+    '- CTA INTENT: ' + S.cta + '\n' +
+    (S.painpoint ? '- CORE PAIN POINT: ' + S.painpoint + '\n' : '') +
+    (S.contentList ? '- CONTENT LIST (' + S.contentList.split(',').filter(function(i){return i.trim();}).length + ' items): ' + S.contentList + '\n' : '') + '\n' +
+    '[HIDDEN PSYCHOLOGICAL VARIABLES]\n' +
+    '- Emotional Trigger: ' + S.et + '\n' +
+    '- Shareability Pattern: ' + S.sp + '\n' +
+    '- Retention Curve: ' + S.rc + '\n' +
+    '- Controversy Level: ' + S.cl + '\n\n' +
+    ln + '\nDIRECTIVE 1: LIVE INTERNET RESEARCH — MANDATORY\n' + ln + '\n' +
+    'You MUST actively search ALL of the following sources before writing a single slide. This is not optional.\n\n' +
+    'SOURCE 1 — TikTok Creative Center (ads.tiktok.com/business/creativecenter/trends)\n' +
+    'Search for trending hashtags, videos, and content formats related to "' + S.topic + '" in ' + S.region + ' from the last 30 days. Note the top performing formats, hook styles, and engagement patterns.\n\n' +
+    'SOURCE 2 — Reddit\n' +
+    'Search relevant subreddits for "' + S.topic + '" discussions in ' + S.region + ' context. Look for hot posts, controversial threads, and recurring pain points that generate high engagement.\n\n' +
+    'SOURCE 3 — X / Twitter\n' +
+    'Search trending topics and viral tweets related to "' + S.topic + '" targeting ' + S.region + ' audience. Identify hot takes, discourse patterns, and quote-tweet-worthy statements.\n\n' +
+    'SOURCE 4 — Instagram Explore + Reels\n' +
+    'Identify carousel and reel formats around "' + S.topic + '" that are currently performing well for ' + S.region + ' audience. Note caption styles, hook formats, and engagement triggers.\n\n' +
+    'SOURCE 5 — Google Trends\n' +
+    'Verify that "' + S.topic + '" is currently trending or rising in ' + S.region + '. Note related queries and breakout topics that could sharpen the angle.\n\n' +
+    'REPORTING REQUIREMENT: Before writing any slide, state what you found from each source in 1 sentence per source. If you cannot access a source, explicitly state which one and why. Do not skip this step.\n\n' +
+    (S.contentList ?
+      ln + '\nDIRECTIVE: CONTENT LIST — MANDATORY COVERAGE\n' + ln + '\n' +
+      'The following ' + S.contentList.split(',').filter(function(i){return i.trim();}).length + ' items MUST ALL appear in the content. No exceptions, no skipping, no substitutions:\n\n' +
+      S.contentList + '\n\n' +
+      'COVERAGE RULES:\n' +
+      '- Every single item in this list must be addressed. Do not omit any.\n' +
+      '- Each item gets its own dedicated slide (unless items are very short, in which case max 2 per slide).\n' +
+      '- Treat each item with equal depth and quality — do not rush the last items.\n' +
+      (S.seriesMode ? '- Distribute items EQUALLY across all ' + S.seriesParts + ' parts. Each part gets exactly ' + Math.floor(S.contentList.split(',').filter(function(i){return i.trim();}).length / S.seriesParts) + ' items. Plan the distribution before writing any slide.\n' : '') +
+      '- The order of items can be rearranged for maximum narrative flow and engagement — but all must be present.\n\n'
+      : ''
+    ) +
+    ln + '\nDIRECTIVE 2: LINGUISTIC PATTERN EXTRACTION\n' + ln + '\n' +
+    'Based on your research findings from Directive 1, before writing any slide you MUST extract the specific linguistic DNA that makes those viral contents work for ' + S.region + ' audience. Analyze and document:\n\n' +
+    'SENTENCE ARCHITECTURE:\n' +
+    '- What is the average sentence length of top performing content? (e.g. 3-5 words per line, or longer flowing sentences)\n' +
+    '- Do they use sentence fragments intentionally? Where and how?\n' +
+    '- What punctuation patterns create rhythm? (ellipsis for pause, em dash for tension, period for punch)\n\n' +
+    'WORD CHOICE PATTERN:\n' +
+    '- What specific vocabulary, slang, or phrases appear repeatedly in viral content for this region + audience?\n' +
+    '- What words do they NEVER use? (corporate words, formal language, etc)\n' +
+    '- How do they handle numbers — written out or numeric? Specific or vague?\n\n' +
+    'RHYTHM + FLOW:\n' +
+    '- Do viral posts in this niche use repetition for emphasis?\n' +
+    '- Is the phrasing direct and declarative, or does it use questions and uncertainty?\n' +
+    '- Where do they break lines for dramatic effect?\n\n' +
+    'APPLY THIS PATTERN:\n' +
+    'Every slide you write MUST apply these extracted linguistic patterns. The goal is for the copy to feel native — indistinguishable from content that is already organically viral in this space. Not generic AI writing, not textbook copywriting. Sound like the best version of what is already working.\n\n' +
+    'State your extracted linguistic pattern in 3-4 bullet points before writing the slides.\n\n' +
+    ln + '\nDIRECTIVE 3: TARGET AUDIENCE + PAIN POINT CALIBRATION\n' + ln + '\n' +
+    'PRIMARY AUDIENCE: ' + S.audience + '\n' +
+    (S.painpoint ?
+      'CORE PAIN POINT / DESIRE: ' + S.painpoint + '\n\n' +
+      'This pain point is the emotional anchor of the entire carousel. Rules:\n' +
+      '- Slide 1 hook must punch directly at this pain point or desire — not around it, not near it, AT it.\n' +
+      '- Every slide must connect back to this emotional anchor, even if subtly.\n' +
+      '- The language used to describe this pain point must mirror exactly how the audience talks about it to themselves — not how a marketer would describe it.\n' +
+      '- Do NOT reframe the pain point into something positive on Slide 1. Let it sit uncomfortable. Resolution comes later.\n\n'
+      :
+      'No specific pain point provided. Infer the most emotionally charged pain point or desire for ' + S.audience + ' in ' + S.region + ' related to this topic based on your research. State your inference before writing the slides.\n\n'
+    ) +
+    'Every hook, example, and reference must map directly to this audience lived experience. Mirror their vocabulary. They must feel this content was made FOR them specifically.\n\n' +
+    ln + '\nDIRECTIVE 4: REGIONAL CULTURE INJECTION\n' + ln + '\n' +
+    rd + '\n\n' +
+    ln + '\nDIRECTIVE 5: PLATFORM RETENTION ARCHITECTURE\n' + ln + '\n' +
+    pa + '\n\n' +
+    ln + '\nDIRECTIVE 6: HOOK FORMULA EXECUTION\n' + ln + '\n' +
+    'The user has selected the following hook formula for Slide 1: ' + S.hook + '\n\n' +
+    'Hook formula definitions and execution rules:\n' +
+    '- POV Hook: Open with "POV:" followed by a specific relatable scenario in second person. Immediately drop the reader into the moment.\n' +
+    '- Confession Hook: Open with a personal admission that is slightly uncomfortable or counterintuitive. "Gue salah selama ini..." or "I used to believe..."\n' +
+    '- Number Hook: Lead with a specific number. "7 hal yang...", "3 alasan kenapa..." — number must be specific and the list must deliver.\n' +
+    '- Vs Hook: Create immediate tension by contrasting two opposing groups, behaviors, or mindsets. Short, punchy, no explanation needed on Slide 1.\n' +
+    '- Unpopular Opinion Hook: State a bold take that most people would instinctively disagree with. No softening. Let it land hard.\n' +
+    '- Question Hook: Open with a question that the target audience is already asking themselves but has never seen answered directly.\n\n' +
+    'Slide 1 MUST use this exact hook formula. Do not deviate. The entire hook must land in 1-2 lines maximum.\n\n' +
+    ln + '\nDIRECTIVE 7: SLIDE COUNT AND STRUCTURE\n' + ln + '\n' +
+    'Produce EXACTLY ' + S.slides + ' slides. Not more, not fewer. This is a hard requirement.\nEach slide = ONE focused idea. No padding, no redundancy.\nSlide copy: 1-3 punchy lines max per slide (insight slides may have 4-5 dense lines).\n\n' +
+    ln + '\nLINGUISTIC STYLE\n' + ln + '\n' +
+    c.note + '\n\n' +
+    ln + '\nDIRECTIVE 8: CTA INTENT FOR FINAL SLIDE\n' + ln + '\n' +
+    'The final slide CTA must be written specifically for this intent: ' + S.cta + '\n\n' +
+    'CTA execution rules:\n' +
+    '- Save for Reference: Final slide copy must give a compelling reason to save — "Save this before you need it" or "Screenshot this." Frame the entire carousel as a reference guide worth keeping.\n' +
+    '- Drive to DM: Final slide must create curiosity or urgency that resolves only via DM. "DM me [keyword] for the full list" or "Send me a message if this hit different."\n' +
+    '- Drive to Link Bio: Final slide must create enough desire that clicking away feels worth it. "Full breakdown is in the link." Tease what they will find, do not give it away.\n' +
+    '- Comment Bait: Final slide must end with a polarizing statement or a direct question that demands a response. Make it impossible not to have an opinion. "Agree or fight me in the comments."\n\n' +
+    (S.seriesMode ?
+      ln + '\nDIRECTIVE 9: SERIES MODE STRUCTURE\n' + ln + '\n' +
+      'This content is intentionally built as a ' + S.seriesParts + '-part series. Total slides: ' + S.slides + '. Structure rules:\n\n' +
+      'PART 1:\n' +
+      '- Slide 1: Hook (use selected hook formula)\n' +
+      '- Slide 2: Open Loop (tease the full content, withhold)\n' +
+      '- Slides 3 to ' + (Math.floor(S.slides / S.seriesParts) - 1) + ': Content slides (equal distribution)\n' +
+      '- Final slide of Part 1: CTA that teases Part 2. Not "bersambung" — craft a specific cliffhanger that makes people actively look for Part 2.\n\n' +
+      'PART 2 onward:\n' +
+      '- First slide: Short re-hook. Assume viewer has NOT seen Part 1.\n' +
+      '- Middle slides: Content slides (equal distribution)\n' +
+      '- Final slide of last part: Final CTA closer. Resolution + action.\n\n' +
+      'EQUAL CONTENT RULE: Every part must have exactly the same number of content slides.\n' +
+      'STANDALONE RULE: Every part must be able to stand alone.\n' +
+      'VOICE CONSISTENCY: Tone and energy must be identical across all parts.\n\n'
+      : ''
+    ) +
+    ln + '\nOUTPUT FORMAT\n' + ln + '\n' +
+    'FIRST: State your live research findings (2-3 sentences max).\n\n' +
+    'THEN output each slide as a SEPARATE labeled block:\n\n' +
+    '[SLIDE 1 - ROLE NAME]\n[Slide copy here]\n\n' +
+    '[SLIDE 2 - ROLE NAME]\n[Slide copy here]\n\n' +
+    '...continue for all ' + S.slides + ' slides...\n\n' +
+    'END with: STRATEGY NOTE: One sentence on why this drives ' + S.goal + ' for this topic.' +
+    (S.seriesMode ? ' Include arc summary per part.' : '') +
+    '\nBEGIN EXECUTION NOW.';
 }
 
 function genPrompt(llm) {
@@ -744,40 +856,91 @@ function buildDesign() {
   var editEl = document.getElementById('inp-anchor-edit');
   var edited = editEl ? editEl.value.trim() : '';
   var anchor = S.ccMode ? (edited || S.charAnchor) : '';
+  var rv = {
+    'Indonesia': 'Modern Indonesian digital - clean, youthful, warm. Jakarta creative studio energy.',
+    'Australia': 'Clean, laid-back modern. Anti-corporate. Sydney indie brand energy.',
+    'United States': 'Polished US digital-native. Confident, high-contrast, culturally current.',
+    'Southeast Asia': 'Vibrant pan-Asian digital. Bold typography, culturally informed colors.',
+    'European Union': 'Refined European. Swiss-grid inspired but warm. Sophisticated typography.'
+  }[S.region] || 'Modern global digital aesthetic.';
   var ln = '========================================';
   var sl = '';
-  for (var i = 1; i <= S.slides; i++) { sl += '[SLIDE ' + i + ' — paste Phase 2 copy here]\n\n'; }
+  for (var i = 1; i <= S.slides; i++) { sl += '[SLIDE ' + i + ' - paste exact text from Phase 2 Slide ' + i + ' here]\n\n'; }
   var cm = '';
   for (var i = 1; i <= S.slides; i++) { cm += i + ' = Generate image for Slide ' + i + '\n'; }
-  var rv = {
-    'Indonesia':'Modern Indonesian digital — clean, youthful, warm.',
-    'Australia':'Clean, laid-back modern. Anti-corporate.',
-    'United States':'Polished US digital-native. High-contrast.',
-    'Southeast Asia':'Vibrant pan-Asian. Bold typography.',
-    'European Union':'Refined European. Swiss-grid inspired.'
-  }[S.region] || 'Modern global digital aesthetic.';
-  return ln + '\nMASTER DESIGN PROMPT — VISUAL TRANSLATOR\nSlides: ' + S.slides + ' | Ratio: 4:5 (1080x1350px)\n' + ln + '\n\n' +
-    '[ROLE]\nYou are a Visual DNA Dissector and Image Generation Executor. Analyze uploaded brand assets, then produce ' + S.slides + ' image prompts using the locked Phase 2 slide content.\n\n' +
-    '[CONTENT LOCK — FROM PHASE 2]\n' + sl +
-    '[CONTEXT]\nPlatform: ' + S.platform + ' | Audience: ' + S.audience + ' | Region: ' + rv + '\nTone: ' + S.tone + ' | Intensity: ' + S.intensity + '/10\n\n' +
-    ln + '\nPRIORITY HIERARCHY\n' + ln + '\n' +
-    '1. CUSTOM INSTRUCTION (HIGHEST):\n' + (custom ? custom + '\nThis overrides everything. Execute exactly as stated.' : 'None provided.') + '\n\n' +
-    (anchor ? '2. CHARACTER ANCHOR (inject on every slide that includes the mascot):\n' + anchor + '\n\n' : '2. CHARACTER ANCHOR: None.\n\n') +
-    '3. BRAND DNA: Extract from uploaded assets. Colors + typography locked from reference.\n\n' +
-    '4. VIRAL CONTEXT: Zero influence on visual decisions.\n\n' +
-    ln + '\nSTEP 1: BRAND VISUAL DNA DISSECTION — MANDATORY\n' + ln +
-    '\nUpload your brand reference images. Write full analysis AS TEXT before any image prompt.\nUse REAL values — real hex codes, real font names. No placeholders.\n\n' +
-    'LAYOUT: Dominant structure + visual weight flow.\nTYPOGRAPHY: All fonts classified as Display/Body/Accent. Weight pairings. Letter-spacing.\nCOLORS: All hex codes — Background/Text/Accent/Secondary. Contrast strategy.\nTEXTURE: Film grain level. Overlays. Overall atmosphere.\n\n' +
-    (anchor ? ln + '\nCHARACTER CONSISTENCY PROTOCOL\n' + ln +
-    '\nMascot is present in this project. Rules:\n- Generate Slide 1 FIRST. Do not proceed until I approve the character appearance.\n- After approval: reference "same character as approved Slide 1" in every subsequent prompt.\n- Character anchor attributes above are HARD CONSTRAINTS — not suggestions.\n- If a slide includes the mascot: state "CHARACTER PRESENT" at the top of the prompt.\n- If a slide does not include the mascot: state "NO CHARACTER THIS SLIDE".\n\n' : '') +
-    ln + '\nUNIVERSAL DESIGN RULES\n' + ln +
-    '\nPer slide define: PRIMARY element (one only), SECONDARY element, TERTIARY element.\nEvery element must justify its existence — if removing it loses no clarity, remove it.\n\n' +
-    ln + '\nSTEP 2: PER-SLIDE IMAGE PROMPTS (' + S.slides + ' total)\n' + ln +
-    '\nDo NOT generate any images yet. Write ALL ' + S.slides + ' prompts first.\nFormat: each prompt inside its own code block (```). Label "SLIDE N PROMPT" above each block.\n\n' +
-    'Each prompt must include:\n- Exact background hex from brand analysis\n- Exact font name and weight\n- Exact text color hex\n- Specific layout (position percentages)\n- Specific texture (opacity levels)\n- EXACT slide text word-for-word from locked content\n- Visual hierarchy: PRIMARY / SECONDARY / TERTIARY\n- "Slide N of ' + S.slides + '"\n\n' +
-    ln + '\nEXECUTION CONSTRAINTS\n' + ln +
-    '\n- Only hex codes from brand assets\n- Only typography from brand DNA\n- All slides must look consistent as one series\n- Ratio: 4:5 — 1080x1350px — no exceptions\n- EXACTLY ' + S.slides + ' slides\n- DO NOT render any image until command below\n\n' +
-    ln + '\nCOMMAND MENU — GENERATE ON DEMAND\n' + ln + '\n' + cm +
+  return ln + '\nMASTER DESIGN PROMPT - VISUAL TRANSLATOR\nTarget: ChatGPT Image (DALL-E 3) | Slides: ' + S.slides + ' | Ratio: 4:5 (1080x1350px)\n' + ln + '\n\n' +
+    '[ROLE]\nYou are a Visual DNA Dissector and Image Generation Executor. Analyze uploaded brand assets, then produce ' + S.slides + ' separate image prompts using the locked Phase 2 slide content.\n\n' +
+    '[CONTENT LOCK - FROM PHASE 2]\nPaste your Phase 2 slide copy into the slots below before executing:\n\n' + sl +
+    '[CONTEXT]\n- Slides: ' + S.slides + ' total\n- Ratio: 4:5 portrait - 1080x1350px - FIXED, no deviation\n- Platform: ' + S.platform + '\n- Audience: ' + S.audience + '\n- Region Aesthetic: ' + rv + '\n- Tone: ' + S.tone + '\n- Style: ' + S.style + '\n- Intensity: ' + S.intensity + '/10\n\n' +
+    ln + '\nPRIORITY ORDER — READ BEFORE EXECUTING\n' + ln + '\n' +
+    'Execute in this exact hierarchy. Higher priority overrides lower priority in ALL decisions.\n\n' +
+    '1. CUSTOM INSTRUCTION (ABSOLUTE — HIGHEST PRIORITY):\n' + (custom ? custom + '\n   This overrides everything including brand DNA and visual style. Execute exactly as stated.' : 'None provided. Skip this layer.') + '\n\n' +
+    (anchor ? '2. CHARACTER ANCHOR (LOCKED — inject on every slide with mascot):\n' + anchor + '\n\n' : '2. CHARACTER ANCHOR: None provided.\n\n') +
+    '3. BRAND DNA: Extract from uploaded assets. Color palette and typography are locked from reference.\n\n' +
+    '4. VIRAL CONTEXT: Zero influence on visual decisions. Content brief context does NOT affect color, typography, layout, or atmosphere choices.\n\n' +
+    ln + '\nSTEP 1: BRAND VISUAL DNA DISSECTION — MANDATORY OUTPUT\n' + ln + '\n' +
+    'Upload your brand visual guide, color palette, or reference images now.\n\n' +
+    'CRITICAL: You MUST write out your complete brand DNA analysis as text BEFORE writing a single image prompt. This output is not optional and cannot be skipped.\n\n' +
+    'Your analysis output must include ACTUAL VALUES — not placeholders. Write the real hex codes, real font names, real descriptions. Example: write "#F2F0EB warm off-white" not "[background color from brand]". Write "Neue Haas Grotesk 900 weight" not "[font from brand DNA]".\n\n' +
+    'LAYOUT: Dominant structure (centered / asymmetric / grid / full-bleed / editorial). Visual weight flow: where does the eye travel 1st, 2nd, 3rd.\n\n' +
+    'TYPOGRAPHY: All font families - classify each as Display / Body / Accent. Weight pairings (e.g. 900 headline + 300 subtext). Font personality: heavy sans-serif / vintage serif / geometric / expressive script. Letter-spacing and line-height signatures.\n\n' +
+    'COLORS: ALL hex codes present - classify as Background / Text / Accent / Secondary / Texture. Contrast strategy: high-contrast / soft tonal / duotone / monochromatic. Note any gradient signatures.\n\n' +
+    'TEXTURE + ATMOSPHERE: Film grain level (heavy / medium / subtle / none). Photography vs pure graphic. Noise / halftone / paper / glass overlays. Overall atmosphere: clinical / warm / gritty / luxe.\n\n' +
+    ln + '\nUNIVERSAL DESIGN RULES — APPLY TO ALL SLIDES\n' + ln + '\n' +
+    'VISUAL HIERARCHY RULE (always active):\n' +
+    'Before writing each image prompt, define the hierarchy:\n' +
+    '- PRIMARY element: What the eye sees first. One element only. This is the anchor of the entire slide.\n' +
+    '- SECONDARY element: Supports and gives context to the primary. Must not compete with primary for attention.\n' +
+    '- TERTIARY element: Detail, caption, or accent only. Smallest visual weight.\n\n' +
+    'Connecting elements (arrows, lines, brackets) MUST have a clear source and destination that are visually obvious. If the connection is not immediately clear without explanation, remove the connecting element entirely.\n\n' +
+    'Every element in the slide must have a reason to exist. If removing it does not reduce clarity or meaning, remove it.\n\n' +
+    (custom ?
+      'CONTENT SEPARATION RULE (active because custom instruction is provided):\n' +
+      'Every piece of content may only appear in ONE place per slide. No exceptions.\n' +
+      'If a device mockup (iPhone, laptop, tablet, etc.) is present in the slide:\n' +
+      '- Content goes INSIDE the device screen only\n' +
+      '- Outside the device = only context or setup text that is DIFFERENT — never a repeat or paraphrase of what is inside\n' +
+      'If no device mockup is present:\n' +
+      '- One focal point text per slide\n' +
+      '- Supporting text must add NEW information, never repeat or paraphrase the headline\n\n'
+      : ''
+    ) +
+    (anchor ?
+      ln + '\nCHARACTER CONSISTENCY PROTOCOL\n' + ln + '\n' +
+      'Mascot is present. Rules:\n' +
+      '- Generate Slide 1 FIRST. Do not proceed until I approve the character appearance.\n' +
+      '- After approval: reference "same character as approved Slide 1" in every subsequent prompt.\n' +
+      '- Character anchor attributes above are HARD CONSTRAINTS — not suggestions.\n' +
+      '- If a slide includes the mascot: state "CHARACTER PRESENT" at top of prompt.\n' +
+      '- If a slide does not include the mascot: state "NO CHARACTER THIS SLIDE".\n\n'
+      : ''
+    ) +
+    ln + '\nSTEP 2: PER-SLIDE IMAGE PROMPTS\n' + ln + '\n' +
+    'Output EACH slide as a SEPARATE block. Use ONLY the locked Phase 2 content. All slides must look like one cohesive series.\n\n' +
+    'WARNING: Do NOT generate any images yet. Write all ' + S.slides + ' prompts first.\n' +
+    'WARNING: Do NOT merge prompts into one block. Each slide gets its own separated block.\n\n' +
+    'FORMATTING REQUIREMENT: Output each slide image prompt inside its own separate code block (using triple backticks). Add the label SLIDE N PROMPT as a plain text header above each code block.\n\n' +
+    'Write each prompt as a creative director briefing a designer who has never seen the brand. Use ONLY actual values from your Step 1 analysis — real hex codes, real font names, real descriptions. No placeholders.\n\n' +
+    'Each prompt must be fully self-contained and specific. Include:\n' +
+    '- Exact background hex from your analysis\n' +
+    '- Exact font name and weight\n' +
+    '- Exact text color hex\n' +
+    '- Specific layout (e.g. text left-anchored at 15% from edge, occupying 70% canvas width)\n' +
+    '- Specific texture (e.g. monochromatic grain overlay at 12% opacity)\n' +
+    '- The EXACT slide text word for word from locked content\n' +
+    '- Visual hierarchy: state what is primary, secondary, tertiary\n' +
+    '- Slide [N] of ' + S.slides + ', note consistency with series\n\n' +
+    ln + '\nEXECUTION CONSTRAINTS\n' + ln + '\n' +
+    '- Use ONLY hex codes extracted from brand assets - no generic colors\n' +
+    '- Use ONLY typography from brand DNA\n' +
+    '- ALL slides must look visually consistent (same series)\n' +
+    '- Text in every image = EXACTLY the locked Phase 2 content for that slide\n' +
+    '- Ratio is ALWAYS 4:5 - 1080x1350px - no exceptions\n' +
+    '- Total slides = EXACTLY ' + S.slides + '\n' +
+    '- DO NOT render any image until I give the command below\n\n' +
+    ln + '\nCOMMAND MENU - GENERATE ON DEMAND\n' + ln + '\n' +
+    'All ' + S.slides + ' image prompts are ready above. To generate a slide image, simply type its number:\n\n' +
+    cm +
     '\nType the number. I will generate that slide image immediately.';
 }
 
