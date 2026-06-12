@@ -913,21 +913,20 @@ function buildDesign() {
     'Your job is to build a complete visual system for this carousel — then execute it with absolute consistency across all ' + S.slides + ' slides. You make design decisions. You justify them. You do not ask for permission on aesthetic choices.\n\n' +
     '[CONTENT LOCK - FROM PHASE 2]\nPaste your Phase 2 slide copy into the slots below before executing:\n\n' + sl +
     '[CONTEXT]\n- Slides: ' + S.slides + ' total\n- Ratio: 4:5 portrait - 1080x1350px - FIXED, no deviation\n- Platform: ' + S.platform + '\n- Audience: ' + S.audience + '\n- Region Aesthetic: ' + rv + '\n- Tone: ' + S.tone + '\n- Style: ' + S.style + '\n- Intensity: ' + S.intensity + '/10\n\n' +
-    ln + '\nASSET AUTHORITY HIERARCHY — READ FIRST, GOVERNS EVERYTHING\n' + ln + '\n' +
-    'You may receive uploaded assets: a PDF brand/visual guide, image style references, or both. Read this hierarchy before touching anything else.\n\n' +
-    'TIER 1 — PDF VISUAL GUIDE (if uploaded): This is law. Every technical decision — color hex codes, font names and weights, spacing rules, layout principles — comes from this document. You extract, you do not interpret. If the PDF says body text is 16px Helvetica Neue Light, that is what every slide uses for body text.\n\n' +
-    'TIER 2 — IMAGE STYLE REFERENCE (if uploaded): This is mood and atmosphere ONLY. Use it to understand the visual energy, the feeling, the cultural context. It does NOT override typography, color, or layout decisions from the PDF. If there is a conflict between what the image looks like and what the PDF specifies — the PDF wins, always.\n\n' +
-    'TIER 3 — NO ASSETS PROVIDED: If neither PDF nor image reference is uploaded, derive the visual system entirely from the content context: region aesthetic (' + rv + '), tone (' + S.tone + '), audience (' + S.audience + '), and intensity (' + S.intensity + '/10). Build a coherent visual system from scratch that serves the content.\n\n' +
-    'CONFLICT RULE: In any conflict between tiers, higher tier wins. No exceptions.\n\n' +
+    ln + '\nASSET BRAND VALUES\n' + ln + '\n' +
+    'If a PDF brand guide is uploaded: use its colors, fonts, spacing, and mascot rules for every slide.\n' +
+    'If an image style reference is uploaded: use it for composition, layout energy, and atmosphere. Font choices must reflect styles visibly present in the reference — do not invent fonts that are not visible.\n' +
+    'If both are uploaded and they disagree: follow the PDF.\n' +
+    'If nothing is uploaded: design from context — region aesthetic (' + rv + '), tone (' + S.tone + '), audience (' + S.audience + '), intensity (' + S.intensity + '/10).\n\n' +
     ln + '\nPRIORITY ORDER — CONTENT DECISIONS\n' + ln + '\n' +
     '1. CUSTOM INSTRUCTION (ABSOLUTE — HIGHEST PRIORITY):\n' + (custom ? custom + '\n   This overrides all visual decisions including brand DNA. Execute exactly as stated.' : 'None provided.') + '\n\n' +
     (anchor ? '2. CHARACTER ANCHOR (LOCKED — see Character Consistency Protocol below):\n' + anchor + '\n\n' : '2. CHARACTER ANCHOR: None provided.\n\n') +
-    '3. BRAND DNA: Extracted from uploaded assets per Asset Authority Hierarchy above.\n\n' +
-    '4. CONTENT BRIEF CONTEXT: Informs aesthetic direction only when no PDF or image assets are provided (Tier 3 fallback).\n\n' +
+    '3. BRAND DNA: From uploaded assets per Asset Brand Values above.\n\n' +
+    '4. CONTENT BRIEF CONTEXT: Informs aesthetic direction only when no PDF or image assets are provided.\n\n' +
     ln + '\nSTEP 1: VISUAL SYSTEM DECLARATION — MANDATORY BEFORE ANY PROMPT\n' + ln + '\n' +
     'Before writing a single image prompt, you must declare the complete visual system for this carousel. This is not analysis — it is a binding design decision document. Every value you declare here will be used identically across all ' + S.slides + ' slides.\n\n' +
     'If a PDF brand guide is uploaded: extract actual values. Write real hex codes, real font names. No placeholders.\n' +
-    'If only image references are uploaded: derive technical values that match the mood, but use your expertise to build a proper design system.\n' +
+    'If only image references are uploaded: derive the complete visual system from what is visually present in the reference. Font choices must reflect the actual font styles visible in the image — condensed, serif, handwritten, etc. Do not inject font names or styles that are not represented in the reference.\n' +
     'If nothing is uploaded: design from scratch based on context (region, tone, audience, intensity).\n\n' +
     'Declare the following — with actual values, not descriptions of where to find them:\n\n' +
     'TYPOGRAPHY SYSTEM:\n' +
@@ -952,23 +951,89 @@ function buildDesign() {
     '- Overlay effects if any (grain, noise, vignette — specify opacity %)\n' +
     '- Overall visual atmosphere in one sentence\n\n' +
     'CONSISTENCY RULE: Once this system is declared, it is locked. No slide may deviate from these values. If a creative decision requires deviation, state why and how it still serves the system.\n\n' +
+    ln + '\nVISUAL IDEA LOCK\n' + ln + '\n' +
+    'Each slide\'s insight needs its own visual idea — not a repeat of the previous slide\'s scene.\n\n' +
+    'Before finalizing each slide, ask: "If this same visual idea could work for another slide in this carousel, it\'s not specific enough to this insight."\n\n' +
+    'The recurring subject (mascot, runner, etc.) can appear across slides for brand consistency — but the SETTING, ACTION, or SITUATION around it should shift to match what each slide is actually saying.\n\n' +
+    ln + '\nCAROUSEL INTENSITY CURVE\n' + ln + '\n' +
+    'Not every slide should feel equally loud. The Hook (Slide 1) and the Closer (final slide) should feel like the most visually decisive moments in the carousel. Middle slides (Evidence/Build) can be visually quieter and more matter-of-fact in comparison — still well-designed, but lower-key. The carousel should feel like it has peaks and valleys, not a flat line of equally loud posters.\n\n' +
+    'Concrete application:\n' +
+    '- Hook (Slide 1) and Closer (final slide): the hero phrase should occupy noticeably more canvas space than other slides\' hero phrases — push toward the upper end of the 60-75% range, and use the boldest weight available in the type system.\n' +
+    '- Middle slides: the hero phrase can sit toward the lower end of the 60-75% range, with comparatively more breathing room around it. Middle slides should feel like supporting pages, not mini-covers.\n\n' +
+    'The difference between Hook/Closer and Middle slides should be visible when slides are placed side by side — not just in isolation.\n\n' +
     ln + '\nUNIVERSAL DESIGN RULES — APPLY TO ALL SLIDES\n' + ln + '\n' +
     'VISUAL HIERARCHY RULE (always active):\n' +
     'Before writing each image prompt, define the hierarchy:\n' +
-    '- PRIMARY element: What the eye sees first. One element only. This is the anchor of the entire slide.\n' +
+    '- PRIMARY element: What the eye sees first. One element only. This is the anchor of the entire slide. It must occupy dramatically larger visual weight than all other elements combined. If a viewer cannot identify the dominant element within 1 second of viewing — the hierarchy has failed.\n' +
     '- SECONDARY element: Supports and gives context to the primary. Must not compete with primary for attention.\n' +
     '- TERTIARY element: Detail, caption, or accent only. Smallest visual weight.\n\n' +
     'Connecting elements (arrows, lines, brackets) MUST have a clear source and destination that are visually obvious. If the connection is not immediately clear without explanation, remove the connecting element entirely.\n\n' +
-    'Every element in the slide must have a reason to exist. If removing it does not reduce clarity or meaning, remove it.\n\n' +
-    '\nTYPOGRAPHY ENFORCEMENT RULE (always active, no exceptions):\n' +
-    'This rule applies to every single slide, regardless of content or layout:\n' +
-    '- Maximum 3 distinct text sizes per slide\n' +
-    '- Body text size ≤ 35% of headline/display text size\n' +
-    '- Label/accent text size ≤ 25% of headline/display text size\n' +
-    '- Never use the same font weight for two different hierarchy levels on the same slide\n' +
-    '- If a slide has only one text element: it is always DISPLAY size\n' +
-    '- If a slide has two text elements: larger is DISPLAY, smaller is BODY (≤35% rule applies)\n' +
-    '- Never bold everything. Never make everything the same size. Hierarchy is the design.\n\n' +
+    'Remove decorative elements that do not improve clarity.\n\n' +
+    ln + '\nEDITORIAL HIERARCHY EXTRACTION — MANDATORY BEFORE EACH SLIDE\n' + ln + '\n' +
+    'Before designing any slide, read the slide copy and ask:\n' +
+    '"If the viewer only remembers ONE phrase from this slide, what should it be?"\n\n' +
+    'That phrase becomes the HERO.\n\n' +
+    'Rules:\n' +
+    '- Only ONE hero per slide.\n' +
+    '- Hero receives approximately 60-75% of visual attention.\n' +
+    '- Supporting copy receives approximately 20-30%.\n' +
+    '- Accent copy receives approximately 5-10%.\n\n' +
+    'Never treat the entire paragraph as the headline.\n' +
+    'Design the punchline. Not the paragraph.\n' +
+    'The objective is not equal visibility. The objective is hierarchy.\n\n' +
+    ln + '\nSLIDE TYPE ASSIGNMENT — MANDATORY BEFORE WRITING ANY PROMPTS\n' + ln + '\n' +
+    'Before designing the carousel, assign a slide type to each of the ' + S.slides + ' slides.\n\n' +
+    'Allowed types:\n' +
+    '- Cover Poster (full-bleed, one dominant word or phrase)\n' +
+    '- Quote Poster (centered, quote marks or framing device)\n' +
+    '- Character Poster (mascot or subject-driven composition)\n' +
+    '- Story Poster (narrative or sequential feel)\n' +
+    '- Evidence Poster (data, list, or supporting visual)\n' +
+    '- Reaction Poster (expression or emotion-driven)\n' +
+    '- CTA Poster (closing, call to action)\n\n' +
+    'Rules:\n' +
+    '- No more than 2 slides may use the same type.\n' +
+    '- Adjacent slides may not use identical types.\n' +
+    '- Visual rhythm across the carousel is mandatory.\n\n' +
+    'State the assigned type at the top of each slide prompt (e.g. "TYPE: Quote Poster").\n\n' +
+    'The goal is not consistency of layout. The goal is consistency of identity with variation of composition. Color, typography, and framing stay consistent — composition and layout structure vary per slide.\n\n' +
+    ln + '\nTEXT DENSITY CONTROL\n' + ln + '\n' +
+    'Never render all copy at headline scale. Extract:\n' +
+    '- 1 HERO phrase\n' +
+    '- 1 SUPPORT phrase\n' +
+    '- 1 ACCENT phrase\n\n' +
+    'Every slide should feel like:\n' +
+    'One dominant statement + One supporting explanation + One small contextual detail\n\n' +
+    'Avoid: wall of text, equal text sizing, equal visual weight.\n' +
+    'A slide should feel like an editorial poster. Not enlarged notes.\n\n' +
+    ln + '\nTYPOGRAPHY ENFORCEMENT RULE — GUARDRAIL ONLY\n' + ln + '\n' +
+    '- Maximum 3 distinct text sizes per slide.\n' +
+    '- Never use identical visual weight for all text elements.\n' +
+    '- Never bold everything.\n' +
+    '- Never make all text the same size.\n' +
+    '- Hierarchy must be visually obvious within one second.\n\n' +
+    ln + '\nBREATHING ROOM PRINCIPLE\n' + ln + '\n' +
+    'Whitespace is an active design element. Target breathing room by slide type:\n' +
+    '- Hook slides: 40-60% empty space\n' +
+    '- Insight slides: 20-40% empty space\n' +
+    '- CTA slides: 25-45% empty space\n\n' +
+    'Do not maximize whitespace. Optimize attention.\n' +
+    'The amount of empty space should be determined by the communication goal of the slide.\n' +
+    'Whitespace exists to strengthen hierarchy, not to satisfy a percentage.\n\n' +
+    ln + '\nTYPOGRAPHY PRINCIPLES\n' + ln + '\n' +
+    'A strong slide: one phrase dominates immediately, the eye knows where to look within one second, hierarchy is obvious, supporting copy is clearly subordinate, the slide feels intentional and editorial.\n\n' +
+    'A weak slide: everything feels equally important, all text uses similar scale, the entire paragraph becomes the headline, the layout feels crowded, attention is evenly distributed.\n\n' +
+    ln + '\nCORE DESIGN PHILOSOPHY\n' + ln + '\n' +
+    'A successful slide is NOT one that displays all copy clearly.\n' +
+    'A successful slide is one where the hero phrase is instantly remembered.\n\n' +
+    'Design priority when conflicts occur:\n' +
+    '1. Editorial Hierarchy\n' +
+    '2. Visual Hierarchy\n' +
+    '3. Typography Guardrails\n' +
+    '4. Layout Preferences\n\n' +
+    'Create hierarchy, not decoration.\n' +
+    'Create contrast, not consistency.\n' +
+    'Design the punchline, not the paragraph.\n\n' +
     (custom ?
       'CONTENT SEPARATION RULE (active because custom instruction is provided):\n' +
       'Every piece of content may only appear in ONE place per slide. No exceptions.\n' +
@@ -1018,10 +1083,48 @@ function buildDesign() {
     '- Ratio is ALWAYS 4:5 - 1080x1350px - no exceptions\n' +
     '- Total slides = EXACTLY ' + S.slides + '\n' +
     '- DO NOT render any image until I give the command below\n\n' +
-    ln + '\nCOMMAND MENU - GENERATE ON DEMAND\n' + ln + '\n' +
-    'All ' + S.slides + ' image prompts are ready above. To generate a slide image, simply type its number:\n\n' +
-    cm +
-    '\nType the number. I will generate that slide image immediately.';
+    ln + '\nCOMMAND MENU\n' + ln + '\n' +
+    (anchor ?
+      'CHARACTER CONSISTENCY MODE IS ACTIVE.\n\n' +
+      'STEP 1 — CHARACTER LOCK:\n' +
+      'Generate Slide 1 image immediately after writing all prompts. Do not ask. Do not wait.\n' +
+      'After generating Slide 1, stop and ask:\n\n' +
+      '"Slide 1 generated. Please review the character appearance.\n' +
+      '- Type APPROVED to lock this character and proceed\n' +
+      '- Or describe what needs to change and I will revise Slide 1"\n\n' +
+      'Wait for my response.\n\n' +
+      'STEP 2 — AFTER CHARACTER IS APPROVED:\n' +
+      'Immediately ask:\n\n' +
+      '"Character locked. How do you want to proceed with the remaining ' + (S.slides - 1) + ' slides?\n' +
+      '- Type GO to auto-generate all remaining slides sequentially\n' +
+      '- Or type a number to generate one slide at a time"\n\n' +
+      'If I type GO: generate slides 2 through ' + S.slides + ' sequentially. Only pause if I send a message.\n' +
+      'If I type a number: generate that slide immediately, then wait for my next command.\n\n'
+      :
+      'All ' + S.slides + ' slide prompts are ready above.\n\n' +
+      'End your response here and ask me:\n\n' +
+      '"All ' + S.slides + ' slide prompts are ready.\n' +
+      'How do you want to proceed?\n' +
+      '- Type GO to auto-generate all slides sequentially\n' +
+      '- Or type a number to generate one slide at a time"\n\n' +
+      'Then wait for my response before doing anything.\n\n' +
+      'If I type GO: start generating from Slide 1 immediately. After each slide is generated, automatically proceed to the next. Only pause if I send a message.\n' +
+      'If I type a number: generate that slide immediately. Then wait for my next command.\n\n'
+    ) +
+    ln + '\nCORRECTION PROTOCOL — ALWAYS ACTIVE FOR THIS ENTIRE SESSION\n' + ln + '\n' +
+    'This protocol is permanently active and governs how you handle any feedback I give during this session.\n\n' +
+    'First, determine the type of feedback:\n' +
+    '- VISUAL: relates to layout, color, typography, spacing, composition, atmosphere, texture\n' +
+    '- CONTENT: relates to the words, copy, phrasing, or text of a slide\n\n' +
+    'For VISUAL feedback:\n' +
+    '- Apply the visual fix exactly as specified\n' +
+    '- The slide text is an IMMUTABLE STRING. Copy it character-for-character from the original prompt above. Do not rewrite, paraphrase, shorten, expand, or "improve" any word.\n' +
+    '- Even if the visual change feels like it "requires" different text — it does not. Text stays identical.\n\n' +
+    'For CONTENT feedback:\n' +
+    '- This should not happen. All slide content was locked in Phase 2 before this prompt.\n' +
+    '- If I send what appears to be a content change: ask me to confirm before executing.\n\n' +
+    'After every correction: restate the slide text you used so I can confirm nothing changed, then stop and ask: "Correction applied. Type a number to continue."\n\n' +
+    'Each correction is surgical — it applies only to what is explicitly stated. Do not use a correction as a reason to reinterpret other slides or change the overall visual system.';
 }
 
 function genDesign() {
