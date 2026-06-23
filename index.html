@@ -210,6 +210,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
         <button class="opt" data-g="style" data-v="Educational" onclick="pick(this)">Educational</button>
         <button class="opt" data-g="style" data-v="Contrarian Take" onclick="pick(this)">Contrarian Take</button>
         <button class="opt" data-g="style" data-v="Storytelling" onclick="pick(this)">Storytelling</button>
+        <button class="opt" data-g="style" data-v="List / Tips" onclick="pick(this)">List / Tips</button>
       </div>
       <div id="desc-style" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:8px;font-size:12px;color:#c0c0e0;line-height:1.6;"></div>
     </div>
@@ -510,7 +511,8 @@ var DESCS = {
     'Relatable': 'Bikin orang merasa "ini gue banget." Fokus pada pengalaman yang universal tapi terasa sangat personal.',
     'Educational': 'Kasih value yang actionable. Orang save karena merasa lebih pinter dan lebih siap setelah baca.',
     'Contrarian Take': 'Lawan narrative yang umum. Bikin orang berhenti scroll dan mikir ulang apa yang mereka percaya.',
-    'Storytelling': 'Bangun narasi yang ada arc-nya. Orang swipe karena penasaran gimana kelanjutan dan endingnya.'
+    'Storytelling': 'Bangun narasi yang ada arc-nya. Orang swipe karena penasaran gimana kelanjutan dan endingnya.',
+    'List / Tips': 'Kasih langkah atau tips yang bisa langsung dipraktikkan. Tiap slide satu aksi konkret yang bisa dilakukan tanpa perlu penjelasan tambahan.'
   },
   goal: {
     'Shares': 'Konten yang orang tag temannya atau forward ke grup. "Ini lo banget" atau "eh liat ini deh."',
@@ -652,8 +654,8 @@ var LC = {
   },
   chatgpt: {
     lbl: 'Master Content Prompt - ChatGPT Architecture',
-    intro: 'You are in fast-execution internet-native mode. Prioritize aggressive hooks, modern slang authenticity, and punchline-dense slide copy. Think: viral tweet energy but structured.',
-    note: 'Write fast. Write punchy. Short sentences. Mid-sentence line breaks for rhythm. Internet phrasing mandatory. TikTok comment section energy in slide format.'
+    intro: 'You are in internet-native mode, fluent in modern slang and current online discourse. Your priority is recognition over punchline density — readers should feel "anjir, bener juga ya", not just "wah hook-nya kenceng". Think: a sharp friend explaining something true, not a tweet trying to go viral.',
+    note: 'Write naturally, like a voice note to a close friend. Internet phrasing and slang are expected. Line breaks for rhythm are fine — but length follows the Clarity Over Compression rule above, not a fixed short-line target.'
   },
   gemini: {
     lbl: 'Master Content Prompt - Gemini Architecture',
@@ -663,24 +665,78 @@ var LC = {
 };
 
 var RD = {
-  'Indonesia': 'REGIONAL DNA - INDONESIA:\n- Language: Bahasa Indonesia + Jaksel slang: "literally", "valid", "fix sih", "lowkey", "ngl", "bestie", "gak sih", "parah banget", "mager", "vibes", "no cap"\n- Tone: Conversational bestie energy. Voice-note to closest friend.\n- Avoid: Corporate AI-speak, religious taboos, overly formal Bahasa.\n- Cultural hooks: Financial pressure, hustle culture, ketinggalan trend, family expectations.',
-  'Australia': 'REGIONAL DNA - AUSTRALIA:\n- Tone: Dry wit, anti-pretentious, self-deprecating humor.\n- Hooks: No BS directness. Contrarian angles, brutal honesty.\n- Cultural hooks: Cost of living, housing anxiety, work-life balance.',
-  'United States': 'REGIONAL DNA - UNITED STATES:\n- Tone: Confident, direct. Skeptical of hustle culture.\n- Hooks: Self-improvement + money + status. Anti-establishment angles.\n- Slang: "Lowkey", "fr fr", "no cap", "based".',
-  'Southeast Asia': 'REGIONAL DNA - SOUTHEAST ASIA:\n- Tone: Aspirational but grounded. English with regional warmth.\n- Hooks: Family values, economic aspiration, social comparison anxiety.',
-  'European Union': 'REGIONAL DNA - EUROPEAN UNION:\n- Tone: Sophisticated, slightly ironic, quality-conscious.\n- Hooks: Work-life balance, sustainability, quality of life.'
+  'Indonesia': 'REGIONAL CONTEXT - INDONESIA:\n- Common cultural hooks: financial pressure, hustle culture, ketinggalan trend, family expectations.\n- Linguistic backdrop: Bahasa Indonesia, often code-mixed with English/Jaksel slang in urban youth contexts — but slang intensity depends on the audience profile (see Audience Language Profile).',
+  'Australia': 'REGIONAL CONTEXT - AUSTRALIA:\n- Common cultural hooks: cost of living, housing anxiety, work-life balance.\n- Linguistic backdrop: dry wit, anti-pretentious, self-deprecating humor tends to land well — but adapt intensity to audience profile.',
+  'United States': 'REGIONAL CONTEXT - UNITED STATES:\n- Common cultural hooks: self-improvement, money, status, skepticism of hustle culture, anti-establishment angles.\n- Linguistic backdrop: directness is generally valued — but vocabulary and slang intensity depend on audience profile.',
+  'Southeast Asia': 'REGIONAL CONTEXT - SOUTHEAST ASIA:\n- Common cultural hooks: family values, economic aspiration, social comparison anxiety.\n- Linguistic backdrop: English often used with regional warmth — adapt formality to audience profile.',
+  'European Union': 'REGIONAL CONTEXT - EUROPEAN UNION:\n- Common cultural hooks: work-life balance, sustainability, quality of life.\n- Linguistic backdrop: tends toward sophistication and mild irony — adapt to audience profile.'
 };
 
-var PA = {
-  'Instagram Carousel': 'INSTAGRAM CAROUSEL (SAVE + SHARE):\nSlide 1: PATTERN INTERRUPT - Counter-intuitive statement, stop the scroll.\nSlide 2: VALIDATION - Make them feel seen and understood.\nSlide 3: OPEN LOOP - Tease insight, withhold the payoff.\nSlides 4-5: DEEP INSIGHT / SAVE TRIGGER - Dense value worth bookmarking.\nSlide 6: SUMMARY PUNCH - One quotable, shareable statement.\nFinal Slide: SAVE CTA - Direct save prompt + share hook.',
-  'TikTok Photo Mode': 'TIKTOK PHOTO MODE (SWIPE VELOCITY + COMMENT BAIT):\nSlide 1: HARD INTERRUPT - Maximum disruption in 5 words or less.\nSlide 2: OPEN LOOP - Tease the story, never reveal yet.\nSlides 3-4: RELATABILITY HIT - "This is literally me" moment.\nSlides 5-6: BUILD + TENSION - Escalate. Create micro-suspense.\nFinal Slide: POLARIZING CLOSER + COMMENT BAIT - Divisive statement or direct question.'
-};
+function buildRetentionFunctions(slides, platform) {
+  // Fixed anchors: Slide 1 = Interrupt, Slide 2 = Curiosity, Last slide = Reaction
+  // Remaining (slides - 3) distributed across Discovery / Implication / Resolution
+  var remaining = Math.max(slides - 3, 0);
+  var seq = [];
+  if (slides >= 1) seq.push('INTERRUPT');
+  if (slides >= 2) seq.push('CURIOSITY');
+  if (remaining === 1) {
+    seq.push('DISCOVERY');
+  } else if (remaining === 2) {
+    seq.push('DISCOVERY'); seq.push('RESOLUTION');
+  } else if (remaining >= 3) {
+    var resolutionCount = Math.max(Math.round(remaining * 0.2), 1);
+    var implicationCount = Math.max(Math.round(remaining * 0.3), 1);
+    var discoveryCount = Math.max(remaining - resolutionCount - implicationCount, 1);
+    for (var i = 0; i < discoveryCount; i++) seq.push('DISCOVERY');
+    for (var i = 0; i < implicationCount; i++) seq.push('IMPLICATION');
+    for (var i = 0; i < resolutionCount; i++) seq.push('RESOLUTION');
+  }
+  if (slides >= 3) seq.push('REACTION');
+  seq = seq.slice(0, slides);
+  while (seq.length < slides) seq.splice(Math.max(seq.length - 1, 0), 0, 'DISCOVERY');
+
+  var seqLines = '';
+  for (var i = 0; i < seq.length; i++) { seqLines += 'Slide ' + (i + 1) + ': ' + seq[i] + '\n'; }
+
+  var platformFlavor = platform === 'TikTok Photo Mode' ?
+    'PLATFORM FLAVOR — TIKTOK PHOTO MODE:\n' +
+    '- CURIOSITY phase: higher tension, faster momentum, unfinished thoughts, strong emotional pull.\n' +
+    '- REACTION phase: comment-oriented — end with something impossible to scroll past without reacting (opinion, debate, "wait that\'s so true" energy).\n'
+    :
+    'PLATFORM FLAVOR — INSTAGRAM CAROUSEL:\n' +
+    '- CURIOSITY phase: more explanatory and reflective — open a question the rest of the carousel will answer.\n' +
+    '- REACTION phase: save-oriented — make the reader feel they\'ll want this again later.\n';
+
+  return 'RETENTION FUNCTIONS\n\n' +
+    'Retention functions define the reader journey, not rigid content requirements. Here is the phase sequence for this ' + slides + '-slide carousel:\n\n' +
+    seqLines + '\n' +
+    'PHASE DEFINITIONS:\n' +
+    '- INTERRUPT: Challenge an assumption, create tension, or trigger recognition immediately.\n' +
+    '- CURIOSITY: Provide a partial insight that naturally creates curiosity about what\'s next. Do not use empty teasing — reveal something real.\n' +
+    '- DISCOVERY: Introduce a distinct observation from the Observation Map. Answers "what is actually happening?"\n' +
+    '- IMPLICATION: Show consequences, emotional meaning, hidden patterns, or second-order effects of prior observations. Answers "so what does that mean?"\n' +
+    '- RESOLUTION: Deliver the strongest interpretation, synthesis, or takeaway. Answers "what\'s the point of all this?"\n' +
+    '- REACTION: Create the desired audience action (comment, save, share, click, reflect) — platform-specific, see below.\n\n' +
+    platformFlavor + '\n' +
+    'UNIVERSAL SAFEGUARD: Every slide must either introduce a new observation, deepen an existing observation, reveal a consequence, synthesize prior observations, or drive the desired audience reaction. No empty transition slides. Every DISCOVERY or IMPLICATION slide must map to one Observation Map item.\n\n';
+}
 
 function buildContent(llm) {
   var c = LC[llm];
   var rd = RD[S.region] || RD['United States'];
-  var pa = PA[S.platform] || PA['Instagram Carousel'];
+  var rf = buildRetentionFunctions(S.slides, S.platform);
   var il = S.intensity <= 3 ? 'LOW - Informative, low provocation' : S.intensity <= 7 ? 'MEDIUM - Punchy, mildly polarizing' : 'HIGH - Aggressive, controversy-adjacent';
   var ln = '========================================';
+
+  var densityByStyle = {
+    'Contrarian Take': 'Preferred completion: Hero + Support. Body copy is allowed only when the observation naturally creates a question the reader expects answered — never to restate or decorate. For most contrarian slides, hero + support already lands; adding body weakens the punch.',
+    'Relatable': 'Preferred: Hero + Support. Common: Hero + Support + a short body (1 sentence). Body should deepen recognition or familiarity ("yep, that\'s me") — not teach, analyze, or explain.',
+    'Educational': 'Preferred: Hero + Support + Body (2-3 sentences). Each slide delivers one complete concept with enough context to actually understand it. Do not compress past the point of clarity.',
+    'Storytelling': 'Preferred: Hero + Support + Body (2-3 sentences). The reader needs room to enter the emotional world of the slide — give the scene enough space to feel real.',
+    'List / Tips': 'Preferred: Hero (the tip itself, stated as an action — not numbered) + Support (one sentence of context). Each slide must contain one specific action, behavior, tactic, or intervention concrete enough that the reader can execute it immediately, without needing another slide to explain how. "Kelola uang lebih disiplin" is too vague; "Pindahkan 20% ke rekening tanpa mobile banking pas gajian" is executable.'
+  };
+  var densityText = densityByStyle[S.style] || densityByStyle['Relatable'];
+
   return c.intro + '\n\n' +
     ln + '\nMASTER CONTENT PROMPT - VIRAL CAROUSEL\n' + ln + '\n\n' +
     '[CONTENT BRIEF]\n' +
@@ -727,35 +783,43 @@ function buildContent(llm) {
       '- The order of items can be rearranged for maximum narrative flow and engagement — but all must be present.\n\n'
       : ''
     ) +
-    ln + '\nDIRECTIVE 2A: ANGLE LOCK — EXECUTE BEFORE ANYTHING ELSE\n' + ln + '\n' +
-    'Before writing a single slide, you must declare the unique DNA of THIS specific content. This declaration is binding — every slide must reflect these decisions.\n\n' +
-    'Declare the following THREE things in writing:\n\n' +
-    '1. NARRATIVE ANGLE\n' +
-    'What is the specific point-of-view this content is told from? Do not use generic framings like "tips" or "advice". Instead: who is the narrator, what do they know that the audience doesn\'t, and what makes this particular angle on "' + S.topic + '" different from the 50 other pieces of content on the same topic? Be specific. Examples of specific angles: "a person who tried all the mainstream advice and it failed, now sharing what actually worked", "an insider exposing something the industry doesn\'t want you to know", "someone who just had a realization 10 minutes ago and is still processing it".\n\n' +
-    '2. STRUCTURAL PATTERN\n' +
-    'What is the narrative architecture of this carousel? It must NOT be the default "problem → insight → solution → CTA" structure. Choose a structure that fits the angle above. Examples: confession arc (admit failure → reveal truth → reframe), contrast structure (what everyone thinks → what\'s actually happening → what to do instead), revelation build (escalating reveals that reframe the entire premise by the end), inside-out (start at the emotional climax, then unpack how we got there).\n\n' +
-    '3. LINGUISTIC SIGNATURE\n' +
-    'One specific language characteristic that will run through this entire piece and no other. It must emerge naturally from the angle and structure above — derived from the topic, audience, and regional culture. This is not a tone description — it is a specific recurring device that you invent based on what serves this content best. Do not copy generic devices. Make it specific to this piece.\n\n' +
-    'BINDING RULE: Once declared, these three elements are locked. Do not drift from them mid-carousel. Consistency of angle, structure, and linguistic signature is what makes content feel authored — not generated.\n\n' +
-    ln + '\nDIRECTIVE 2: LINGUISTIC PATTERN EXTRACTION\n' + ln + '\n' +
-    'Based on your research findings from Directive 1, before writing any slide you MUST extract the specific linguistic DNA that makes those viral contents work for ' + S.region + ' audience. Analyze and document:\n\n' +
-    'SENTENCE ARCHITECTURE:\n' +
-    '- What is the average sentence length of top performing content? (e.g. 3-5 words per line, or longer flowing sentences)\n' +
-    '- Do they use sentence fragments intentionally? Where and how?\n' +
-    '- What punctuation patterns create rhythm? (ellipsis for pause, em dash for tension, period for punch)\n\n' +
-    'WORD CHOICE PATTERN:\n' +
-    '- What specific vocabulary, slang, or phrases appear repeatedly in viral content for this region + audience?\n' +
-    '- What words do they NEVER use? (corporate words, formal language, etc)\n' +
-    '- How do they handle numbers — written out or numeric? Specific or vague?\n\n' +
-    'RHYTHM + FLOW:\n' +
-    '- Do viral posts in this niche use repetition for emphasis?\n' +
-    '- Is the phrasing direct and declarative, or does it use questions and uncertainty?\n' +
-    '- Where do they break lines for dramatic effect?\n\n' +
-    'APPLY THIS PATTERN:\n' +
-    'Every slide you write MUST apply these extracted linguistic patterns.\n\n' +
+    ln + '\nDIRECTIVE 2: SIGNAL EXTRACTION\n' + ln + '\n' +
+    'Based on your research findings from Directive 1, extract two separate sets of signals for ' + S.region + ' + ' + S.audience + ':\n\n' +
+    'THEMATIC SIGNALS (raw material for the Observation Map below):\n' +
+    'What recurring tensions, frustrations, desires, fears, questions, or behavioral patterns about "' + S.topic + '" appear across the research? List 4-6 raw signals — these are patterns noticed, not insights yet.\n\n' +
+    'LINGUISTIC SIGNALS (feeds Angle Lock and slide writing):\n' +
+    '- Sentence architecture: average length, fragments, punctuation rhythm of top-performing content\n' +
+    '- Word choice: recurring slang/vocabulary, words to avoid (corporate/formal), how numbers are handled\n' +
+    '- Rhythm: repetition use, declarative vs questioning, line-break patterns\n\n' +
+    'State both sets briefly (3-4 bullets each) before proceeding.\n\n' +
+    ln + '\nDIRECTIVE 2A: OBSERVATION MAP (DO NOT OUTPUT)\n' + ln + '\n' +
+    'Using the THEMATIC SIGNALS above, generate approximately ' + Math.max(S.slides - 1, 3) + ' distinct observations about "' + S.topic + '" for ' + S.audience + '. This is the most important step — it determines whether the carousel feels like a series of discoveries or a series of restated slogans.\n\n' +
+    'Each observation must introduce a distinct behavior, emotional dynamic, consequence, interpretation, or realization.\n\n' +
+    'Each observation must NOT be:\n' +
+    '- a synonym of another observation in this map\n' +
+    '- a stronger/punchier restatement of another observation\n' +
+    '- merely a different example illustrating the same observation\n\n' +
+    'Observations should be informed by the thematic signals above — but go beyond them. Synthesize, do not summarize. A weak map restates the same idea N times with different wording. A strong map gives the reader N genuinely separate "wait, that\'s actually true" moments.\n\n' +
+    'Generate enough observations to support ' + S.slides + ' slides without restatement — but not more than the carousel can meaningfully develop. Do not output this map as visible text. Use it internally to structure which observation each slide will carry.\n\n' +
+    'DISCOVERY DIVERSITY: Where possible, each observation in the map should represent a different category — behavior, emotional dynamic, consequence, interpretation, realization. Avoid placing two adjacent DISCOVERY slides in the same category unless the topic genuinely doesn\'t support more variety. Additionally, where the topic supports it, observations should draw from different explanatory domains relevant to this specific topic (identify what those domains are for this topic — e.g. for a behavioral topic this might be incentives, habits, social dynamics, identity, decision-making; for a financial topic this might be systems, behavior, social comparison, incentives) — rather than multiple observations explaining the same behavior through variations of the same underlying mechanism.\n\n' +
+    'OBSERVATION COVERAGE CHECK (apply before finalizing, do not output): Every major observation in the map must appear in the carousel. No single observation may be the primary point of more than one slide. If two slides end up depending on the same observation, merge them or rewrite one to carry a different observation from the map.\n\n' +
+    'OBSERVATION RANKING (internal, do not output): Rank the observations by novelty, emotional recognition, and explanatory power. The highest-ranked observation should have the strongest influence on the Hook (Slide 1), Resolution, and CTA — these are the slides readers remember most, so they should carry the most compelling angle.\n\n' +
+    ln + '\nDIRECTIVE 2B: ANGLE LOCK — EXECUTE BEFORE WRITING SLIDES\n' + ln + '\n' +
+    'Using the Observation Map above, declare the following TWO things in writing. This declaration is binding — every slide must reflect these decisions.\n\n' +
+    '1. NARRATIVE LENS\n' +
+    'Who is experiencing or realizing these observations, and from what vantage point? Be specific. Examples: "a close friend of a ' + S.topic + ' person, finally understanding a pattern they\'ve noticed for years", "someone mid-realization about their own behavior, thinking out loud". Do not use generic framings like "tips" or "advice".\n\n' +
+    '2. LINGUISTIC SIGNATURE\n' +
+    'One specific recurring language device (a metaphor family, a recurring phrase structure, a way of addressing the reader) derived from the LINGUISTIC SIGNALS above and the topic. It must run through the entire piece. Do not copy generic devices — make it specific to this piece.\n\n' +
+    'BINDING RULE: Once declared, these elements are locked. Do not drift from them mid-carousel.\n\n' +
+    ln + '\nCLARITY OVER COMPRESSION\n' + ln + '\n' +
+    'Express each slide\'s observation with enough specificity, context, or emotional nuance for it to feel true. Do not add length for its own sake. Do not shorten an observation if shortening removes clarity, specificity, or emotional recognition. A shorter slide is not automatically a better slide — but brevity is preferred when meaning is fully preserved.\n\n' +
+    'DENSITY GUIDANCE — for this carousel\'s style ("' + S.style + '"):\n' +
+    densityText + '\n' +
+    'These are preferred completion states, not hard quotas. The goal is the right amount of information per slide — never fewer words for their own sake.\n\n' +
+    'COGNITIVE LOAD CHECK — apply to every slide before finalizing:\n' +
+    'Can the reader clearly identify the ONE primary point of this slide? Supporting ideas, examples, consequences, and emotional texture are fine — but there should be a single thing the reader walks away with. If two ideas compete to be the main takeaway, simplify by removing the competing conclusion, not by cutting words.\n\n' +
     'NATIVENESS TEST — apply to every slide before finalizing:\n' +
-    'Read each slide out loud as if you are sending a voice note to your closest friend. Ask: would these exact words ever come out of a real person\'s mouth in this context, unprompted, naturally? If the answer is no — if it sounds like it was written, not spoken — rewrite it. The target is copy that feels like it was captured, not composed. Not polished AI output. Not textbook copywriting. The best version of what a real person in this culture would actually say.\n\n' +
-    'State your extracted linguistic pattern in 3-4 bullet points before writing the slides.\n\n' +
+    'Read each slide out loud as if sending a voice note to your closest friend. Would these exact words come out of a real person\'s mouth in this context, naturally? If it sounds written, not spoken — rewrite it. The target is copy that feels captured, not composed.\n\n' +
     ln + '\nDIRECTIVE 3: TARGET AUDIENCE + PAIN POINT CALIBRATION\n' + ln + '\n' +
     'PRIMARY AUDIENCE: ' + S.audience + '\n' +
     (S.painpoint ?
@@ -769,10 +833,21 @@ function buildContent(llm) {
       'No specific pain point provided. Infer the most emotionally charged pain point or desire for ' + S.audience + ' in ' + S.region + ' related to this topic based on your research. State your inference before writing the slides.\n\n'
     ) +
     'Every hook, example, and reference must map directly to this audience lived experience. Mirror their vocabulary. They must feel this content was made FOR them specifically.\n\n' +
-    ln + '\nDIRECTIVE 4: REGIONAL CULTURE INJECTION\n' + ln + '\n' +
+    ln + '\nDIRECTIVE 4: AUDIENCE LANGUAGE PROFILE\n' + ln + '\n' +
+    'Before applying any regional or linguistic context, infer the language profile for THIS specific audience using: audience age/description (' + S.audience + '), niche/topic (' + S.topic + '), region (' + S.region + '), and your research findings.\n\n' +
+    'Determine:\n' +
+    '- VOCABULARY LEVEL: casual/everyday vs more measured/considered\n' +
+    '- SLANG INTENSITY: heavy internet slang, light slang, or minimal/none\n' +
+    '- SENTENCE RHYTHM: short punchy fragments vs longer flowing sentences\n' +
+    '- EMOTIONAL DIRECTNESS: blunt and confrontational vs gentle and exploratory\n' +
+    '- INTERNET FLUENCY: terminally-online phrasing vs plain conversational language\n\n' +
+    'Do NOT default to Gen Z internet slang ("bestie", "lowkey", "no cap", etc.) unless the audience profile genuinely supports it. A parenting audience (30-40), a finance audience (25-45), and a Gen Z relationship audience (18-24) speak in recognizably different registers — infer which register fits THIS audience, then apply it consistently.\n\n' +
+    'State your inferred profile in 2-3 bullets before writing the slides.\n\n' +
+    ln + '\nDIRECTIVE 4A: REGIONAL CULTURE INJECTION\n' + ln + '\n' +
     rd + '\n\n' +
+    'Apply the regional cultural hooks above filtered through the Audience Language Profile you just declared — region sets the cultural backdrop, audience profile sets the voice.\n\n' +
     ln + '\nDIRECTIVE 5: PLATFORM RETENTION ARCHITECTURE\n' + ln + '\n' +
-    pa + '\n\n' +
+    rf + '\n' +
     ln + '\nDIRECTIVE 6: HOOK FORMULA EXECUTION\n' + ln + '\n' +
     'The user has selected the following hook formula for Slide 1: ' + S.hook + '\n\n' +
     'IMPORTANT: The hook formula is a STRUCTURAL GUIDE — it defines how the hook is constructed, not what words to use. Do NOT write the hook formula name or any label in the slide. Do NOT write "POV:", "Unpopular opinion:", or any other formula identifier as literal text in the slide copy. The formula shapes the angle and structure of Slide 1 only.\n\n' +
@@ -784,8 +859,9 @@ function buildContent(llm) {
     '- Unpopular Opinion Hook: State a bold take that most people would instinctively push back on. Write the opinion itself — not a label announcing that it is an opinion.\n' +
     '- Question Hook: Open with a question the audience is already asking internally but has never seen answered directly. The question is the entire slide.\n\n' +
     'Slide 1 MUST use this exact hook formula. The entire hook must land in 1-2 lines maximum.\n\n' +
+    'HOOK–OBSERVATION ALIGNMENT: The hook must emerge from the strongest observation in the Observation Map — do not invent a separate claim solely to satisfy the hook formula. The hook formula defines presentation (how the hook is constructed), not content (what it says). If applying the formula would collapse the strongest observation into a generic slogan, prioritize the observation\'s substance and adapt the formula\'s presentation around it.\n\n' +
     ln + '\nDIRECTIVE 7: SLIDE COUNT AND STRUCTURE\n' + ln + '\n' +
-    'Produce EXACTLY ' + S.slides + ' slides. Not more, not fewer. This is a hard requirement.\nEach slide = ONE focused idea. No padding, no redundancy.\nSlide copy: 1-3 punchy lines max per slide (insight slides may have 4-5 dense lines).\n\n' +
+    'Produce EXACTLY ' + S.slides + ' slides. Not more, not fewer. This is a hard requirement.\nEach slide = ONE observation from the Observation Map. No padding, no redundancy. Length per slide follows the Clarity Over Compression rule above — typically 1-4 lines, longer only if the observation needs room to land.\n\n' +
     ln + '\nLINGUISTIC STYLE\n' + ln + '\n' +
     c.note + '\n\n' +
     ln + '\nDIRECTIVE 8: CTA INTENT FOR FINAL SLIDE\n' + ln + '\n' +
@@ -969,6 +1045,10 @@ function buildDesign() {
     '- TERTIARY element: Detail, caption, or accent only. Smallest visual weight.\n\n' +
     'Connecting elements (arrows, lines, brackets) MUST have a clear source and destination that are visually obvious. If the connection is not immediately clear without explanation, remove the connecting element entirely.\n\n' +
     'Remove decorative elements that do not improve clarity.\n\n' +
+    'VISUAL FOCAL POINT CHECK (apply before finalizing each slide — this is the enforcement layer for the rules above):\n' +
+    'If a viewer glances at this slide for one second, is it immediately obvious what the single primary focal point is? If more than one element competes for primary attention — a large hero AND a large illustration/chart/photo, or accumulated decorative marks (scribbles, underlines, arrows, badges, highlight blocks) — resolve it before finalizing: reduce emphasis on the competing element, remove decoration, shrink supporting graphics, or increase empty space, until exactly one element clearly wins.\n' +
+    'When the Visual Hierarchy Rule, Breathing Room Principle, or Intensity Curve are in tension with filling the canvas, this check wins: one dominant focal point per slide is the non-negotiable outcome.\n' +
+    'Note: image generators tend to fill available space and add elements by default. Actively resist this — empty space around the focal point is a deliberate design choice, not a gap to be filled. A slide with one strong focal point and generous empty space is stronger than a slide where every region is doing something.\n\n' +
     ln + '\nEDITORIAL HIERARCHY EXTRACTION — MANDATORY BEFORE EACH SLIDE\n' + ln + '\n' +
     'Before designing any slide, read the slide copy and ask:\n' +
     '"If the viewer only remembers ONE phrase from this slide, what should it be?"\n\n' +
@@ -1111,20 +1191,31 @@ function buildDesign() {
       'If I type GO: start generating from Slide 1 immediately. After each slide is generated, automatically proceed to the next. Only pause if I send a message.\n' +
       'If I type a number: generate that slide immediately. Then wait for my next command.\n\n'
     ) +
-    ln + '\nCORRECTION PROTOCOL — ALWAYS ACTIVE FOR THIS ENTIRE SESSION\n' + ln + '\n' +
-    'This protocol is permanently active and governs how you handle any feedback I give during this session.\n\n' +
-    'First, determine the type of feedback:\n' +
-    '- VISUAL: relates to layout, color, typography, spacing, composition, atmosphere, texture\n' +
-    '- CONTENT: relates to the words, copy, phrasing, or text of a slide\n\n' +
-    'For VISUAL feedback:\n' +
-    '- Apply the visual fix exactly as specified\n' +
-    '- The slide text is an IMMUTABLE STRING. Copy it character-for-character from the original prompt above. Do not rewrite, paraphrase, shorten, expand, or "improve" any word.\n' +
-    '- Even if the visual change feels like it "requires" different text — it does not. Text stays identical.\n\n' +
-    'For CONTENT feedback:\n' +
-    '- This should not happen. All slide content was locked in Phase 2 before this prompt.\n' +
-    '- If I send what appears to be a content change: ask me to confirm before executing.\n\n' +
-    'After every correction: restate the slide text you used so I can confirm nothing changed, then stop and ask: "Correction applied. Type a number to continue."\n\n' +
-    'Each correction is surgical — it applies only to what is explicitly stated. Do not use a correction as a reason to reinterpret other slides or change the overall visual system.';
+    ln + '\nLOCK REFERENCE STATE — ALWAYS ACTIVE FOR THIS ENTIRE SESSION\n' + ln + '\n' +
+    'This protocol activates whenever I bring up a specific slide with INTENT TO CHANGE something — a correction, a "what if we changed X" discussion, or a redesign request. It does NOT trigger for purely casual comments (e.g. "slide 3 looks good").\n\n' +
+    'Before responding to any such message, output this short block first:\n\n' +
+    '```\n' +
+    'LOCK CHECK\n' +
+    'Slide: [N]\n' +
+    'Mode: [LOCKED DISCUSSION | VISUAL REVISION | CONTENT REVISION | REDESIGN REQUEST]\n' +
+    'Hero: [current hero phrase for this slide]\n' +
+    'Copy: [LOCKED / UNLOCK PENDING]\n' +
+    'Visual System: [LOCKED / UNLOCK PENDING]\n' +
+    '```\n\n' +
+    'How to classify Mode:\n' +
+    '- LOCKED DISCUSSION: I am asking an opinion or brainstorming ("what do you think is missing from slide 7?", "what if the CTA was stronger?"). Copy and Visual System stay LOCKED. Any ideas you offer are PROPOSALS ONLY — do not generate anything yet.\n' +
+    '- VISUAL REVISION: I am asking to fix a visual issue (composition, anatomy, color, layout). Copy = LOCKED. Visual System = LOCKED. Only the specified visual element may change. The slide text remains an IMMUTABLE STRING — copy it character-for-character from the original locked content.\n' +
+    '- CONTENT REVISION: I am asking to change the actual words/copy of a slide. Copy = UNLOCK PENDING. Ask me to confirm the exact new text before executing. Visual System stays LOCKED.\n' +
+    '- REDESIGN REQUEST: I am asking to rebuild a slide from scratch or take it in a fundamentally different direction. Copy = UNLOCK PENDING, Visual System = UNLOCK PENDING. Do not generate yet — first output:\n\n' +
+    '```\n' +
+    'REDESIGN MODE ACTIVE\n' +
+    'Current Lock: Version [X]\n' +
+    'New Proposal: Version [X+1]\n' +
+    '```\n\n' +
+    'Then ask me to confirm before generating the proposal.\n\n' +
+    'RE-LOCK RULE: A redesign proposal NEVER becomes the active version automatically. After generating a redesign proposal, present it as "Proposal [version]" and ask: "Type LOCK [version] to make this the new reference, or KEEP [previous version] to discard this proposal." Without an explicit LOCK [version] command from me, the previous locked version remains active — including for all future LOCK CHECK blocks and corrections.\n\n' +
+    'After any VISUAL REVISION or executed CONTENT REVISION is applied: stop and ask "Correction applied. Type a number to continue."\n\n' +
+    'Each correction is surgical — it applies only to what is explicitly stated. Do not use a correction, discussion, or redesign of one slide as a reason to reinterpret other slides or change the overall visual system declared in Step 1.';
 }
 
 function genDesign() {
