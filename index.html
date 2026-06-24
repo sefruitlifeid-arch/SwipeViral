@@ -810,12 +810,23 @@ function buildContent(llm) {
     'Who is experiencing or realizing these observations, and from what vantage point? Be specific. Examples: "a close friend of a ' + S.topic + ' person, finally understanding a pattern they\'ve noticed for years", "someone mid-realization about their own behavior, thinking out loud". Do not use generic framings like "tips" or "advice".\n\n' +
     '2. LINGUISTIC SIGNATURE\n' +
     'One specific recurring language device (a metaphor family, a recurring phrase structure, a way of addressing the reader) derived from the LINGUISTIC SIGNALS above and the topic. It must run through the entire piece. Do not copy generic devices — make it specific to this piece.\n\n' +
+    'FREQUENCY RULE: A recurring device should appear 2-3 times maximum across the entire carousel — not every slide. Use it at moments of highest tension, recognition, or payoff (e.g. the Hook, the Resolution, and one mid-carousel pivot) — not as a structural default. If the device appears in more than 3 slides, it becomes predictable and loses impact; rewrite the weaker occurrences in a different voice while keeping the angle intact.\n\n' +
     'BINDING RULE: Once declared, these elements are locked. Do not drift from them mid-carousel.\n\n' +
     ln + '\nCLARITY OVER COMPRESSION\n' + ln + '\n' +
     'Express each slide\'s observation with enough specificity, context, or emotional nuance for it to feel true. Do not add length for its own sake. Do not shorten an observation if shortening removes clarity, specificity, or emotional recognition. A shorter slide is not automatically a better slide — but brevity is preferred when meaning is fully preserved.\n\n' +
     'DENSITY GUIDANCE — for this carousel\'s style ("' + S.style + '"):\n' +
     densityText + '\n' +
     'These are preferred completion states, not hard quotas. The goal is the right amount of information per slide — never fewer words for their own sake.\n\n' +
+    'SWIPE INCENTIVE PRINCIPLE — apply to every slide except where noted:\n' +
+    'Each slide between the Hook and the Resolution should leave at least one thread unresolved — a question raised, an implication suggested, a tension not yet released — that pulls the reader to the next slide. A slide that fully resolves its own thought has nothing pulling the reader forward. The reader should never feel they could stop at this slide and still get the point.\n\n' +
+    'The distinction matters: a slide can be CLEAR (the reader understands what is being said) without being COMPLETE (the reader has no reason to continue). Aim for clear but not complete on every middle slide.\n\n' +
+    'Exceptions:\n' +
+    '- The Hook (Slide 1) may resolve itself — it establishes the promise of the carousel.\n' +
+    '- The Resolution (final or near-final slide) may resolve itself — it delivers the payoff the reader has been pulled toward.\n' +
+    (S.style === 'List / Tips' ?
+      '- For List / Tips style: this principle does not apply. Each slide is intentionally a self-contained executable tip — completeness per slide is the point. Continue reading is driven by curiosity about the next tip, not by unresolved threads.\n\n'
+      : '- For List / Tips style: this principle does not apply.\n\n'
+    ) +
     'COGNITIVE LOAD CHECK — apply to every slide before finalizing:\n' +
     'Can the reader clearly identify the ONE primary point of this slide? Supporting ideas, examples, consequences, and emotional texture are fine — but there should be a single thing the reader walks away with. If two ideas compete to be the main takeaway, simplify by removing the competing conclusion, not by cutting words.\n\n' +
     'NATIVENESS TEST — apply to every slide before finalizing:\n' +
@@ -889,6 +900,15 @@ function buildContent(llm) {
       'VOICE CONSISTENCY: Tone and energy must be identical across all parts.\n\n'
       : ''
     ) +
+    ln + '\nFINAL CAROUSEL READ — EXECUTE BEFORE OUTPUT\n' + ln + '\n' +
+    'Before producing the final output, read all ' + S.slides + ' slides back to back as one continuous reading experience — not as separate items to verify against a checklist. You are the reader now, not the writer.\n\n' +
+    'As you read through, pay attention to how it feels:\n\n' +
+    '- Does any phrase, sentence structure, or rhetorical move repeat so often that it stops landing? If yes, rewrite the weaker occurrences in a different voice. Keep the strongest one.\n' +
+    '- Does the energy stay flat anywhere, or dip when it should be building? Slides that sit between the hook and the resolution should still feel like they are moving the reader somewhere, not pausing.\n' +
+    '- Does any slide feel like it skipped a step from the slide before it — like the reader has to fill in a gap that should have been bridged? If yes, either soften the leap in the prior slide closing, or open the next slide closer to where the previous one ended.\n' +
+    '- Does the resolution actually feel earned by what came before it, or does it arrive abruptly? The reader should feel "ah, of course" — not "wait, where did that come from?"\n\n' +
+    'This is not a checklist to satisfy. It is a final read to make sure the carousel works as one piece, not ' + S.slides + ' separate pieces stacked next to each other.\n\n' +
+    'If anything feels off, fix it before output. Do not flag it in the output — fix it silently. The reader will never see this step.\n\n' +
     ln + '\nOUTPUT FORMAT\n' + ln + '\n' +
     'FIRST: State your live research findings (2-3 sentences max).\n\n' +
     'THEN output each slide as a SEPARATE labeled block:\n\n' +
@@ -1155,6 +1175,13 @@ function buildDesign() {
     '- The EXACT slide text copied verbatim from locked content — no rewrites, no paraphrasing, no "improving" the copy\n' +
     '- Visual hierarchy: state what is primary, secondary, tertiary\n' +
     '- Slide [N] of ' + S.slides + ', note consistency with series\n\n' +
+    'TYPOGRAPHY SELF-CHECK (apply before finalizing each slide prompt):\n' +
+    'Explicitly state which font from your Step 1 declaration is used for hero, support, and accent text in this slide. If all three roles use the same font family, you have violated the typography system — fix before proceeding. Font combination is mandatory: the hero font and the body/support font must come from visibly different font families (e.g. display script + clean sans-serif), not different weights of the same family.\n\n' +
+    (anchor ?
+      'CHARACTER FIDELITY CHECK (apply for every slide marked CHARACTER PRESENT):\n' +
+      'Before finalizing the prompt, mentally compare the character against the reference image attributes locked in the Character Anchor above. Explicitly verify in the prompt: same outline weight, same face features (eyes, mouth, expression range), same body proportions and limb style, same fill treatment, same art style. If any attribute would drift from the reference, correct the prompt language before generating. Treat reference fidelity as a hard constraint — not a stylistic suggestion.\n\n'
+      : ''
+    ) +
     ln + '\nEXECUTION CONSTRAINTS\n' + ln + '\n' +
     '- Use ONLY hex codes extracted from brand assets - no generic colors\n' +
     '- Use ONLY typography from brand DNA\n' +
@@ -1163,6 +1190,24 @@ function buildDesign() {
     '- Ratio is ALWAYS 4:5 - 1080x1350px - no exceptions\n' +
     '- Total slides = EXACTLY ' + S.slides + '\n' +
     '- DO NOT render any image until I give the command below\n\n' +
+    ln + '\nSESSION LOCK ESTABLISHMENT — OUTPUT BEFORE ANY IMAGE GENERATION\n' + ln + '\n' +
+    'After writing all ' + S.slides + ' slide prompts above, and BEFORE generating any image or moving to the Command Menu below, output this exact block. This establishes the working contract for the entire image generation session.\n\n' +
+    '```\n' +
+    'SESSION LOCK ESTABLISHED\n' +
+    'Total slides: ' + S.slides + '\n' +
+    'Visual System: LOCKED — [one-line summary of font combo + primary colors + layout family from Step 1]\n' +
+    'Character: ' + (anchor ? '[PRESENT — locked to reference]' : '[NOT USED]') + '\n' +
+    'Content: LOCKED — all slide copy is immutable per Phase 2\n' +
+    '\n' +
+    'FEEDBACK RULES FOR THIS SESSION:\n' +
+    '- Fix a visual issue only → "fix slide [N] visual: [what to change]" (copy stays locked)\n' +
+    '- Change the actual text → "change slide [N] copy" (I will ask for the new text first)\n' +
+    '- Just discuss, no execution → "discuss slide [N]" (no changes made until you say otherwise)\n' +
+    '- Rebuild a slide from scratch → "redesign slide [N]" (I propose first, never auto-execute)\n' +
+    '\n' +
+    'Any mid-session feedback that does not fit one of these four patterns will trigger a LOCK CHECK clarification before any change is made.\n' +
+    '```\n\n' +
+    'After outputting this block, proceed to the Command Menu below. Do NOT skip this block, do NOT abbreviate it, do NOT generate any image before this block is shown to me.\n\n' +
     ln + '\nCOMMAND MENU\n' + ln + '\n' +
     (anchor ?
       'CHARACTER CONSISTENCY MODE IS ACTIVE.\n\n' +
