@@ -138,7 +138,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 <body>
 <div class="wrap">
 <div class="hdr">
-  <div class="badge">System v2.1 &middot; Operational</div>
+  <div class="badge">System v3.6 &middot; Operational</div>
   <h1>Viral Carousel<br><span>Prompt Builder OS</span></h1>
   <p>3-Phase Strategic Content Intelligence System</p>
 </div>
@@ -239,6 +239,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
         <button class="opt" data-g="audience" data-v="Women 25-40" onclick="pick(this)">Women 25-40</button>
         <button class="opt" data-g="audience" data-v="Finance Conscious" onclick="pick(this)">Finance-Conscious</button>
         <button class="opt" data-g="audience" data-v="Creative Professionals" onclick="pick(this)">Creative Pros</button>
+        <button class="opt" data-g="audience" data-v="Men 25-40" onclick="pick(this)">Men 25-40</button>
+        <button class="opt" data-g="audience" data-v="Tech and Gadget Enthusiasts" onclick="pick(this)">Tech &amp; Gadget</button>
+        <button class="opt" data-g="audience" data-v="Fitness and Wellness" onclick="pick(this)">Fitness &amp; Wellness</button>
+        <button class="opt" data-g="audience" data-v="Food Enthusiasts" onclick="pick(this)">Food Enthusiasts</button>
+        <button class="opt" data-g="audience" data-v="Travelers" onclick="pick(this)">Travelers</button>
+        <button class="opt" data-g="audience" data-v="Gamers" onclick="pick(this)">Gamers</button>
+        <button class="opt" data-g="audience" data-v="Spiritual and Astrology Seekers" onclick="pick(this)">Spiritual &amp; Astrology</button>
       </div>
     </div>
   </div>
@@ -759,18 +766,25 @@ function buildContent(llm) {
     '- Retention Curve: ' + S.rc + '\n' +
     '- Controversy Level: ' + S.cl + '\n\n' +
     ln + '\nDIRECTIVE 1: LIVE INTERNET RESEARCH — MANDATORY\n' + ln + '\n' +
-    'You MUST actively search ALL of the following sources before writing a single slide. This is not optional.\n\n' +
-    'SOURCE 1 — TikTok Creative Center (ads.tiktok.com/business/creativecenter/trends)\n' +
+    'You MUST actively attempt to search the following sources before writing a single slide. Sources are organized into tiers based on access reliability — work through them in order and use the FALLBACK RULE below when a source cannot be accessed.\n\n' +
+    'TIER A — PRIMARY SOURCES (best signal, but access can be inconsistent):\n\n' +
+    'SOURCE A1 — TikTok Creative Center (ads.tiktok.com/business/creativecenter/trends)\n' +
     'Search for trending hashtags, videos, and content formats related to "' + S.topic + '" in ' + S.region + ' from the last 30 days. Note the top performing formats, hook styles, and engagement patterns.\n\n' +
-    'SOURCE 2 — Reddit\n' +
-    'Search relevant subreddits for "' + S.topic + '" discussions in ' + S.region + ' context. Look for hot posts, controversial threads, and recurring pain points that generate high engagement.\n\n' +
-    'SOURCE 3 — X / Twitter\n' +
-    'Search trending topics and viral tweets related to "' + S.topic + '" targeting ' + S.region + ' audience. Identify hot takes, discourse patterns, and quote-tweet-worthy statements.\n\n' +
-    'SOURCE 4 — Instagram Explore + Reels\n' +
-    'Identify carousel and reel formats around "' + S.topic + '" that are currently performing well for ' + S.region + ' audience. Note caption styles, hook formats, and engagement triggers.\n\n' +
-    'SOURCE 5 — Google Trends\n' +
+    'SOURCE A2 — Google Trends\n' +
     'Verify that "' + S.topic + '" is currently trending or rising in ' + S.region + '. Note related queries and breakout topics that could sharpen the angle.\n\n' +
-    'REPORTING REQUIREMENT: Before writing any slide, state what you found from each source in 1 sentence per source. If you cannot access a source, explicitly state which one and why. Do not skip this step.\n\n' +
+    'TIER B — SECONDARY SOURCES (always-accessible via web search, use as foundation):\n\n' +
+    'SOURCE B1 — Reddit\n' +
+    'Search relevant subreddits for "' + S.topic + '" discussions in ' + S.region + ' context. Look for hot posts, controversial threads, and recurring pain points that generate high engagement.\n\n' +
+    'SOURCE B2 — X / Twitter\n' +
+    'Search trending topics and viral tweets related to "' + S.topic + '" targeting ' + S.region + ' audience. Identify hot takes, discourse patterns, and quote-tweet-worthy statements.\n\n' +
+    'SOURCE B3 — Instagram Explore + Reels (via web search proxies if direct access unavailable)\n' +
+    'Identify carousel and reel formats around "' + S.topic + '" that are currently performing well for ' + S.region + ' audience. Note caption styles, hook formats, and engagement triggers.\n\n' +
+    'FALLBACK RULE — APPLY WHEN A SOURCE IS INACCESSIBLE:\n' +
+    '1. If a TIER A source cannot be accessed: explicitly state "Source A[N]: not accessible this session" — do NOT fabricate data, do NOT silently skip. Proceed with the remaining sources.\n' +
+    '2. If a TIER B source cannot be accessed: same — state the failure, then move on.\n' +
+    '3. Research is considered SUFFICIENT if AT LEAST 2 sources (from any tier combination) returned usable signal. If fewer than 2 sources returned signal, explicitly tell me: "Research signal is thin — output will rely more on general knowledge than current trends." Do not pretend research was complete when it was not.\n' +
+    '4. NEVER invent specific data points (e.g. "trending hashtag #X has 2.4M views") when a source was inaccessible. State observations only from sources you actually accessed.\n\n' +
+    'REPORTING REQUIREMENT: Before writing any slide, state what you found from EACH source in 1 sentence per source — including explicit "not accessible" notes for failed sources. This is non-negotiable; it lets me trust the research foundation.\n\n' +
     (S.contentList ?
       ln + '\nDIRECTIVE: CONTENT LIST — MANDATORY COVERAGE\n' + ln + '\n' +
       'The following ' + S.contentList.split(',').filter(function(i){return i.trim();}).length + ' items MUST ALL appear in the content. No exceptions, no skipping, no substitutions:\n\n' +
@@ -1004,6 +1018,14 @@ function buildDesign() {
   var cm = '';
   for (var i = 1; i <= S.slides; i++) { cm += i + ' = Generate image for Slide ' + i + '\n'; }
   return ln + '\nMASTER DESIGN PROMPT - VISUAL TRANSLATOR\nTarget: ChatGPT Image (DALL-E 3) | Slides: ' + S.slides + ' | Ratio: 4:5 (1080x1350px)\n' + ln + '\n\n' +
+    ln + '\nMETA-RULE — READ BEFORE EVERYTHING ELSE\n' + ln + '\n' +
+    'You operate under STRICT PROTOCOL ADHERENCE for this entire session. This means:\n\n' +
+    '1. FOLLOW THE RULES AS WRITTEN. Do not improvise. Do not invent new commands, modes, or workflows that are not explicitly defined in this prompt. If a command like "LOCK HYBRID" or "PROCEED WITH X" is not in the COMMANDS list, you cannot create it.\n\n' +
+    '2. DO NOT SEEK PERMISSION FOR DECISIONS ALREADY RESOLVED BY THE PROMPT. When the prompt specifies a rule (e.g. "PDF brand guide wins for fonts/colors, image reference is for composition only"), follow it silently. Do not surface the rule as a "choice" for the user to make.\n\n' +
+    '3. EXECUTION ORDER IS NON-NEGOTIABLE. Write slide prompts → output SESSION LOCK ESTABLISHED block → proceed to Command Menu. Skipping or reordering these steps is a protocol violation.\n\n' +
+    '4. WHEN UNCERTAIN, EXECUTE THE LITERAL INSTRUCTION. Do not interpret, do not "improve", do not propose alternatives. The user has already thought through the system. Your job is to execute it.\n\n' +
+    '5. INVENTED COMMANDS, MODES, OR CONCEPTS ARE FORBIDDEN. The complete command vocabulary is: A, B, C, D, E (defined in SESSION LOCK ESTABLISHED), plus the four LOCK CHECK modes (LOCKED DISCUSSION, VISUAL REVISION, CONTENT REVISION, REDESIGN REQUEST). Nothing else exists. If something does not fit these, ask the user to clarify using the existing vocabulary — do not invent new vocabulary.\n\n' +
+    'This META-RULE overrides any tendency to be "helpful by improvising." Helpfulness in this system = strict execution of the defined protocol.\n\n' +
     '[ROLE]\n' +
     'You are a Senior Art Director with 15+ years of experience in editorial design, brand identity systems, and social media visual production. You think like a designer, not an executor. You understand typographic hierarchy, spatial tension, visual weight, and why some designs stop the scroll and others disappear.\n\n' +
     'Your job is to build a complete visual system for this carousel — then execute it with absolute consistency across all ' + S.slides + ' slides. You make design decisions. You justify them. You do not ask for permission on aesthetic choices.\n\n' +
@@ -1190,24 +1212,34 @@ function buildDesign() {
     '- Ratio is ALWAYS 4:5 - 1080x1350px - no exceptions\n' +
     '- Total slides = EXACTLY ' + S.slides + '\n' +
     '- DO NOT render any image until I give the command below\n\n' +
-    ln + '\nSESSION LOCK ESTABLISHMENT — OUTPUT BEFORE ANY IMAGE GENERATION\n' + ln + '\n' +
-    'After writing all ' + S.slides + ' slide prompts above, and BEFORE generating any image or moving to the Command Menu below, output this exact block. This establishes the working contract for the entire image generation session.\n\n' +
+    ln + '\nSESSION LOCK ESTABLISHMENT — MANDATORY GATE BEFORE COMMAND MENU\n' + ln + '\n' +
+    'CRITICAL ENFORCEMENT: The Command Menu below CANNOT execute until the SESSION LOCK ESTABLISHED block has been output to the user. If you proceed to ask the user "GO or number" without first showing the lock block in full, you have violated the protocol. The user\'s feedback contract has not been established and any subsequent revision will fail to trigger LOCK CHECK correctly.\n\n' +
+    'EXECUTION ORDER (non-negotiable):\n' +
+    '1. Write all ' + S.slides + ' slide prompts above (Step 2)\n' +
+    '2. Output the SESSION LOCK ESTABLISHED block below — IN FULL, NO ABBREVIATION\n' +
+    '3. ONLY THEN proceed to the Command Menu and ask "GO or number"\n\n' +
+    'If you skip step 2, the entire downstream protocol (LOCK CHECK, REDESIGN MODE, RE-LOCK RULE) is broken. This is the single most important enforcement in this prompt.\n\n' +
+    'Output this exact block:\n\n' +
     '```\n' +
     'SESSION LOCK ESTABLISHED\n' +
-    'Total slides: ' + S.slides + '\n' +
-    'Visual System: LOCKED — [one-line summary of font combo + primary colors + layout family from Step 1]\n' +
-    'Character: ' + (anchor ? '[PRESENT — locked to reference]' : '[NOT USED]') + '\n' +
-    'Content: LOCKED — all slide copy is immutable per Phase 2\n' +
+    'Slides: ' + S.slides + ' | Visual: LOCKED | Character: ' + (anchor ? 'PRESENT' : 'NOT USED') + ' | Content: LOCKED\n' +
     '\n' +
-    'FEEDBACK RULES FOR THIS SESSION:\n' +
-    '- Fix a visual issue only → "fix slide [N] visual: [what to change]" (copy stays locked)\n' +
-    '- Change the actual text → "change slide [N] copy" (I will ask for the new text first)\n' +
-    '- Just discuss, no execution → "discuss slide [N]" (no changes made until you say otherwise)\n' +
-    '- Rebuild a slide from scratch → "redesign slide [N]" (I propose first, never auto-execute)\n' +
+    'COMMANDS:\n' +
+    'A. fix [N] — fix visual issue (copy stays)\n' +
+    'B. change [N] — change slide copy\n' +
+    'C. discuss [N] — talk only, no changes\n' +
+    'D. redesign [N] — rebuild from scratch\n' +
+    'E. override brand — experiment outside brand system\n' +
     '\n' +
-    'Any mid-session feedback that does not fit one of these four patterns will trigger a LOCK CHECK clarification before any change is made.\n' +
+    'Brand guide = source of truth. Use E only to override.\n' +
     '```\n\n' +
-    'After outputting this block, proceed to the Command Menu below. Do NOT skip this block, do NOT abbreviate it, do NOT generate any image before this block is shown to me.\n\n' +
+    'After outputting this block, pause briefly so the user can read it, then proceed to the Command Menu below.\n\n' +
+    'COMMAND MAPPING TO LOCK CHECK MODES (internal — use when classifying user commands):\n' +
+    '- "A" or "fix [N]" → VISUAL REVISION mode\n' +
+    '- "B" or "change [N]" → CONTENT REVISION mode\n' +
+    '- "C" or "discuss [N]" → LOCKED DISCUSSION mode\n' +
+    '- "D" or "redesign [N]" → REDESIGN REQUEST mode\n' +
+    '- "E" or "override brand: [scope]" → BRAND OVERRIDE mode. Treat as elevated REDESIGN — confirm exact scope of override (typography only? colors? both?) before executing. Do NOT auto-apply override to other slides; ask whether override is for this slide only or for the entire remaining carousel.\n\n' +
     ln + '\nCOMMAND MENU\n' + ln + '\n' +
     (anchor ?
       'CHARACTER CONSISTENCY MODE IS ACTIVE.\n\n' +
@@ -1237,7 +1269,9 @@ function buildDesign() {
       'If I type a number: generate that slide immediately. Then wait for my next command.\n\n'
     ) +
     ln + '\nLOCK REFERENCE STATE — ALWAYS ACTIVE FOR THIS ENTIRE SESSION\n' + ln + '\n' +
+    'ACTIVATION PRECONDITION: This protocol only activates AFTER the SESSION LOCK ESTABLISHED block has been output to the user AND at least one image has been generated. Before that point, you are in EXECUTION MODE — follow the execution order strictly (write all slide prompts → output SESSION LOCK ESTABLISHED block → proceed to Command Menu). Do NOT pre-empt with LOCK CHECK during initial prompt processing, even if you perceive conflicts between input sources. Conflicts between brand guide and style reference are already resolved by the ASSET BRAND VALUES section above (PDF wins for fonts/colors; image reference is used only for composition, layout energy, and atmosphere). Trust those rules; execute them silently; do not seek user permission to follow rules that are already written.\n\n' +
     'This protocol activates whenever I bring up a specific slide with INTENT TO CHANGE something — a correction, a "what if we changed X" discussion, or a redesign request. It does NOT trigger for purely casual comments (e.g. "slide 3 looks good").\n\n' +
+    'TRIGGER DETECTION — MANDATORY: Any user message that references a slide AND contains directive or modification language MUST trigger this protocol. This includes — but is not limited to — casual Indonesian/English instructions such as: "ganti", "ilangin", "hilangin", "ubah", "tambahin", "kurangin", "perbaiki", "betulin", "fix", "remove", "change", "tukar", "ngga gitu", "harusnya...", "coba...", "bisa...", "kayaknya lebih bagus kalau...", "gausa...", "gak usah...", or any phrasing that implies the current image should be different. Do NOT treat directive-sounding feedback as a final instruction to execute. Even if the user\'s tone sounds conclusive (e.g. "ilangin aja"), you MUST still output LOCK CHECK first and confirm scope before executing. Auto-execution without LOCK CHECK is a protocol violation.\n\n' +
     'Before responding to any such message, output this short block first:\n\n' +
     '```\n' +
     'LOCK CHECK\n' +
