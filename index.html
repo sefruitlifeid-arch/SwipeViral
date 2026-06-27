@@ -138,7 +138,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 <body>
 <div class="wrap">
 <div class="hdr">
-  <div class="badge">System v3.6 &middot; Operational</div>
+  <div class="badge">System v4.5 &middot; Operational</div>
   <h1>Viral Carousel<br><span>Prompt Builder OS</span></h1>
   <p>3-Phase Strategic Content Intelligence System</p>
 </div>
@@ -155,19 +155,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   <div class="card">
     <div class="fld">
       <div class="flbl"><span class="flbl-txt">Topic</span><span class="tag tag-r">Required</span></div>
-      <textarea id="inp-topic" rows="2" placeholder="e.g. Tips belanja ga mikir tapi duit ga boncos&hellip;"></textarea>
+      <textarea id="inp-topic" rows="2" oninput="saveBriefState()" placeholder="e.g. Tips belanja ga mikir tapi duit ga boncos&hellip;"></textarea>
     </div>
   </div>
   <div class="card">
     <div class="fld">
       <div class="flbl"><span class="flbl-txt">Core Pain Point / Desire</span><span class="tag tag-m">Optional</span></div>
-      <textarea id="inp-pain" rows="2" placeholder="e.g. Tiap habis belanja ngerasa guilty tapi diulang lagi bulan depan"></textarea>
+      <textarea id="inp-pain" rows="2" oninput="saveBriefState()" placeholder="e.g. Tiap habis belanja ngerasa guilty tapi diulang lagi bulan depan"></textarea>
     </div>
   </div>
   <div class="card">
     <div class="fld">
       <div class="flbl"><span class="flbl-txt">Content List</span><span class="tag tag-m">Optional &middot; Forces All Items In</span></div>
-      <textarea id="inp-content-list" rows="3" oninput="updateListCounter()" placeholder="List semua item yang WAJIB masuk, pisahkan dengan koma.&#10;e.g. Aries, Taurus, Gemini, Cancer, Leo, Virgo..."></textarea>
+      <textarea id="inp-content-list" rows="3" oninput="updateListCounter();saveBriefState()" placeholder="List semua item yang WAJIB masuk, pisahkan dengan koma.&#10;e.g. Aries, Taurus, Gemini, Cancer, Leo, Virgo..."></textarea>
       <div style="margin-top:8px;font-family:Space Mono,monospace;font-size:9px;color:#7070a0;letter-spacing:0.1em;" id="list-counter"></div>
     </div>
   </div>
@@ -319,6 +319,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       <div class="hvi"><span class="hvk">Controversy Level</span><span class="hvv" id="hv4">-</span></div>
     </div>
   </div>
+  <div class="navrow" style="margin-bottom:12px;">
+    <button class="gbtn" onclick="exportBrief()" style="flex:1;">&#128190; Export Brief</button>
+    <label class="gbtn" style="flex:1;text-align:center;cursor:pointer;">&#128194; Load Brief<input type="file" id="loadBriefInput" accept=".json" onchange="loadBrief(event)" style="display:none;"></label>
+  </div>
+  <div id="autosave-status" style="text-align:center;font-family:Space Mono,monospace;font-size:9px;color:#6ee7b7;letter-spacing:0.1em;margin-bottom:12px;display:none;">&#10003; BRIEF AUTO-SAVED</div>
   <div class="navrow">
     <button class="btnd" onclick="resetAll()">&#8635; Reset</button>
     <button class="btn btnp" style="flex:1" onclick="toPhase2()">Lock Selections &rarr; Phase 2</button>
@@ -355,7 +360,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 <!-- PHASE 3 -->
 <div class="sec" id="phase3">
   <div class="shdr"><div class="snum">03</div><div class="stitle"><h2>Batch Visual Translator</h2><p>Generate the Master Design Prompt for DALL-E 3 / ChatGPT Image.</p></div></div>
-  <div class="dinfo"><div class="dinfoT">Visual DNA Dissector Protocol</div><p>Locked to 4:5 (1080x1350px). Content injected from Phase 2. Command menu at end lets you type a number to render any slide directly in ChatGPT.</p></div>
+  <div class="dinfo"><div class="dinfoT">Visual DNA Dissector Protocol</div><p>Locked to 4:5 (1080x1350px). Content injected from Phase 2. Commands: GO (preview all), 1-7 (generate slide), fix [N], swap [N], chat [N]. Anything else = discussion only.</p></div>
   <div class="card">
     <div class="fld">
       <div class="flbl" style="justify-content:space-between;">
@@ -434,10 +439,21 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     </div>
   </div>
   <div class="card" style="margin-top:4px;">
+    <div class="fld">
+      <div class="flbl"><span class="flbl-txt">Target Image Generator</span></div>
+      <div class="ogrid">
+        <button class="opt sel" data-g="imageGen" data-v="dalle" onclick="pickImageGen(this)">DALL-E / ChatGPT Image</button>
+        <button class="opt" data-g="imageGen" data-v="gemini" onclick="pickImageGen(this)">Gemini / Nano Banana</button>
+      </div>
+      <div id="imageGenDesc" style="margin-top:10px;padding:10px 14px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:8px;font-size:12px;color:#c0c0e0;line-height:1.6;">
+        DALL-E mode: structured design-spec prompts. Best for editorial layering and mixed typography.
+      </div>
+    </div>
+    <div class="div"></div>
     <button class="btn btnp btnf" onclick="genDesign()">Compile Master Design Prompt</button>
     <div id="load3" style="display:none;margin-top:16px"><div class="spin-wrap"><div class="spin"></div> Building&hellip;</div></div>
     <div class="outbox" id="out3" style="display:none;margin-top:16px">
-      <div class="outhdr"><div class="outlbl"><div class="outdot"></div>Master Design Prompt &middot; DALL-E 3</div><button class="cpbtn" id="cp3" onclick="doCopy('out3body','cp3')">Copy All</button></div>
+      <div class="outhdr"><div class="outlbl"><div class="outdot"></div><span id="out3lbl">Master Design Prompt &middot; DALL-E 3</span></div><button class="cpbtn" id="cp3" onclick="doCopy('out3body','cp3')">Copy All</button></div>
       <div class="outbody" id="out3body"></div>
     </div>
   </div>
@@ -454,7 +470,7 @@ var S = {
   audience:'', hook:'', cta:'', painpoint:'', contentList:'',
   customDesign:'', intensity:5, slides:7, seriesMode:false,
   seriesParts:2, et:'', sp:'', rc:'', cl:'', ccMode:false, charAnchor:'',
-  mascotStrict:5
+  mascotStrict:5, imageGen:'dalle'
 };
 
 function pick(btn) {
@@ -465,6 +481,7 @@ function pick(btn) {
   S[g] = btn.getAttribute('data-v');
   showDesc(g, btn.getAttribute('data-v'));
   calcHidden();
+  saveBriefState();
 }
 
 function setIntensity(v) {
@@ -472,11 +489,13 @@ function setIntensity(v) {
   var lbl = v <= 3 ? 'LOW INTENSITY' : v <= 7 ? 'MEDIUM INTENSITY' : 'HIGH INTENSITY';
   document.getElementById('iDisp').textContent = v + ' - ' + lbl;
   calcHidden();
+  saveBriefState();
 }
 
 function setSlides(v) {
   S.slides = parseInt(v, 10);
   document.getElementById('sDisp').textContent = v + ' SLIDES';
+  saveBriefState();
 }
 
 var EM = {
@@ -656,8 +675,8 @@ function toPhase2() {
 var LC = {
   claude: {
     lbl: 'Master Content Prompt - Claude Architecture',
-    intro: "You are operating under Claude's structural discipline protocol. Execute with deep linguistic nuance, non-robotic transitions, and precise cognitive architecture. Avoid formulaic AI phrasing. Every sentence must earn its place.",
-    note: 'Write with structural elegance. Use nested logic. No transition words like "furthermore" or "in conclusion". Let ideas flow through syntax variation.'
+    intro: "You are writing for social media — not an essay, not a report, not an analysis. Your default register is too polished and too complete. Fight that tendency actively. The reader should feel they are reading something captured, not composed. A sharp friend talking through a realization — not a writer presenting an argument.",
+    note: 'SENTENCE RHYTHM — vary aggressively. Mix fragments with longer sentences. A slide can open with two words. Then go longer when the observation needs room. Then cut short again. Claude defaults to uniform, well-structured sentences — that is exactly what makes output feel written rather than spoken. Break that pattern.\n\nWORDS TO AVOID — these signal Claude-default writing, not natural speech: "framework", "konvensional", "mempertimbangkan", "genuine", "pada akhirnya", "sesungguhnya", "hakikatnya", "merupakan", "terdapat", "seolah-olah", "mencerminkan". If any of these appear in a slide, rewrite that sentence.\n\nNATIVENESS CHECK — before finalizing each slide, ask: would these exact words come out of a real person\'s mouth if they were sending a voice note to a close friend right now? If the sentence sounds like it was written rather than said — rewrite it. "Mereka hanya tidak punya framework lain waktu itu" fails this test. "Mereka emang ga punya pilihan lain yang kelihatan" passes it.\n\nCOMPLETENESS TRAP — Claude tends to make every sentence self-contained and logically complete. Resist this. Some slides should feel slightly open-ended, slightly unresolved — that is what pulls the reader forward. A thought does not need to be fully closed to be fully understood.\n\nSLIDE LENGTH — this is the most important constraint. Every slide has a hard limit:\n- HERO: 1-2 lines maximum. Never more. If the hero runs to 3 lines, cut a phrase.\n- SUPPORT: 2-3 lines maximum. If support runs to 4+ lines, you are over-explaining — pick the strongest sentence and cut the rest.\n- TOTAL per slide: 6 lines maximum including hero + support + any accent. If a slide exceeds 6 lines, it is too long. Cut, do not compress.\n- Word count backup: if line count is ambiguous (short lines vs long lines), hero should not exceed 15 words, support should not exceed 30 words total.\n\nThe most common Claude failure on length: trying to fit two observations into one slide because both feel important. They do not both fit. One observation per slide. If the second observation matters, it gets its own slide — or it gets cut. A shorter slide that lands cleanly is always stronger than a longer slide that covers everything.'
   },
   chatgpt: {
     lbl: 'Master Content Prompt - ChatGPT Architecture',
@@ -931,6 +950,7 @@ function buildContent(llm) {
     '...continue for all ' + S.slides + ' slides...\n\n' +
     'END with: STRATEGY NOTE: One sentence on why this drives ' + S.goal + ' for this topic.' +
     (S.seriesMode ? ' Include arc summary per part.' : '') +
+    (llm === 'claude' ? '\n\nAfter the STRATEGY NOTE, add this exact line:\n\n---\nMau saya buatkan full Canva prompt untuk carousel ini? Balas "ya" dan saya akan generate brief lengkap yang siap di-paste ke Canva Magic Design — termasuk color palette, typography, layout per slide, dan copy yang sudah dikunci.' : '') +
     '\nBEGIN EXECUTION NOW.';
 }
 
@@ -1018,14 +1038,256 @@ function buildDesign() {
   var cm = '';
   for (var i = 1; i <= S.slides; i++) { cm += i + ' = Generate image for Slide ' + i + '\n'; }
   return ln + '\nMASTER DESIGN PROMPT - VISUAL TRANSLATOR\nTarget: ChatGPT Image (DALL-E 3) | Slides: ' + S.slides + ' | Ratio: 4:5 (1080x1350px)\n' + ln + '\n\n' +
+    ln + '\nPROJECT ORIENTATION\n' + ln + '\n' +
+    'This prompt defines the deliverables for a carousel design project. The goal is to produce a complete, consistent visual system across all ' + S.slides + ' slides.\n\n' +
+    'Workflow sequence for this response:\n' +
+    '1. Output Visual System Declaration (Step 1)\n' +
+    '2. Output all ' + S.slides + ' per-slide image prompts (Step 2)\n' +
+    '3. Output Command Menu\n' +
+    '4. Do not generate any images in this response\n\n' +
+    'If the full output cannot fit in one response, continue when the user replies "lanjut". Begin the continuation with: RESUMING FROM: [last completed element].\n\n' +
+    'Execution Priority:\n' +
+    'Complete all text deliverables before any commentary or caveats. If a step cannot be completed, state which step and why, then continue.\n\n' +
+    '[ROLE]\n' +
+    'You are a Senior Art Director with 15+ years of experience in editorial design, brand identity systems, and social media visual production. You think like a designer, not an executor. You understand typographic hierarchy, spatial tension, visual weight, and why some designs stop the scroll and others disappear.\n\n' +
+    'Your job is to build a complete visual system for this carousel — then execute it with absolute consistency across all ' + S.slides + ' slides. You make design decisions. You justify them. You do not ask for permission on aesthetic choices.\n\n' +
+    '[CONTENT LOCK - FROM PHASE 2]\n' +
+    'Paste your Phase 2 slide copy into the slots below before executing:\n\n' + sl +
+    '[CONTEXT]\n' +
+    '- Slides: ' + S.slides + ' total\n' +
+    '- Ratio: 4:5 portrait - 1080x1350px - fixed\n' +
+    '- Platform: ' + S.platform + '\n' +
+    '- Audience: ' + S.audience + '\n' +
+    '- Region Aesthetic: ' + rv + '\n' +
+    '- Tone: ' + S.tone + '\n' +
+    '- Style: ' + S.style + '\n' +
+    '- Intensity: ' + S.intensity + '/10\n\n' +
+    ln + '\nASSET BRAND VALUES\n' + ln + '\n' +
+    'If a PDF brand guide is uploaded: use its colors, fonts, spacing, and mascot rules for every slide.\n' +
+    'If an image style reference is uploaded: use it for composition, layout energy, and atmosphere. Font choices must reflect styles visibly present in the reference — do not invent fonts that are not visible.\n' +
+    'If both are uploaded and they disagree: follow the PDF.\n' +
+    'If nothing is uploaded: design from context — region aesthetic (' + rv + '), tone (' + S.tone + '), audience (' + S.audience + '), intensity (' + S.intensity + '/10).\n\n' +
+    ln + '\nPRIORITY ORDER — CONTENT DECISIONS\n' + ln + '\n' +
+    '1. CUSTOM INSTRUCTION (highest priority):\n' + (custom ? custom + '\n   This overrides all visual decisions including brand DNA. Execute exactly as stated.' : 'None provided.') + '\n\n' +
+    (anchor ? '2. CHARACTER ANCHOR (see Character Consistency section below):\n' + anchor + '\n\n' : '2. CHARACTER ANCHOR: None provided.\n\n') +
+    '3. BRAND DNA: From uploaded assets per Asset Brand Values above.\n\n' +
+    '4. CONTENT BRIEF CONTEXT: Informs aesthetic direction only when no PDF or image assets are provided.\n\n' +
+    ln + '\nSTEP 1: VISUAL SYSTEM DECLARATION — COMPLETE BEFORE WRITING SLIDE PROMPTS\n' + ln + '\n' +
+    'Before writing a single image prompt, declare the complete visual system for this carousel. This is a binding design decision document. Every value declared here will be used identically across all ' + S.slides + ' slides.\n\n' +
+    'If a PDF brand guide is uploaded: extract actual values. Write real hex codes, real font names. No placeholders.\n' +
+    'If only image references are uploaded: derive the complete visual system from what is visually present in the reference. Font choices must reflect the actual font styles visible in the image. Do not inject font names or styles that are not represented in the reference.\n' +
+    'If nothing is uploaded: design from scratch based on context (region, tone, audience, intensity).\n\n' +
+    'Declare the following with actual values:\n\n' +
+    'TYPOGRAPHY SYSTEM:\n' +
+    '- DISPLAY font: [name] [weight] — used for slide headline/primary text\n' +
+    '- BODY font: [name] [weight] — used for supporting copy\n' +
+    '- ACCENT font: [name] [weight] — used for labels, callouts, slide numbers (if any)\n' +
+    '- SIZE RATIO: Body text should not exceed 35% of the display text size. Accent/label text should not exceed 25% of display text size.\n' +
+    '- LETTER SPACING: Declare specific values for display and body\n' +
+    '- LINE HEIGHT: Declare for display and body\n\n' +
+    'COLOR SYSTEM:\n' +
+    '- BACKGROUND: [exact hex]\n' +
+    '- PRIMARY TEXT: [exact hex]\n' +
+    '- SECONDARY TEXT: [exact hex]\n' +
+    '- ACCENT: [exact hex]\n' +
+    '- Any additional brand colors with their roles\n\n' +
+    'LAYOUT SYSTEM:\n' +
+    '- Dominant grid structure (e.g. centered axis / left-anchored / asymmetric)\n' +
+    '- Safe zone margins (e.g. 8% from all edges)\n' +
+    '- Maximum number of distinct text elements per slide (recommended: 3 max)\n\n' +
+    'TEXTURE + ATMOSPHERE:\n' +
+    '- Background treatment (flat / gradient / texture — specify)\n' +
+    '- Overlay effects if any (grain, noise, vignette — specify opacity %)\n' +
+    '- Overall visual atmosphere in one sentence\n\n' +
+    'Consistency note: Once this system is declared, use it identically across all slides. If a creative decision requires deviation, state why and how it still serves the overall system.\n\n' +
+    ln + '\nVISUAL IDEA LOCK\n' + ln + '\n' +
+    'Each slide\'s insight needs its own visual idea — not a repeat of the previous slide\'s scene.\n\n' +
+    'Before finalizing each slide, ask: "If this same visual idea could work for another slide in this carousel, it\'s not specific enough to this insight."\n\n' +
+    'The recurring subject (mascot, runner, etc.) can appear across slides for brand consistency — but the SETTING, ACTION, or SITUATION around it should shift to match what each slide is actually saying.\n\n' +
+    ln + '\nCAROUSEL INTENSITY CURVE\n' + ln + '\n' +
+    'Not every slide should feel equally loud. The Hook (Slide 1) and the Closer (final slide) should feel like the most visually decisive moments in the carousel. Middle slides can be visually quieter and more matter-of-fact — still well-designed, but lower-key. The carousel should feel like it has peaks and valleys, not a flat line of equally loud posters.\n\n' +
+    'Preferred application:\n' +
+    '- Hook (Slide 1) and Closer (final slide): hero phrase toward the upper end of the 60-75% visual weight range, boldest weight available.\n' +
+    '- Middle slides: hero phrase toward the lower end of the 60-75% range, more breathing room around it.\n\n' +
+    'The difference between Hook/Closer and Middle slides should be visible when slides are placed side by side.\n\n' +
+    ln + '\nDESIGN PRINCIPLES — APPLY TO ALL SLIDES\n' + ln + '\n' +
+    'VISUAL HIERARCHY:\n' +
+    'Before writing each image prompt, define the hierarchy:\n' +
+    '- PRIMARY element: What the eye sees first. One element only. Must occupy dramatically larger visual weight than all other elements combined.\n' +
+    '- SECONDARY element: Supports and gives context to the primary. Should not compete with primary for attention.\n' +
+    '- TERTIARY element: Detail, caption, or accent only. Smallest visual weight.\n\n' +
+    'Connecting elements (arrows, lines, brackets) should have a clear source and destination. Remove decorative elements that do not improve clarity.\n\n' +
+    'FOCAL POINT CHECK (apply before finalizing each slide):\n' +
+    'If a viewer glances at this slide for one second, is it immediately obvious what the single primary focal point is? If more than one element competes for primary attention, resolve it before finalizing: reduce emphasis on the competing element, remove decoration, or increase empty space, until exactly one element clearly wins.\n' +
+    'Empty space around the focal point is a deliberate design choice, not a gap to be filled.\n\n' +
+    ln + '\nEDITORIAL HIERARCHY — APPLY BEFORE EACH SLIDE\n' + ln + '\n' +
+    'Before designing any slide, read the slide copy and ask:\n' +
+    '"If the viewer only remembers ONE phrase from this slide, what should it be?"\n\n' +
+    'That phrase becomes the HERO.\n\n' +
+    'Guidelines:\n' +
+    '- One hero per slide.\n' +
+    '- Hero receives approximately 60-75% of visual attention.\n' +
+    '- Supporting copy receives approximately 20-30%.\n' +
+    '- Accent copy receives approximately 5-10%.\n\n' +
+    'Design the punchline. Not the paragraph. The goal is hierarchy, not equal visibility.\n\n' +
+    ln + '\nSLIDE TYPE ASSIGNMENT — COMPLETE BEFORE WRITING PROMPTS\n' + ln + '\n' +
+    'Before designing the carousel, assign a slide type to each of the ' + S.slides + ' slides.\n\n' +
+    'Available types:\n' +
+    '- Cover Poster (full-bleed, one dominant word or phrase)\n' +
+    '- Quote Poster (centered, quote marks or framing device)\n' +
+    '- Character Poster (mascot or subject-driven composition)\n' +
+    '- Story Poster (narrative or sequential feel)\n' +
+    '- Evidence Poster (data, list, or supporting visual)\n' +
+    '- Reaction Poster (expression or emotion-driven)\n' +
+    '- CTA Poster (closing, call to action)\n\n' +
+    'Preferred distribution:\n' +
+    '- No more than 2 slides using the same type.\n' +
+    '- Adjacent slides should not use identical types.\n' +
+    '- Visual rhythm across the carousel is expected.\n\n' +
+    'State the assigned type at the top of each slide prompt.\n\n' +
+    'The goal is consistency of identity with variation of composition. Color, typography, and framing stay consistent — composition and layout structure vary per slide.\n\n' +
+    ln + '\nTEXT DENSITY GUIDANCE\n' + ln + '\n' +
+    'Extract from each slide:\n' +
+    '- 1 HERO phrase\n' +
+    '- 1 SUPPORT phrase\n' +
+    '- 1 ACCENT phrase\n\n' +
+    'Every slide should feel like: one dominant statement + one supporting explanation + one small contextual detail.\n\n' +
+    'Avoid: wall of text, equal text sizing, equal visual weight. A slide should feel like an editorial poster, not enlarged notes.\n\n' +
+    ln + '\nTYPOGRAPHY GUIDELINES\n' + ln + '\n' +
+    '- Maximum 3 distinct text sizes per slide.\n' +
+    '- Avoid identical visual weight for all text elements.\n' +
+    '- Hierarchy should be visually obvious within one second.\n\n' +
+    ln + '\nBREATHING ROOM\n' + ln + '\n' +
+    'Whitespace is an active design element. Target breathing room by slide type:\n' +
+    '- Hook slides: 40-60% empty space\n' +
+    '- Insight slides: 20-40% empty space\n' +
+    '- CTA slides: 25-45% empty space\n\n' +
+    'Optimize for attention, not maximum whitespace. Empty space should strengthen hierarchy.\n\n' +
+    ln + '\nCORE DESIGN PHILOSOPHY\n' + ln + '\n' +
+    'A successful slide is one where the hero phrase is instantly remembered — not one that displays all copy at equal scale.\n\n' +
+    'Design priority when decisions conflict:\n' +
+    '1. Editorial Hierarchy\n' +
+    '2. Visual Hierarchy\n' +
+    '3. Typography Guidelines\n' +
+    '4. Layout Preferences\n\n' +
+    'Create hierarchy, not decoration. Create contrast, not consistency. Design the punchline, not the paragraph.\n\n' +
+    (custom ?
+      'CONTENT SEPARATION NOTE (active because custom instruction is provided):\n' +
+      'Every piece of content may only appear in ONE place per slide. No exceptions.\n\n'
+      : ''
+    ) +
+    (anchor ?
+      ln + '\nCHARACTER CONSISTENCY\n' + ln + '\n' +
+      'A brand mascot is present. Preferred workflow:\n' +
+      '- Generate Slide 1 first. Do not proceed until the character appearance is approved.\n' +
+      '- After approval: reference "same character as approved Slide 1" in every subsequent prompt.\n' +
+      (S.mascotStrict <= 3 ?
+        '- Similarity level: LOOSE (' + S.mascotStrict + '/10). The character anchor is a creative guide. Maintain overall vibe, color palette, and recognizability. Proportions and pose may adapt to slide context.\n' :
+        S.mascotStrict <= 7 ?
+        '- Similarity level: CONSISTENT (' + S.mascotStrict + '/10). Face features, color palette, and art style are the reference. Pose and expression may vary per slide. Character should be clearly recognizable across all slides.\n' :
+        '- Similarity level: STRICT (' + S.mascotStrict + '/10). All character anchor attributes are the reference. Only facial expression may change. Maintain visual consistency across every slide.\n'
+      ) +
+      '- If a slide includes the mascot: note "CHARACTER PRESENT" at top of prompt.\n' +
+      '- If a slide does not include the mascot: note "NO CHARACTER THIS SLIDE".\n\n'
+      : ''
+    ) +
+    ln + '\nSTEP 2: PER-SLIDE IMAGE PROMPTS\n' + ln + '\n' +
+    'Output each slide as a separate block. Use only the locked Phase 2 content. All slides should look like one cohesive series.\n\n' +
+    'Output format: each slide image prompt inside its own code block (triple backticks). Add the label SLIDE N PROMPT as a plain text header above each code block.\n\n' +
+    'Do not generate any images yet. Write all ' + S.slides + ' prompts first.\n' +
+    'Do not merge prompts into one block. Each slide gets its own separated block.\n\n' +
+    'Write each prompt as a creative director briefing a designer who has never seen the brand. Use only actual values from the Step 1 declaration — real hex codes, real font names, real descriptions. No placeholders.\n\n' +
+    'Each prompt should be fully self-contained and include:\n' +
+    '- Exact background hex\n' +
+    '- Exact font name and weight\n' +
+    '- Exact text color hex\n' +
+    '- Specific layout description\n' +
+    '- Specific texture description\n' +
+    '- The exact slide text copied verbatim from the locked content — no rewrites, no paraphrasing\n' +
+    '- Visual hierarchy: state what is primary, secondary, tertiary\n' +
+    '- Slide [N] of ' + S.slides + ', note consistency with series\n\n' +
+    'TYPOGRAPHY CHECK (apply before finalizing each slide prompt):\n' +
+    'State which font from the Step 1 declaration is used for hero, support, and accent text. If all three roles use the same font family, revisit the typography system. Font combination is preferred: the hero font and the body/support font should come from visibly different font families.\n\n' +
+    (anchor ?
+      'CHARACTER FIDELITY CHECK (apply for every slide marked CHARACTER PRESENT):\n' +
+      'Before finalizing the prompt, verify against the Character Anchor: same outline weight, same face features, same body proportions, same fill treatment, same art style. Treat reference fidelity as a design requirement.\n\n'
+      : ''
+    ) +
+    ln + '\nEXECUTION NOTES\n' + ln + '\n' +
+    '- Use only hex codes extracted from brand assets\n' +
+    '- Use only typography from brand DNA\n' +
+    '- All slides should look visually consistent (same series)\n' +
+    '- The slide text is the source of truth for copy. Do not rewrite, paraphrase, shorten, expand, or reformat it. Copy it character for character. Style and position it — do not edit it.\n' +
+    '- Ratio is always 4:5 - 1080x1350px\n' +
+    '- Total slides: ' + S.slides + '\n' +
+    '- Do not generate any image until the image generation command is received\n\n' +
+    ln + '\nCOMMAND MENU — OUTPUT AFTER ALL SLIDE PROMPTS ARE COMPLETE\n' + ln + '\n' +
+    'After completing all ' + S.slides + ' slide prompts, output this block exactly:\n\n' +
+    '```\n' +
+    'All ' + S.slides + ' slide prompts are ready.\n' +
+    '\n' +
+    'Commands:\n' +
+    'GO          — preview all slide prompts as full text (no image generation)\n' +
+    '1, 2, 3...  — generate image for that specific slide\n' +
+    'fix [N]     — fix visual issue on slide N, copy stays identical\n' +
+    'swap [N]    — replace subject/asset on slide N, layout stays identical\n' +
+    'chat [N]    — discuss slide N only, no generation\n' +
+    '\n' +
+    'If no slide number is given, the command applies to the most recently generated slide.\n' +
+    'Anything else you type = discussion only. No image will be generated.\n' +
+    '```\n\n' +
+    ln + '\nCOMMAND EXECUTION RULES\n' + ln + '\n' +
+    'These rules are always active after the Command Menu has been output.\n\n' +
+    'GO — Output the full text of all ' + S.slides + ' slide prompts as a readable preview. Do not generate any image.\n\n' +
+    '1 / 2 / 3 / [any slide number] — Generate the image for that slide immediately. After generating, wait for the next command.\n\n' +
+    'fix [N] — Fix a visual issue on slide N. The slide copy stays character-for-character identical. Only the visual treatment changes. Execute immediately.\n\n' +
+    'swap [N] — Replace the primary visual subject on slide N (person, product, illustration, logo). Keep layout, typography, colors, hierarchy, and composition completely identical. Execute immediately.\n\n' +
+    'chat [N] — Discuss slide N. Do not generate any image. Do not make any changes. Respond in text only. Stay in discussion until the user types a different command.\n\n' +
+    'STRICT PARSING RULE — If the user input does not exactly match one of the five commands above (GO, a slide number, fix, swap, chat), treat it as discussion only. Do not infer intent. Do not generate an image. Do not make changes. Respond in text only.\n\n' +
+    'This rule exists because casual feedback like "slide 3 feels off" or "kurang bagus" must never trigger image generation. Only an explicit command does.\n\n' +
+    (anchor ?
+      'CHARACTER NOTE: A mascot is present. When generating Slide 1 for the first time, note that this establishes the character reference. All subsequent slides with the character must match Slide 1\'s character appearance.\n\n'
+      : ''
+    );
+}
+
+function pickImageGen(btn) {
+  var all = document.querySelectorAll('[data-g="imageGen"]');
+  for (var i = 0; i < all.length; i++) { all[i].classList.remove('sel'); }
+  btn.classList.add('sel');
+  S.imageGen = btn.getAttribute('data-v');
+  var desc = document.getElementById('imageGenDesc');
+  if (S.imageGen === 'gemini') {
+    desc.textContent = 'Gemini mode: visual-prose prompts with explicit positional language. Tuned for Nano Banana literal interpretation, no metadata leakage.';
+  } else {
+    desc.textContent = 'DALL-E mode: structured design-spec prompts. Best for editorial layering and mixed typography.';
+  }
+}
+
+function buildDesignGemini() {
+  var custom = document.getElementById('inp-custom-design').value.trim();
+  var editEl = document.getElementById('inp-anchor-edit');
+  var edited = editEl ? editEl.value.trim() : '';
+  var anchor = S.ccMode ? (edited || S.charAnchor) : '';
+  var rv = {
+    'Indonesia': 'Modern Indonesian digital - clean, youthful, warm. Jakarta creative studio energy.',
+    'Australia': 'Clean, laid-back modern. Anti-corporate. Sydney indie brand energy.',
+    'United States': 'Polished US digital-native. Confident, high-contrast, culturally current.',
+    'Southeast Asia': 'Vibrant pan-Asian digital. Bold typography, culturally informed colors.',
+    'European Union': 'Refined European. Swiss-grid inspired but warm. Sophisticated typography.'
+  }[S.region] || 'Modern global digital aesthetic.';
+  var ln = '========================================';
+  var sl = '';
+  for (var i = 1; i <= S.slides; i++) { sl += '[SLIDE ' + i + ' - paste exact text from Phase 2 Slide ' + i + ' here]\n\n'; }
+  return ln + '\nMASTER DESIGN PROMPT - VISUAL TRANSLATOR\nTarget: Gemini / Nano Banana | Slides: ' + S.slides + ' | Ratio: 4:5 (1080x1350px)\n' + ln + '\n\n' +
     ln + '\nMETA-RULE — READ BEFORE EVERYTHING ELSE\n' + ln + '\n' +
-    'You operate under STRICT PROTOCOL ADHERENCE for this entire session. This means:\n\n' +
-    '1. FOLLOW THE RULES AS WRITTEN. Do not improvise. Do not invent new commands, modes, or workflows that are not explicitly defined in this prompt. If a command like "LOCK HYBRID" or "PROCEED WITH X" is not in the COMMANDS list, you cannot create it.\n\n' +
-    '2. DO NOT SEEK PERMISSION FOR DECISIONS ALREADY RESOLVED BY THE PROMPT. When the prompt specifies a rule (e.g. "PDF brand guide wins for fonts/colors, image reference is for composition only"), follow it silently. Do not surface the rule as a "choice" for the user to make.\n\n' +
-    '3. EXECUTION ORDER IS NON-NEGOTIABLE. Write slide prompts → output SESSION LOCK ESTABLISHED block → proceed to Command Menu. Skipping or reordering these steps is a protocol violation.\n\n' +
-    '4. WHEN UNCERTAIN, EXECUTE THE LITERAL INSTRUCTION. Do not interpret, do not "improve", do not propose alternatives. The user has already thought through the system. Your job is to execute it.\n\n' +
-    '5. INVENTED COMMANDS, MODES, OR CONCEPTS ARE FORBIDDEN. The complete command vocabulary is: A, B, C, D, E (defined in SESSION LOCK ESTABLISHED), plus the four LOCK CHECK modes (LOCKED DISCUSSION, VISUAL REVISION, CONTENT REVISION, REDESIGN REQUEST). Nothing else exists. If something does not fit these, ask the user to clarify using the existing vocabulary — do not invent new vocabulary.\n\n' +
-    'This META-RULE overrides any tendency to be "helpful by improvising." Helpfulness in this system = strict execution of the defined protocol.\n\n' +
+    'You operate under strict execution for this entire session. This means:\n\n' +
+    '1. FOLLOW THE RULES AS WRITTEN. Do not improvise. Do not invent commands or workflows not defined in this prompt.\n\n' +
+    '2. DO NOT SEEK PERMISSION FOR DECISIONS ALREADY RESOLVED BY THE PROMPT. When the prompt specifies a rule, follow it silently. Do not surface it as a choice for the user.\n\n' +
+    '3. EXECUTION ORDER: Write Visual System Declaration then write all slide prompts then output Command Menu. Do not skip or reorder.\n\n' +
+    '4. WHEN UNCERTAIN, EXECUTE THE LITERAL INSTRUCTION. Do not interpret, do not improve, do not propose alternatives.\n\n' +
+    '5. THE ONLY VALID COMMANDS ARE: GO, a slide number, fix, swap, chat. Everything else the user types is treated as discussion only — never as an action trigger.\n\n' +
+    'Helpfulness in this system = strict execution of the defined workflow.\n\n' +
     '[ROLE]\n' +
     'You are a Senior Art Director with 15+ years of experience in editorial design, brand identity systems, and social media visual production. You think like a designer, not an executor. You understand typographic hierarchy, spatial tension, visual weight, and why some designs stop the scroll and others disappear.\n\n' +
     'Your job is to build a complete visual system for this carousel — then execute it with absolute consistency across all ' + S.slides + ' slides. You make design decisions. You justify them. You do not ask for permission on aesthetic choices.\n\n' +
@@ -1087,10 +1349,10 @@ function buildDesign() {
     '- TERTIARY element: Detail, caption, or accent only. Smallest visual weight.\n\n' +
     'Connecting elements (arrows, lines, brackets) MUST have a clear source and destination that are visually obvious. If the connection is not immediately clear without explanation, remove the connecting element entirely.\n\n' +
     'Remove decorative elements that do not improve clarity.\n\n' +
-    'VISUAL FOCAL POINT CHECK (apply before finalizing each slide — this is the enforcement layer for the rules above):\n' +
-    'If a viewer glances at this slide for one second, is it immediately obvious what the single primary focal point is? If more than one element competes for primary attention — a large hero AND a large illustration/chart/photo, or accumulated decorative marks (scribbles, underlines, arrows, badges, highlight blocks) — resolve it before finalizing: reduce emphasis on the competing element, remove decoration, shrink supporting graphics, or increase empty space, until exactly one element clearly wins.\n' +
+    'VISUAL FOCAL POINT CHECK (apply before finalizing each slide):\n' +
+    'If a viewer glances at this slide for one second, is it immediately obvious what the single primary focal point is? If more than one element competes for primary attention — a large hero AND a large illustration/chart/photo, or accumulated decorative marks (scribbles, underlines, arrows, badges, highlight blocks) — resolve it before finalizing.\n' +
     'When the Visual Hierarchy Rule, Breathing Room Principle, or Intensity Curve are in tension with filling the canvas, this check wins: one dominant focal point per slide is the non-negotiable outcome.\n' +
-    'Note: image generators tend to fill available space and add elements by default. Actively resist this — empty space around the focal point is a deliberate design choice, not a gap to be filled. A slide with one strong focal point and generous empty space is stronger than a slide where every region is doing something.\n\n' +
+    'Note: image generators tend to fill available space and add elements by default. Actively resist this — empty space around the focal point is a deliberate design choice, not a gap to be filled.\n\n' +
     ln + '\nEDITORIAL HIERARCHY EXTRACTION — MANDATORY BEFORE EACH SLIDE\n' + ln + '\n' +
     'Before designing any slide, read the slide copy and ask:\n' +
     '"If the viewer only remembers ONE phrase from this slide, what should it be?"\n\n' +
@@ -1103,8 +1365,8 @@ function buildDesign() {
     'Never treat the entire paragraph as the headline.\n' +
     'Design the punchline. Not the paragraph.\n' +
     'The objective is not equal visibility. The objective is hierarchy.\n\n' +
-    ln + '\nSLIDE TYPE ASSIGNMENT — MANDATORY BEFORE WRITING ANY PROMPTS\n' + ln + '\n' +
-    'Before designing the carousel, assign a slide type to each of the ' + S.slides + ' slides.\n\n' +
+    ln + '\nSLIDE TYPE ASSIGNMENT — INTERNAL ONLY (DO NOT RENDER AS TEXT)\n' + ln + '\n' +
+    'Before designing the carousel, internally assign a slide phase/type to each of the ' + S.slides + ' slides.\n\n' +
     'Allowed types:\n' +
     '- Cover Poster (full-bleed, one dominant word or phrase)\n' +
     '- Quote Poster (centered, quote marks or framing device)\n' +
@@ -1117,7 +1379,7 @@ function buildDesign() {
     '- No more than 2 slides may use the same type.\n' +
     '- Adjacent slides may not use identical types.\n' +
     '- Visual rhythm across the carousel is mandatory.\n\n' +
-    'State the assigned type at the top of each slide prompt (e.g. "TYPE: Quote Poster").\n\n' +
+    'IMPORTANT — METADATA SEPARATION: The slide type, slide number, and canvas dimensions are CONTEXT FOR YOU, the image generator. They MUST NOT appear as rendered text on the canvas. Do not write "TYPE: Cover Poster", "CTA Poster", "1080x1350px", "Slide N of M", or any similar production label as visible text in the image. The only text rendered on the canvas is: hero phrase, supporting copy, accent copy, and the brand watermark.\n\n' +
     'The goal is not consistency of layout. The goal is consistency of identity with variation of composition. Color, typography, and framing stay consistent — composition and layout structure vary per slide.\n\n' +
     ln + '\nTEXT DENSITY CONTROL\n' + ln + '\n' +
     'Never render all copy at headline scale. Extract:\n' +
@@ -1126,45 +1388,25 @@ function buildDesign() {
     '- 1 ACCENT phrase\n\n' +
     'Every slide should feel like:\n' +
     'One dominant statement + One supporting explanation + One small contextual detail\n\n' +
-    'Avoid: wall of text, equal text sizing, equal visual weight.\n' +
-    'A slide should feel like an editorial poster. Not enlarged notes.\n\n' +
-    ln + '\nTYPOGRAPHY ENFORCEMENT RULE — GUARDRAIL ONLY\n' + ln + '\n' +
+    'Avoid: wall of text, equal text sizing, equal visual weight.\n\n' +
+    ln + '\nTYPOGRAPHY ENFORCEMENT RULE\n' + ln + '\n' +
     '- Maximum 3 distinct text sizes per slide.\n' +
     '- Never use identical visual weight for all text elements.\n' +
     '- Never bold everything.\n' +
-    '- Never make all text the same size.\n' +
     '- Hierarchy must be visually obvious within one second.\n\n' +
     ln + '\nBREATHING ROOM PRINCIPLE\n' + ln + '\n' +
     'Whitespace is an active design element. Target breathing room by slide type:\n' +
     '- Hook slides: 40-60% empty space\n' +
     '- Insight slides: 20-40% empty space\n' +
     '- CTA slides: 25-45% empty space\n\n' +
-    'Do not maximize whitespace. Optimize attention.\n' +
-    'The amount of empty space should be determined by the communication goal of the slide.\n' +
     'Whitespace exists to strengthen hierarchy, not to satisfy a percentage.\n\n' +
-    ln + '\nTYPOGRAPHY PRINCIPLES\n' + ln + '\n' +
-    'A strong slide: one phrase dominates immediately, the eye knows where to look within one second, hierarchy is obvious, supporting copy is clearly subordinate, the slide feels intentional and editorial.\n\n' +
-    'A weak slide: everything feels equally important, all text uses similar scale, the entire paragraph becomes the headline, the layout feels crowded, attention is evenly distributed.\n\n' +
     ln + '\nCORE DESIGN PHILOSOPHY\n' + ln + '\n' +
     'A successful slide is NOT one that displays all copy clearly.\n' +
     'A successful slide is one where the hero phrase is instantly remembered.\n\n' +
-    'Design priority when conflicts occur:\n' +
-    '1. Editorial Hierarchy\n' +
-    '2. Visual Hierarchy\n' +
-    '3. Typography Guardrails\n' +
-    '4. Layout Preferences\n\n' +
-    'Create hierarchy, not decoration.\n' +
-    'Create contrast, not consistency.\n' +
-    'Design the punchline, not the paragraph.\n\n' +
+    'Create hierarchy, not decoration. Create contrast, not consistency. Design the punchline, not the paragraph.\n\n' +
     (custom ?
       'CONTENT SEPARATION RULE (active because custom instruction is provided):\n' +
-      'Every piece of content may only appear in ONE place per slide. No exceptions.\n' +
-      'If a device mockup (iPhone, laptop, tablet, etc.) is present in the slide:\n' +
-      '- Content goes INSIDE the device screen only\n' +
-      '- Outside the device = only context or setup text that is DIFFERENT — never a repeat or paraphrase of what is inside\n' +
-      'If no device mockup is present:\n' +
-      '- One focal point text per slide\n' +
-      '- Supporting text must add NEW information, never repeat or paraphrase the headline\n\n'
+      'Every piece of content may only appear in ONE place per slide. No exceptions.\n\n'
       : ''
     ) +
     (anchor ?
@@ -1173,32 +1415,42 @@ function buildDesign() {
       '- Generate Slide 1 FIRST. Do not proceed until I approve the character appearance.\n' +
       '- After approval: reference "same character as approved Slide 1" in every subsequent prompt.\n' +
       (S.mascotStrict <= 3 ?
-        '- SIMILARITY MODE: LOOSE (level ' + S.mascotStrict + '/10). The character anchor above is a creative guide, not a hard spec. Maintain the overall vibe, color palette, and recognizability. Proportions and pose may adapt to slide context. The character should feel like the same personality, not necessarily the same exact drawing.\n' :
+        '- SIMILARITY MODE: LOOSE (level ' + S.mascotStrict + '/10). The character anchor above is a creative guide, not a hard spec. Maintain the overall vibe, color palette, and recognizability.\n' :
         S.mascotStrict <= 7 ?
-        '- SIMILARITY MODE: CONSISTENT (level ' + S.mascotStrict + '/10). Face features, color palette, and art style are locked from the character anchor above. Pose, expression, and contextual accessories may vary per slide. The character must be clearly and immediately recognizable as the same character across all slides.\n' :
-        '- SIMILARITY MODE: STRICT (level ' + S.mascotStrict + '/10). ALL character anchor attributes are hard locked. This means: exact body proportions, exact colors (no variation), exact outline weight, exact art style. Only facial expression may change. If you deviate from any locked attribute, it is a failure. Treat this as a character sheet from a production studio — zero tolerance for drift.\n'
+        '- SIMILARITY MODE: CONSISTENT (level ' + S.mascotStrict + '/10). Face features, color palette, and art style are locked. Pose and expression may vary per slide.\n' :
+        '- SIMILARITY MODE: STRICT (level ' + S.mascotStrict + '/10). ALL character anchor attributes are hard locked. Only facial expression may change.\n'
       ) +
       '- If a slide includes the mascot: state "CHARACTER PRESENT" at top of prompt.\n' +
       '- If a slide does not include the mascot: state "NO CHARACTER THIS SLIDE".\n\n'
       : ''
     ) +
-    ln + '\nSTEP 2: PER-SLIDE IMAGE PROMPTS\n' + ln + '\n' +
-    'Output EACH slide as a SEPARATE block. Use ONLY the locked Phase 2 content. All slides must look like one cohesive series.\n\n' +
+    ln + '\nSTEP 2: PER-SLIDE IMAGE PROMPTS — GEMINI-NATIVE FORMAT\n' + ln + '\n' +
+    'Output EACH slide as a SEPARATE block in a code block (triple backticks). Use ONLY the locked Phase 2 content. All slides must look like one cohesive series.\n\n' +
     'WARNING: Do NOT generate any images yet. Write all ' + S.slides + ' prompts first.\n' +
-    'WARNING: Do NOT merge prompts into one block. Each slide gets its own separated block.\n\n' +
-    'FORMATTING REQUIREMENT: Output each slide image prompt inside its own separate code block (using triple backticks). Add the label SLIDE N PROMPT as a plain text header above each code block.\n\n' +
-    'Write each prompt as a creative director briefing a designer who has never seen the brand. Use ONLY actual values from your Step 1 analysis — real hex codes, real font names, real descriptions. No placeholders.\n\n' +
-    'Each prompt must be fully self-contained and specific. Include:\n' +
-    '- Exact background hex from your analysis\n' +
-    '- Exact font name and weight\n' +
-    '- Exact text color hex\n' +
-    '- Specific layout (e.g. text left-anchored at 15% from edge, occupying 70% canvas width)\n' +
-    '- Specific texture (e.g. monochromatic grain overlay at 12% opacity)\n' +
-    '- The EXACT slide text copied verbatim from locked content — no rewrites, no paraphrasing, no "improving" the copy\n' +
-    '- Visual hierarchy: state what is primary, secondary, tertiary\n' +
-    '- Slide [N] of ' + S.slides + ', note consistency with series\n\n' +
+    'WARNING: Do NOT merge prompts into one block. Each slide gets its own separated block with its own header.\n\n' +
+    'GEMINI-NATIVE PROMPT FORMAT — STRICT TEMPLATE:\n\n' +
+    'Each slide prompt MUST follow this structure as flowing prose (not bullet list, not headers, not metadata labels):\n\n' +
+    '```\n' +
+    'Graphic design, poster layout, aspect ratio 4:5. Slide [N] of ' + S.slides + '. [Phase] phase page.\n' +
+    'BACKGROUND: [exact background description with hex color, texture treatment, opacity, and any structural blocks/splits].\n' +
+    'TYPOGRAPHY & TEXT RENDER:\n' +
+    '- HERO PHRASE (Primary [focal anchor/engagement anchor/focus], [weight description], [font name] font style, [solid color / no stroke / no outline qualifier], color is [color name] [hex]): "[exact slide hero text]"\n' +
+    '- SUPPORTING COPY ([positional descriptor: "Stacked below the hero" / "Positioned in the lower third" / "Inside the bottom color block"], [font name] [weight], color is [color name] [hex]): "[exact supporting text]"\n' +
+    '- ACCENT [GRAPHIC/COPY] ([positional descriptor], [description], color is [color name] [hex])\n' +
+    '- WATERMARK ([positional descriptor], [font name], [size descriptor: micro scale / small], color is [color name] [hex]): "[watermark text]"\n' +
+    'LAYOUT: [Grid type: left-aligned grid / centered axis / horizontal split axis / asymmetric left-heavy]. [Safe zone margin %, e.g. 8% safe zone margins]. [Whitespace percentage in specific area, e.g. "40% open whitespace on the top right area" or "50% empty negative space wraps the central text container"]. [Final atmosphere note, e.g. "No decorative outlines" / "High-contrast editorial closing print poster"].\n' +
+    '```\n\n' +
+    'FORMAT REQUIREMENTS (NON-NEGOTIABLE):\n' +
+    '1. Opening line must always include: "Slide [N] of ' + S.slides + '. [Phase] phase page." — examples of valid phases: "High-intensity hook cover page", "Curiosity phase page", "Discovery phase page", "Implication phase page", "Resolution phase page", "CTA closer page".\n' +
+    '2. NEVER write headers like "TYPE: Cover Poster" or "1080x1350px" or "Slide N of M" as standalone label lines that could be misread as text-to-render. The phase descriptor lives ONLY in the opening sentence.\n' +
+    '3. Each text element must include ALL of: positional descriptor, role, font name in quotes, weight/style, color name + hex.\n' +
+    '4. Use vocabulary native to Gemini/Nano Banana: "safe zone margins", "negative space", "axis", "fine-grain print texture", "monochromatic paper grain finish", "solid color without stroke", "no decorative outlines", "high design breathing room", "structured sans-serif", "handwritten script", "geometric sans-serif".\n' +
+    '5. Position language must be CONCRETE not abstract. Bad: "asymmetric tension". Good: "Centered horizontally, vertically positioned in the upper-middle third of canvas".\n' +
+    '6. Whitespace must be specified by EXACT percentage in a SPECIFIC area: "40% open whitespace on the top right area", not "generous breathing room".\n' +
+    '7. The exact slide text must be in straight quotes, copied character-for-character from the locked Phase 2 content. No rewrites, no paraphrasing, no "improving" the copy.\n' +
+    '8. LAYOUT section is ONE flowing sentence describing: grid type + safe zone + whitespace area/percentage + atmospheric note.\n\n' +
     'TYPOGRAPHY SELF-CHECK (apply before finalizing each slide prompt):\n' +
-    'Explicitly state which font from your Step 1 declaration is used for hero, support, and accent text in this slide. If all three roles use the same font family, you have violated the typography system — fix before proceeding. Font combination is mandatory: the hero font and the body/support font must come from visibly different font families (e.g. display script + clean sans-serif), not different weights of the same family.\n\n' +
+    'Explicitly state which font from your Step 1 declaration is used for hero, support, and accent text in this slide. If all three roles use the same font family, you have violated the typography system — fix before proceeding. Font combination is mandatory: the hero font and the body/support font must come from visibly different font families (e.g. handwritten script display + clean geometric sans-serif), not different weights of the same family.\n\n' +
     (anchor ?
       'CHARACTER FIDELITY CHECK (apply for every slide marked CHARACTER PRESENT):\n' +
       'Before finalizing the prompt, mentally compare the character against the reference image attributes locked in the Character Anchor above. Explicitly verify in the prompt: same outline weight, same face features (eyes, mouth, expression range), same body proportions and limb style, same fill treatment, same art style. If any attribute would drift from the reference, correct the prompt language before generating. Treat reference fidelity as a hard constraint — not a stylistic suggestion.\n\n'
@@ -1209,99 +1461,47 @@ function buildDesign() {
     '- Use ONLY typography from brand DNA\n' +
     '- ALL slides must look visually consistent (same series)\n' +
     '- Text in every image = EXACTLY the locked Phase 2 content for that slide. The slide text is an IMMUTABLE STRING. You are not allowed to rewrite, paraphrase, shorten, expand, or reformat it in any way. Copy it character for character. Your only job is to style and position it — not edit it.\n' +
+    '- NEVER render production metadata (slide type labels, canvas dimensions, slide numbers in "N of M" format) as visible text on the canvas. These exist ONLY in the prompt for your context.\n' +
     '- Ratio is ALWAYS 4:5 - 1080x1350px - no exceptions\n' +
     '- Total slides = EXACTLY ' + S.slides + '\n' +
     '- DO NOT render any image until I give the command below\n\n' +
-    ln + '\nSESSION LOCK ESTABLISHMENT — MANDATORY GATE BEFORE COMMAND MENU\n' + ln + '\n' +
-    'CRITICAL ENFORCEMENT: The Command Menu below CANNOT execute until the SESSION LOCK ESTABLISHED block has been output to the user. If you proceed to ask the user "GO or number" without first showing the lock block in full, you have violated the protocol. The user\'s feedback contract has not been established and any subsequent revision will fail to trigger LOCK CHECK correctly.\n\n' +
-    'EXECUTION ORDER (non-negotiable):\n' +
-    '1. Write all ' + S.slides + ' slide prompts above (Step 2)\n' +
-    '2. Output the SESSION LOCK ESTABLISHED block below — IN FULL, NO ABBREVIATION\n' +
-    '3. ONLY THEN proceed to the Command Menu and ask "GO or number"\n\n' +
-    'If you skip step 2, the entire downstream protocol (LOCK CHECK, REDESIGN MODE, RE-LOCK RULE) is broken. This is the single most important enforcement in this prompt.\n\n' +
-    'Output this exact block:\n\n' +
+    ln + '\nCOMMAND MENU — OUTPUT AFTER ALL SLIDE PROMPTS ARE COMPLETE\n' + ln + '\n' +
+    'After completing all ' + S.slides + ' slide prompts, output this block exactly:\n\n' +
     '```\n' +
-    'SESSION LOCK ESTABLISHED\n' +
-    'Slides: ' + S.slides + ' | Visual: LOCKED | Character: ' + (anchor ? 'PRESENT' : 'NOT USED') + ' | Content: LOCKED\n' +
+    'All ' + S.slides + ' slide prompts are ready.\n' +
     '\n' +
-    'COMMANDS:\n' +
-    'A. fix [N] — fix visual issue (copy stays)\n' +
-    'B. change [N] — change slide copy\n' +
-    'C. discuss [N] — talk only, no changes\n' +
-    'D. redesign [N] — rebuild from scratch\n' +
-    'E. override brand — experiment outside brand system\n' +
+    'Commands:\n' +
+    'GO          — preview all slide prompts as full text (no image generation)\n' +
+    '1, 2, 3...  — generate image for that specific slide\n' +
+    'fix [N]     — fix visual issue on slide N, copy stays identical\n' +
+    'swap [N]    — replace subject/asset on slide N, layout stays identical\n' +
+    'chat [N]    — discuss slide N only, no generation\n' +
     '\n' +
-    'Brand guide = source of truth. Use E only to override.\n' +
+    'If no slide number is given, the command applies to the most recently generated slide.\n' +
+    'Anything else you type = discussion only. No image will be generated.\n' +
     '```\n\n' +
-    'After outputting this block, pause briefly so the user can read it, then proceed to the Command Menu below.\n\n' +
-    'COMMAND MAPPING TO LOCK CHECK MODES (internal — use when classifying user commands):\n' +
-    '- "A" or "fix [N]" → VISUAL REVISION mode\n' +
-    '- "B" or "change [N]" → CONTENT REVISION mode\n' +
-    '- "C" or "discuss [N]" → LOCKED DISCUSSION mode\n' +
-    '- "D" or "redesign [N]" → REDESIGN REQUEST mode\n' +
-    '- "E" or "override brand: [scope]" → BRAND OVERRIDE mode. Treat as elevated REDESIGN — confirm exact scope of override (typography only? colors? both?) before executing. Do NOT auto-apply override to other slides; ask whether override is for this slide only or for the entire remaining carousel.\n\n' +
-    ln + '\nCOMMAND MENU\n' + ln + '\n' +
+    ln + '\nCOMMAND EXECUTION RULES\n' + ln + '\n' +
+    'These rules are always active after the Command Menu has been output.\n\n' +
+    'GO — Output the full text of all ' + S.slides + ' slide prompts as a readable preview. Do not generate any image.\n\n' +
+    '1 / 2 / 3 / [any slide number] — Generate the image for that slide immediately. After generating, wait for the next command.\n\n' +
+    'fix [N] — Fix a visual issue on slide N. The slide copy stays character-for-character identical. Only the visual treatment changes. Execute immediately.\n\n' +
+    'swap [N] — Replace the primary visual subject on slide N (person, product, illustration, logo). Keep layout, typography, colors, hierarchy, and composition completely identical. Execute immediately.\n\n' +
+    'chat [N] — Discuss slide N. Do not generate any image. Do not make any changes. Respond in text only. Stay in discussion until the user types a different command.\n\n' +
+    'STRICT PARSING RULE — If the user input does not exactly match one of the five commands above (GO, a slide number, fix, swap, chat), treat it as discussion only. Do not infer intent. Do not generate an image. Do not make changes. Respond in text only.\n\n' +
+    'This rule exists because casual feedback like "slide 3 feels off" or "kurang bagus" must never trigger image generation. Only an explicit command does.\n\n' +
     (anchor ?
-      'CHARACTER CONSISTENCY MODE IS ACTIVE.\n\n' +
-      'STEP 1 — CHARACTER LOCK:\n' +
-      'Generate Slide 1 image immediately after writing all prompts. Do not ask. Do not wait.\n' +
-      'After generating Slide 1, stop and ask:\n\n' +
-      '"Slide 1 generated. Please review the character appearance.\n' +
-      '- Type APPROVED to lock this character and proceed\n' +
-      '- Or describe what needs to change and I will revise Slide 1"\n\n' +
-      'Wait for my response.\n\n' +
-      'STEP 2 — AFTER CHARACTER IS APPROVED:\n' +
-      'Immediately ask:\n\n' +
-      '"Character locked. How do you want to proceed with the remaining ' + (S.slides - 1) + ' slides?\n' +
-      '- Type GO to auto-generate all remaining slides sequentially\n' +
-      '- Or type a number to generate one slide at a time"\n\n' +
-      'If I type GO: generate slides 2 through ' + S.slides + ' sequentially. Only pause if I send a message.\n' +
-      'If I type a number: generate that slide immediately, then wait for my next command.\n\n'
-      :
-      'All ' + S.slides + ' slide prompts are ready above.\n\n' +
-      'End your response here and ask me:\n\n' +
-      '"All ' + S.slides + ' slide prompts are ready.\n' +
-      'How do you want to proceed?\n' +
-      '- Type GO to auto-generate all slides sequentially\n' +
-      '- Or type a number to generate one slide at a time"\n\n' +
-      'Then wait for my response before doing anything.\n\n' +
-      'If I type GO: start generating from Slide 1 immediately. After each slide is generated, automatically proceed to the next. Only pause if I send a message.\n' +
-      'If I type a number: generate that slide immediately. Then wait for my next command.\n\n'
-    ) +
-    ln + '\nLOCK REFERENCE STATE — ALWAYS ACTIVE FOR THIS ENTIRE SESSION\n' + ln + '\n' +
-    'ACTIVATION PRECONDITION: This protocol only activates AFTER the SESSION LOCK ESTABLISHED block has been output to the user AND at least one image has been generated. Before that point, you are in EXECUTION MODE — follow the execution order strictly (write all slide prompts → output SESSION LOCK ESTABLISHED block → proceed to Command Menu). Do NOT pre-empt with LOCK CHECK during initial prompt processing, even if you perceive conflicts between input sources. Conflicts between brand guide and style reference are already resolved by the ASSET BRAND VALUES section above (PDF wins for fonts/colors; image reference is used only for composition, layout energy, and atmosphere). Trust those rules; execute them silently; do not seek user permission to follow rules that are already written.\n\n' +
-    'This protocol activates whenever I bring up a specific slide with INTENT TO CHANGE something — a correction, a "what if we changed X" discussion, or a redesign request. It does NOT trigger for purely casual comments (e.g. "slide 3 looks good").\n\n' +
-    'TRIGGER DETECTION — MANDATORY: Any user message that references a slide AND contains directive or modification language MUST trigger this protocol. This includes — but is not limited to — casual Indonesian/English instructions such as: "ganti", "ilangin", "hilangin", "ubah", "tambahin", "kurangin", "perbaiki", "betulin", "fix", "remove", "change", "tukar", "ngga gitu", "harusnya...", "coba...", "bisa...", "kayaknya lebih bagus kalau...", "gausa...", "gak usah...", or any phrasing that implies the current image should be different. Do NOT treat directive-sounding feedback as a final instruction to execute. Even if the user\'s tone sounds conclusive (e.g. "ilangin aja"), you MUST still output LOCK CHECK first and confirm scope before executing. Auto-execution without LOCK CHECK is a protocol violation.\n\n' +
-    'Before responding to any such message, output this short block first:\n\n' +
-    '```\n' +
-    'LOCK CHECK\n' +
-    'Slide: [N]\n' +
-    'Mode: [LOCKED DISCUSSION | VISUAL REVISION | CONTENT REVISION | REDESIGN REQUEST]\n' +
-    'Hero: [current hero phrase for this slide]\n' +
-    'Copy: [LOCKED / UNLOCK PENDING]\n' +
-    'Visual System: [LOCKED / UNLOCK PENDING]\n' +
-    '```\n\n' +
-    'How to classify Mode:\n' +
-    '- LOCKED DISCUSSION: I am asking an opinion or brainstorming ("what do you think is missing from slide 7?", "what if the CTA was stronger?"). Copy and Visual System stay LOCKED. Any ideas you offer are PROPOSALS ONLY — do not generate anything yet.\n' +
-    '- VISUAL REVISION: I am asking to fix a visual issue (composition, anatomy, color, layout). Copy = LOCKED. Visual System = LOCKED. Only the specified visual element may change. The slide text remains an IMMUTABLE STRING — copy it character-for-character from the original locked content.\n' +
-    '- CONTENT REVISION: I am asking to change the actual words/copy of a slide. Copy = UNLOCK PENDING. Ask me to confirm the exact new text before executing. Visual System stays LOCKED.\n' +
-    '- REDESIGN REQUEST: I am asking to rebuild a slide from scratch or take it in a fundamentally different direction. Copy = UNLOCK PENDING, Visual System = UNLOCK PENDING. Do not generate yet — first output:\n\n' +
-    '```\n' +
-    'REDESIGN MODE ACTIVE\n' +
-    'Current Lock: Version [X]\n' +
-    'New Proposal: Version [X+1]\n' +
-    '```\n\n' +
-    'Then ask me to confirm before generating the proposal.\n\n' +
-    'RE-LOCK RULE: A redesign proposal NEVER becomes the active version automatically. After generating a redesign proposal, present it as "Proposal [version]" and ask: "Type LOCK [version] to make this the new reference, or KEEP [previous version] to discard this proposal." Without an explicit LOCK [version] command from me, the previous locked version remains active — including for all future LOCK CHECK blocks and corrections.\n\n' +
-    'After any VISUAL REVISION or executed CONTENT REVISION is applied: stop and ask "Correction applied. Type a number to continue."\n\n' +
-    'Each correction is surgical — it applies only to what is explicitly stated. Do not use a correction, discussion, or redesign of one slide as a reason to reinterpret other slides or change the overall visual system declared in Step 1.';
+      'CHARACTER NOTE: A mascot is present. When generating Slide 1 for the first time, note that this establishes the character reference. All subsequent slides with the character must match Slide 1\'s character appearance.\n\n'
+      : ''
+    );
 }
 
 function genDesign() {
   S.customDesign = document.getElementById('inp-custom-design').value.trim();
   document.getElementById('out3').style.display = 'none';
   document.getElementById('load3').style.display = 'block';
-  var txt = buildDesign();
+  var txt = S.imageGen === 'gemini' ? buildDesignGemini() : buildDesign();
+  var lbl = S.imageGen === 'gemini' ? 'Master Design Prompt &middot; Gemini / Nano Banana' : 'Master Design Prompt &middot; DALL-E 3';
+  document.getElementById('out3lbl').innerHTML = lbl;
   setTimeout(function() {
     document.getElementById('load3').style.display = 'none';
     document.getElementById('out3').style.display = 'block';
@@ -1365,13 +1565,106 @@ function clearCharInput() {
   S.charAnchor = '';
 }
 
+function saveBriefState() {
+  S.topic = document.getElementById('inp-topic').value.trim();
+  S.painpoint = document.getElementById('inp-pain').value.trim();
+  S.contentList = document.getElementById('inp-content-list').value.trim();
+  try { localStorage.setItem('vcpb_brief', JSON.stringify(S)); } catch(e) {}
+  var st = document.getElementById('autosave-status');
+  if (st) { st.style.display = 'block'; setTimeout(function() { st.style.display = 'none'; }, 1500); }
+}
+
+function restoreBriefState() {
+  try {
+    var saved = localStorage.getItem('vcpb_brief');
+    if (!saved) return;
+    var data = JSON.parse(saved);
+    for (var k in data) { if (S.hasOwnProperty(k)) S[k] = data[k]; }
+    // Restore textareas
+    if (S.topic) document.getElementById('inp-topic').value = S.topic;
+    if (S.painpoint) document.getElementById('inp-pain').value = S.painpoint;
+    if (S.contentList) { document.getElementById('inp-content-list').value = S.contentList; updateListCounter(); }
+    // Restore option buttons
+    var groups = ['platform','region','goal','style','tone','audience','hook','cta'];
+    for (var i = 0; i < groups.length; i++) {
+      if (S[groups[i]]) {
+        var btns = document.querySelectorAll('[data-g="' + groups[i] + '"]');
+        for (var j = 0; j < btns.length; j++) {
+          if (btns[j].getAttribute('data-v') === S[groups[i]]) { btns[j].classList.add('sel'); showDesc(groups[i], S[groups[i]]); }
+        }
+      }
+    }
+    // Restore sliders
+    document.getElementById('iSlider').value = S.intensity;
+    setIntensity(S.intensity);
+    document.getElementById('sSlider').value = S.slides;
+    setSlides(S.slides);
+    // Restore series mode
+    if (S.seriesMode) { toggleSeries(true); if (S.seriesParts) { var sp = document.querySelector('[data-g="seriesParts"][data-v="' + S.seriesParts + '"]'); if (sp) setParts(sp, S.seriesParts); } }
+    // Restore imageGen
+    if (S.imageGen) { var ig = document.querySelector('[data-g="imageGen"][data-v="' + S.imageGen + '"]'); if (ig) { var all = document.querySelectorAll('[data-g="imageGen"]'); for (var i = 0; i < all.length; i++) all[i].classList.remove('sel'); ig.classList.add('sel'); pickImageGen(ig); } }
+    // Restore hidden vars
+    calcHidden();
+  } catch(e) {}
+}
+
+function exportBrief() {
+  S.topic = document.getElementById('inp-topic').value.trim();
+  S.painpoint = document.getElementById('inp-pain').value.trim();
+  S.contentList = document.getElementById('inp-content-list').value.trim();
+  var blob = new Blob([JSON.stringify(S, null, 2)], {type: 'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  var fn = S.topic ? S.topic.replace(/[^a-zA-Z0-9 ]/g,'').replace(/ +/g,'_').slice(0,30) : 'brief';
+  a.download = 'vcpb_' + fn + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function loadBrief(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      resetAll();
+      for (var k in data) { if (S.hasOwnProperty(k)) S[k] = data[k]; }
+      // Apply to UI
+      if (S.topic) document.getElementById('inp-topic').value = S.topic;
+      if (S.painpoint) document.getElementById('inp-pain').value = S.painpoint;
+      if (S.contentList) { document.getElementById('inp-content-list').value = S.contentList; updateListCounter(); }
+      var groups = ['platform','region','goal','style','tone','audience','hook','cta'];
+      for (var i = 0; i < groups.length; i++) {
+        if (S[groups[i]]) {
+          var btns = document.querySelectorAll('[data-g="' + groups[i] + '"]');
+          for (var j = 0; j < btns.length; j++) {
+            if (btns[j].getAttribute('data-v') === S[groups[i]]) { btns[j].classList.add('sel'); showDesc(groups[i], S[groups[i]]); }
+          }
+        }
+      }
+      document.getElementById('iSlider').value = S.intensity;
+      setIntensity(S.intensity);
+      document.getElementById('sSlider').value = S.slides;
+      setSlides(S.slides);
+      if (S.seriesMode) { toggleSeries(true); if (S.seriesParts) { var sp = document.querySelector('[data-g="seriesParts"][data-v="' + S.seriesParts + '"]'); if (sp) setParts(sp, S.seriesParts); } }
+      if (S.imageGen) { var ig = document.querySelector('[data-g="imageGen"][data-v="' + S.imageGen + '"]'); if (ig) { var all = document.querySelectorAll('[data-g="imageGen"]'); for (var i = 0; i < all.length; i++) all[i].classList.remove('sel'); ig.classList.add('sel'); } }
+      calcHidden();
+      saveBriefState();
+    } catch(err) { alert('File tidak valid.'); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
 function resetAll() {
+  try { localStorage.removeItem('vcpb_brief'); } catch(e) {}
   S = {
     topic:'', platform:'', region:'', goal:'', style:'', tone:'',
     audience:'', hook:'', cta:'', painpoint:'', contentList:'',
     customDesign:'', intensity:5, slides:7, seriesMode:false,
     seriesParts:2, et:'', sp:'', rc:'', cl:'', ccMode:false, charAnchor:'',
-    mascotStrict:5
+    mascotStrict:5, imageGen:'dalle'
   };
   var textareaIds = ['inp-topic','inp-pain','inp-content-list','inp-custom-design','inp-char-raw','inp-anchor-edit'];
   for (var i = 0; i < textareaIds.length; i++) {
@@ -1393,6 +1686,12 @@ function resetAll() {
   document.getElementById('sDisp').textContent = '7 SLIDES';
   var opts = document.querySelectorAll('.opt');
   for (var i = 0; i < opts.length; i++) { opts[i].classList.remove('sel'); }
+  var dalleBtn = document.querySelector('[data-g="imageGen"][data-v="dalle"]');
+  if (dalleBtn) dalleBtn.classList.add('sel');
+  var imgDesc = document.getElementById('imageGenDesc');
+  if (imgDesc) imgDesc.textContent = 'DALL-E mode: structured design-spec prompts. Best for editorial layering and mixed typography.';
+  var out3lbl = document.getElementById('out3lbl');
+  if (out3lbl) out3lbl.innerHTML = 'Master Design Prompt &middot; DALL-E 3';
   var serOff = document.getElementById('series-off');
   if (serOff) serOff.classList.add('sel');
   var cct = document.getElementById('cct');
@@ -1413,6 +1712,9 @@ function resetAll() {
   if (mascotMD) { mascotMD.textContent = 'Face + color palette locked. Pose and expression can vary per slide mood.'; }
   goPhase(1);
 }
+
+// Auto-restore saved brief on page load
+restoreBriefState();
 </script>
 </body>
 </html>
